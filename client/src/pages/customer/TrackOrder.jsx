@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { Card, CardHeader, CardBody } from '@/components/Card';
-import { Badge } from '@/components/Badge';
-import { MapPin, Truck, Compass, PhoneCall } from 'lucide-react';
+import { Compass, Inbox } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { useTrackingStore } from '@/store/trackingStore';
+import { Card, CardHeader, CardBody } from '@/components/Card';
+import { Badge } from '@/components/Badge';
+import { Button } from '@/components/Button';
 import L from 'leaflet';
 
 // Fix Leaflet default marker icons bug in Vite/React bundling
@@ -23,22 +25,37 @@ const agentIcon = new L.Icon({
 });
 
 export const TrackOrder = () => {
-  const { agentLocation, isTracking, startTracking, updateAgentLocation } = useTrackingStore();
+  const { agentLocation, isTracking, deliveryStatus } = useTrackingStore();
 
   const clientCoords = [37.7749, -122.4194]; // San Francisco Default
-  const mockAgentCoords = [37.7833, -122.4167]; // Near SFO
 
-  useEffect(() => {
-    startTracking('ZEP-9902');
-    updateAgentLocation(mockAgentCoords[0], mockAgentCoords[1]);
-  }, []);
+  if (!isTracking) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-app-border rounded-2xl text-center space-y-4 max-w-xl mx-auto my-12">
+        <div className="p-3 bg-app-bg-secondary rounded-full text-app-text-secondary">
+          <Compass className="w-8 h-8" />
+        </div>
+        <div>
+          <h3 className="font-bold text-app-text-primary text-lg">No Active Tracking</h3>
+          <p className="text-sm text-app-text-secondary mt-1">
+            You don't have any active deliveries to track at the moment.
+          </p>
+        </div>
+        <Link to="/customer/orders">
+          <Button variant="primary" size="md" className="font-bold cursor-pointer">
+            View My Orders
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Track Your Shipment</h1>
-          <p className="text-sm text-app-text-secondary">Order ID: <strong className="text-app-text-primary">#ZEP-9902</strong></p>
+          <p className="text-sm text-app-text-secondary">Delivery Status: <strong className="text-app-text-primary">{deliveryStatus || 'In Transit'}</strong></p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="secondary" dot>Live Tracking Active</Badge>
@@ -68,7 +85,7 @@ export const TrackOrder = () => {
             {agentLocation && (
               <Marker position={[agentLocation.lat, agentLocation.lng]} icon={agentIcon}>
                 <Popup>
-                  Delivery Agent (Alex)
+                  Delivery Agent
                 </Popup>
               </Marker>
             )}
@@ -100,27 +117,8 @@ export const TrackOrder = () => {
                     <Compass className="w-3.5 h-3.5" />
                   </div>
                   <h4 className="text-sm font-bold">Courier is approaching</h4>
-                  <p className="text-xs text-app-text-secondary">Estimated arrival: 8 mins</p>
+                  <p className="text-xs text-app-text-secondary">Live updates enabled</p>
                 </div>
-
-                <div className="relative">
-                  <div className="absolute -left-[30px] top-0.5 bg-success-500 text-white rounded-full p-1.5 flex items-center justify-center">
-                    <Truck className="w-3.5 h-3.5" />
-                  </div>
-                  <h4 className="text-sm font-bold">Order Approved & Dispatched</h4>
-                  <p className="text-xs text-app-text-secondary">Assigned to agent #ZEP-DRV-09</p>
-                </div>
-              </div>
-
-              {/* Agent contact */}
-              <div className="flex items-center justify-between p-4 bg-app-bg-secondary rounded-xl border border-app-border">
-                <div>
-                  <p className="text-xs text-app-text-secondary">Delivery Agent</p>
-                  <p className="text-sm font-bold">Alex Mercer</p>
-                </div>
-                <button className="bg-primary-50 text-primary-600 p-2.5 rounded-full hover:bg-primary-100 transition-colors">
-                  <PhoneCall className="w-4 h-4" />
-                </button>
               </div>
             </CardBody>
           </Card>
@@ -129,4 +127,5 @@ export const TrackOrder = () => {
     </div>
   );
 };
+
 export default TrackOrder;

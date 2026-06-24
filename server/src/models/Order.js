@@ -1,32 +1,77 @@
 import mongoose from 'mongoose';
 
+const OrderItemSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true,
+    },
+    productName: { type: String, required: true },
+    productPrice: { type: Number, required: true },
+    quantity: { type: Number, required: true, min: [1, 'Quantity must be at least 1'] },
+    subtotal: { type: Number, required: true },
+  },
+  { _id: false }
+);
+
+const ShippingAddressSchema = new mongoose.Schema(
+  {
+    fullName: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    addressLine1: { type: String, required: true },
+    addressLine2: { type: String },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    landmark: { type: String },
+  },
+  { _id: false }
+);
+
 const OrderSchema = new mongoose.Schema(
   {
-    customer: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User', 
-      required: true 
+    customerId: {
+      type: String,
+      required: true,
+      index: true,
     },
-    items: [
-      {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-        quantity: { type: Number, required: true, default: 1 }
-      }
-    ],
-    deliveryAgent: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User' 
+    orderNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
     },
-    status: { 
-      type: String, 
-      enum: ['pending', 'approved', 'assigned', 'in-transit', 'delivered', 'cancelled'], 
-      default: 'pending' 
+    items: [OrderItemSchema],
+    shippingAddress: {
+      type: ShippingAddressSchema,
+      required: true,
     },
-    totalAmount: { type: Number, required: true },
-    deliveryAddress: { type: String, required: true }
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: [
+        'pending_approval',
+        'approved',
+        'accepted',
+        'picked_up',
+        'out_for_delivery',
+        'delivered',
+        'rejected',
+      ],
+      default: 'pending_approval',
+      required: true,
+    },
+    deliveryAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
-  { 
-    timestamps: true 
+  {
+    timestamps: true,
   }
 );
 

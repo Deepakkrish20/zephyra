@@ -6,8 +6,15 @@ const ProductSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     description: { type: String },
     imageUrl: { type: String },
+    images: { type: [String], default: [] },
+    category: { type: String, default: 'Uncategorized' },
     stock: { type: Number, default: 0 },
-    isPublished: { type: Boolean, default: false }
+    status: {
+      type: String,
+      enum: ['draft', 'published', 'hidden'],
+      default: 'draft',
+      required: true
+    }
   },
   { 
     timestamps: true 
