@@ -36,8 +36,11 @@ export const ProductsPage = () => {
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Title Header */}
-      <div>
-        <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
+      <div className="border-b border-app-border pb-4">
+        <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 font-mono tracking-widest uppercase">
+          // CURATED COLLECTION
+        </span>
+        <h1 className="text-3xl font-extrabold tracking-tight text-app-text-primary mt-1">
           Explore Products
         </h1>
         <p className="text-sm text-app-text-secondary mt-1">

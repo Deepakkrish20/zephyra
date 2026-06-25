@@ -26,16 +26,16 @@ export const PublicLayout = () => {
       <header className="sticky top-0 z-40 bg-app-bg-primary border-b border-app-border backdrop-blur-md bg-opacity-80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 font-black text-xl tracking-tight bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
-              <ShoppingBag className="w-6 h-6 text-primary-600" />
+            <Link to="/" className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
+              <ShoppingBag className="w-5 h-5 text-primary-600" />
               ZEPHYRA
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <NavLink to="/" className={({ isActive }) => `text-sm font-semibold hover:text-primary-600 transition-colors ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`}>
-                Home
+              <NavLink to="/" className={({ isActive }) => `text-[10px] font-mono tracking-widest uppercase hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+                INDEX // HOME
               </NavLink>
-              <NavLink to="/products" className={({ isActive }) => `text-sm font-semibold hover:text-primary-600 transition-colors ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`}>
-                Shop Products
+              <NavLink to="/products" className={({ isActive }) => `text-[10px] font-mono tracking-widest uppercase hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+                DIR // CATALOG
               </NavLink>
             </nav>
           </div>
@@ -54,7 +54,7 @@ export const PublicLayout = () => {
             <Link to="/cart" className="relative p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors">
               <ShoppingCart className="w-5 h-5" />
               {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary-600 text-white font-extrabold text-[10px] w-5 h-5 flex items-center justify-center rounded-full ring-2 ring-app-bg-primary animate-pulse">
+                <span className="absolute -top-1 -right-1 bg-primary-500 text-zinc-950 font-extrabold text-[10px] w-5 h-5 flex items-center justify-center rounded-full ring-2 ring-app-bg-primary animate-pulse">
                   {itemCount}
                 </span>
               )}
@@ -63,23 +63,20 @@ export const PublicLayout = () => {
             {/* User Profile / Dashboard Link */}
             {user ? (
               <div className="flex items-center gap-2">
-                <Link to={user.role === 'admin' ? '/admin' : user.role === 'delivery_agent' ? '/delivery' : '/customer/profile'} className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+                <Link to={user.role === 'admin' ? '/admin' : user.role === 'delivery_agent' ? '/delivery' : '/customer/profile'} className="text-sm font-bold bg-primary-500 hover:bg-primary-600 text-zinc-950 px-4 py-2 rounded-lg transition-colors">
                   Dashboard ({user.role})
                 </Link>
                 <button 
                   onClick={logout} 
-                  className="text-sm font-semibold border border-app-border px-3 py-1.5 rounded-lg hover:bg-app-bg-secondary transition-colors cursor-pointer"
+                  className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   Logout
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link to="/login" className="text-sm font-semibold text-app-text-secondary hover:text-primary-600 px-3 py-1.5 transition-colors">
+                <Link to="/login" className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer">
                   Login
-                </Link>
-                <Link to="/register" className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
-                  Register
                 </Link>
               </div>
             )}

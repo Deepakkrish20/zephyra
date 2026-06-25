@@ -93,18 +93,19 @@ export const Login = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-zinc-950 hover:bg-zinc-900 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 text-white font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-app-text-secondary">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-primary-600 font-semibold hover:underline">
-          Register here
+      {/* Subtle First-time Customer Signup Link */}
+      <div className="mt-6 text-center font-mono text-[10px] text-app-text-secondary tracking-wider">
+        <span>NEW CUSTOMER? </span>
+        <Link to="/register" className="text-app-text-primary font-bold hover:underline">
+          CREATE AN ACCOUNT
         </Link>
-      </p>
+      </div>
     </div>
   );
 };

@@ -30,8 +30,8 @@ export const CustomerLayout = () => {
       <header className="sticky top-0 z-40 bg-app-bg-primary border-b border-app-border backdrop-blur-md bg-opacity-80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 font-black text-xl tracking-tight bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
-              <ShoppingBag className="w-6 h-6 text-primary-600" />
+            <Link to="/" className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
+              <ShoppingBag className="w-5 h-5 text-primary-600" />
               ZEPHYRA
             </Link>
             <nav className="hidden md:flex items-center gap-6">

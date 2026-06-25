@@ -55,8 +55,8 @@ export const AdminLayout = () => {
       >
         {/* Sidebar Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-app-border">
-          <Link to="/" className="flex items-center gap-2 font-black text-lg tracking-tight bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
-            ZEPHYRA ADMIN
+          <Link to="/" className="flex items-center gap-2 font-mono font-bold text-base tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
+            ZEPHYRA <span className="text-[10px] bg-primary-100 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded-full font-sans tracking-normal font-bold">ADMIN</span>
           </Link>
           <button 
             onClick={() => setIsSidebarOpen(false)} 

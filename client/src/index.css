@@ -42,23 +42,24 @@
   --color-app-text-primary: var(--text-primary);
   --color-app-text-secondary: var(--text-secondary);
   --color-app-border: var(--border);
+  --color-app-watermark: var(--watermark-color);
 
   --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
 }
 
 :root {
-  /* Light Mode Colors (Curated Violet & Teal Palette) */
-  --primary-50: #f5f3ff;
-  --primary-100: #ede9fe;
-  --primary-200: #ddd6fe;
-  --primary-300: #c4b5fd;
-  --primary-400: #a78bfa;
-  --primary-500: #8b5cf6;
-  --primary-600: #7c3aed;
-  --primary-700: #6d28d9;
-  --primary-800: #5b21b6;
-  --primary-900: #4c1d95;
-  --primary-950: #2e1065;
+  /* Light Mode Colors (Curated Neon Lime Green Palette - Para.co inspired) */
+  --primary-50: #f3fef0;
+  --primary-100: #e5fad0;
+  --primary-200: #cbfa9d;
+  --primary-300: #acf46c;
+  --primary-400: #71eb44;
+  --primary-500: #71eb44;
+  --primary-600: #54ce27;
+  --primary-700: #3ea31a;
+  --primary-800: #318016;
+  --primary-900: #286615;
+  --primary-950: #123307;
 
   --secondary-50: #f0fdfa;
   --secondary-100: #ccfbf1;
@@ -73,9 +74,9 @@
   --secondary-950: #042f2e;
 
   /* Status CSS variables */
-  --success-50: #f0fdf4;
-  --success-500: #22c55e;
-  --success-600: #16a34a;
+  --success-50: #f3fef0;
+  --success-500: #71eb44;
+  --success-600: #54ce27;
 
   --warning-50: #fffbeb;
   --warning-500: #f59e0b;
@@ -91,34 +92,36 @@
   --text-primary: #0f172a;
   --text-secondary: #64748b;
   --border: #e2e8f0;
+  --watermark-color: rgba(113, 235, 68, 0.015);
 }
 
 /* Dark Mode Variables - triggered by .dark class on <html> element */
 .dark {
-  --bg-primary: #0b0f19;
-  --bg-secondary: #111827;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
-  --border: #1f2937;
+  --border: #1c1c1f;
+  --watermark-color: rgba(113, 235, 68, 0.02);
 
   /* Adjusted primary & secondary tints for dark background contrast */
-  --primary-50: #1e1b4b;
-  --primary-100: #2e1065;
-  --primary-200: #4c1d95;
-  --primary-300: #5b21b6;
-  --primary-400: #6d28d9;
-  --primary-500: #a78bfa;
-  --primary-600: #c4b5fd;
-  --primary-700: #ddd6fe;
-  --primary-800: #ede9fe;
-  --primary-900: #f5f3ff;
-  --primary-950: #faf5ff;
+  --primary-50: #0d2d05;
+  --primary-100: #1b4e0d;
+  --primary-200: #2b6e15;
+  --primary-300: #3da31c;
+  --primary-400: #54ce27;
+  --primary-500: #71eb44;
+  --primary-600: #90f167;
+  --primary-700: #aef58c;
+  --primary-800: #caf9aa;
+  --primary-900: #e5fbcc;
+  --primary-950: #f3fef0;
 
   --secondary-50: #042f2e;
   --secondary-500: #2dd4bf;
   --secondary-600: #5eead4;
 
-  --success-50: #052e16;
+  --success-50: #0d2d05;
   --warning-50: #451a03;
   --danger-50: #450a0a;
 }
@@ -147,3 +150,211 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
+
+/* Premium 2026 Grid & Design Patterns */
+.bg-grid-pattern {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-size: 20px 20px;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+}
+
+.dark .bg-dot-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Custom Keyframe Animations */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes blob-float-1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes blob-float-2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 40px) scale(1.05);
+  }
+}
+
+.animate-blob-1 {
+  animation: blob-float-1 12s ease-in-out infinite;
+}
+
+.animate-blob-2 {
+  animation: blob-float-2 16s ease-in-out infinite;
+}
+
+.glow-card {
+  position: relative;
+}
+
+.glow-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: var(--primary-500);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glow-card:hover::after {
+  opacity: 0.25;
+  box-shadow: 0 0 15px var(--primary-500);
+}
+
+/* Unique Light Theme Blueprint & HUD Styles */
+
+/* Dynamic stroke dash offsets for logistics packets */
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animate-flow-dash {
+  stroke-dasharray: 6, 4;
+  animation: flow-dash 1.2s linear infinite;
+}
+
+/* Radar-like scanning sweep */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar-sweep {
+  transform-origin: center;
+  animation: radar-sweep 20s linear infinite;
+}
+
+/* Bracket micro-translations on hover */
+.hud-bracket {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #71eb44;
+  border-style: solid;
+  opacity: 0.25;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.group:hover .hud-bracket {
+  opacity: 1;
+  border-color: #71eb44;
+}
+
+.hud-bracket-tl {
+  top: 6px;
+  left: 6px;
+  border-width: 1.5px 0 0 1.5px;
+}
+.group:hover .hud-bracket-tl {
+  top: 10px;
+  left: 10px;
+}
+
+.hud-bracket-tr {
+  top: 6px;
+  right: 6px;
+  border-width: 1.5px 1.5px 0 0;
+}
+.group:hover .hud-bracket-tr {
+  top: 10px;
+  right: 10px;
+}
+
+.hud-bracket-bl {
+  bottom: 6px;
+  left: 6px;
+  border-width: 0 0 1.5px 1.5px;
+}
+.group:hover .hud-bracket-bl {
+  bottom: 10px;
+  left: 10px;
+}
+
+.hud-bracket-br {
+  bottom: 6px;
+  right: 6px;
+  border-width: 0 1.5px 1.5px 0;
+}
+.group:hover .hud-bracket-br {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* High precision layout lines */
+.bg-blueprint-grid-fine {
+  background-size: 25px 25px;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+}
+
+.dark .bg-blueprint-grid-fine {
+  background-image: none;
+}
+
+
