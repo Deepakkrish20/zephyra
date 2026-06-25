@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes.js';
+import adminRoutes from './adminRoutes.js';
 import productRoutes from './productRoutes.js';
 import cartRoutes from './cartRoutes.js';
 import checkoutRoutes from './checkoutRoutes.js';
@@ -8,8 +10,9 @@ import { protect, restrictTo } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-// Route placeholders
-router.use('/auth', (req, res) => res.json({ msg: 'Auth routes placeholder' }));
+// API Routes
+router.use('/auth', authRoutes);
+router.use('/admin', protect, restrictTo('admin'), adminRoutes);
 router.use('/products', productRoutes);
 router.use('/cart', cartRoutes);
 router.use('/checkout', checkoutRoutes);

@@ -1,8 +1,9 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import RoleRoute from './RoleRoute';
 import { ROLES } from '../constants/roles';
+import { useAuthStore } from '../store/authStore';
 
 // Layouts
 import PublicLayout from '../layouts/PublicLayout';
@@ -14,6 +15,9 @@ import DeliveryLayout from '../layouts/DeliveryLayout';
 import Home from '../pages/Home';
 import Products from '../pages/Products';
 import ProductDetails from '../pages/ProductDetails';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import VerifyEmail from '../pages/VerifyEmail';
 
 // Customer Pages
 import Cart from '../pages/customer/Cart';
@@ -36,6 +40,14 @@ import AcceptedOrders from '../pages/delivery/AcceptedOrders';
 import DeliveryTracking from '../pages/delivery/DeliveryTracking';
 
 export const AppRoutes = () => {
+  const { token, getCurrentUser } = useAuthStore();
+
+  useEffect(() => {
+    if (token) {
+      getCurrentUser().catch(() => {});
+    }
+  }, [token, getCurrentUser]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -45,6 +57,9 @@ export const AppRoutes = () => {
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="verify-email" element={<VerifyEmail />} />
         </Route>
 
         {/* Customer Private Routes */}
@@ -52,12 +67,13 @@ export const AppRoutes = () => {
           path="/customer"
           element={
             <ProtectedRoute>
-              <RoleRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN]}>
+              <RoleRoute allowedRoles={[ROLES.CUSTOMER]}>
                 <CustomerLayout />
               </RoleRoute>
             </ProtectedRoute>
           }
         >
+          <Route index element={<Navigate to="/customer/profile" replace />} />
           <Route path="profile" element={<Profile />} />
           <Route path="orders" element={<Orders />} />
           <Route path="track" element={<TrackOrder />} />
@@ -87,7 +103,7 @@ export const AppRoutes = () => {
           path="/delivery"
           element={
             <ProtectedRoute>
-              <RoleRoute allowedRoles={[ROLES.DELIVERY_AGENT, ROLES.ADMIN]}>
+              <RoleRoute allowedRoles={[ROLES.DELIVERY_AGENT]}>
                 <DeliveryLayout />
               </RoleRoute>
             </ProtectedRoute>

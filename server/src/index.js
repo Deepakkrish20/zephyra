@@ -4,13 +4,18 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import router from './routes/index.js';
 import errorHandler from './middlewares/errorMiddleware.js';
 import { initSocket } from './sockets/socket.js';
 
-// Load environment variables
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables relative to this file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Establish DB Connection
 connectDB();

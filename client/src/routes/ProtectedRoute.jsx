@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
 export const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated, token, isLoading } = useAuthStore();
   const location = useLocation();
 
   if (isLoading) {
@@ -14,10 +14,10 @@ export const ProtectedRoute = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    // Redirect to home/login page if not authenticated
+  if (!isAuthenticated || !token) {
+    // Redirect to login page if not authenticated
     // Saving the location to redirect back after login
-    return <Navigate to="/" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;

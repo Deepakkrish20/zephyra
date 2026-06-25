@@ -23,6 +23,11 @@ export const adminApi = {
     // const response = await api.post(`/admin/orders/${orderId}/approve`);
     // return response.data;
     return {};
+  },
+
+  createDeliveryAgent: async (agentData) => {
+    const response = await api.post('/admin/delivery-agents', agentData);
+    return response.data;
   }
 };
 

@@ -6,7 +6,7 @@ import { useCartStore } from '@/store/cartStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
 
 export const PublicLayout = () => {
-  const { user, setMockRole } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const { itemCount } = useCartStore();
   const [isDark, setIsDark] = useState(false);
 
@@ -18,10 +18,6 @@ export const PublicLayout = () => {
   const handleThemeToggle = () => {
     const darkState = toggleDarkMode();
     setIsDark(darkState);
-  };
-
-  const handleRoleChange = (e) => {
-    setMockRole(e.target.value);
   };
 
   return (
@@ -45,21 +41,6 @@ export const PublicLayout = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Developer Role Switcher (Mock Auth Help) */}
-            <div className="hidden lg:flex items-center gap-2 bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/20 px-3 py-1 rounded-lg">
-              <ShieldAlert className="w-4 h-4 text-yellow-600" />
-              <span className="text-xs text-yellow-800 dark:text-yellow-400 font-semibold">Dev Role:</span>
-              <select 
-                value={user?.role || ''} 
-                onChange={handleRoleChange} 
-                className="bg-transparent text-xs text-yellow-900 dark:text-yellow-300 font-bold border-none focus:outline-none cursor-pointer"
-              >
-                <option value="customer" className="bg-app-bg-primary text-app-text-primary">Customer</option>
-                <option value="admin" className="bg-app-bg-primary text-app-text-primary">Admin</option>
-                <option value="delivery_agent" className="bg-app-bg-primary text-app-text-primary">Delivery Agent</option>
-              </select>
-            </div>
-
             {/* Dark Mode */}
             <button 
               onClick={handleThemeToggle} 
@@ -81,11 +62,26 @@ export const PublicLayout = () => {
 
             {/* User Profile / Dashboard Link */}
             {user ? (
-              <Link to={user.role === 'admin' ? '/admin' : user.role === 'delivery_agent' ? '/delivery' : '/customer/profile'} className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
-                Dashboard ({user.role})
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link to={user.role === 'admin' ? '/admin' : user.role === 'delivery_agent' ? '/delivery' : '/customer/profile'} className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  Dashboard ({user.role})
+                </Link>
+                <button 
+                  onClick={logout} 
+                  className="text-sm font-semibold border border-app-border px-3 py-1.5 rounded-lg hover:bg-app-bg-secondary transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
             ) : (
-              <span className="text-sm text-app-text-secondary">Not Authenticated</span>
+              <div className="flex items-center gap-2">
+                <Link to="/login" className="text-sm font-semibold text-app-text-secondary hover:text-primary-600 px-3 py-1.5 transition-colors">
+                  Login
+                </Link>
+                <Link to="/register" className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  Register
+                </Link>
+              </div>
             )}
           </div>
         </div>
