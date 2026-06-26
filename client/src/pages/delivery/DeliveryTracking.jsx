@@ -72,7 +72,7 @@ export const DeliveryTracking = () => {
             {/* Trail */}
             <Polyline 
               positions={coordinatesLog.map((c) => [c.lat, c.lng])} 
-              color="#0d9488" 
+              color="#71eb44" 
               weight={4}
             />
           </MapContainer>

@@ -8,6 +8,8 @@ import orderRoutes from './orderRoutes.js';
 import adminOrderRoutes from './adminOrderRoutes.js';
 import { protect, restrictTo } from '../middlewares/authMiddleware.js';
 
+import deliveryRoutes from './deliveryRoutes.js';
+
 const router = Router();
 
 // API Routes
@@ -18,7 +20,7 @@ router.use('/cart', cartRoutes);
 router.use('/checkout', checkoutRoutes);
 router.use('/orders', orderRoutes);
 router.use('/admin/orders', protect, restrictTo('admin'), adminOrderRoutes);
-router.use('/delivery', (req, res) => res.json({ msg: 'Agent dispatches routes placeholder' }));
+router.use('/delivery', deliveryRoutes);
 router.use('/tracking', (req, res) => res.json({ msg: 'Live coordinates routes placeholder' }));
 
 export default router;

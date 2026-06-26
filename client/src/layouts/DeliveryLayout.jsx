@@ -53,8 +53,8 @@ export const DeliveryLayout = () => {
         `}
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-app-border">
-          <Link to="/" className="flex items-center gap-2 font-black text-base tracking-tight text-secondary-600 dark:text-secondary-400">
-            <Compass className="w-5 h-5 text-secondary-600" />
+          <Link to="/" className="flex items-center gap-2 font-black text-base tracking-tight text-primary-600 dark:text-primary-400">
+            <Compass className="w-5 h-5 text-primary-600" />
             ZEPHYRA DRIVER
           </Link>
           <button 
@@ -76,7 +76,7 @@ export const DeliveryLayout = () => {
                 onClick={() => setIsSidebarOpen(false)}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all
                   ${isActive 
-                    ? 'bg-secondary-600 text-white shadow-md shadow-secondary-600/10' 
+                    ? 'bg-primary-500 text-white shadow-md shadow-primary-500/10' 
                     : 'text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary'
                   }
                 `}
@@ -111,7 +111,7 @@ export const DeliveryLayout = () => {
             <Menu className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2 bg-secondary-50 dark:bg-secondary-500/10 px-3 py-1 rounded-full text-secondary-600 dark:text-secondary-400">
+          <div className="flex items-center gap-2 bg-primary-50 dark:bg-primary-500/10 px-3 py-1 rounded-full text-primary-600 dark:text-primary-400">
             <UserCheck className="w-4 h-4" />
             <span className="text-xs font-bold">On Duty</span>
           </div>
@@ -131,7 +131,7 @@ export const DeliveryLayout = () => {
                   ID: #ZEP-DRV-09
                 </p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-secondary-100 dark:bg-secondary-500/10 flex items-center justify-center text-secondary-600 font-bold text-xs">
+              <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-500/10 flex items-center justify-center text-primary-600 font-bold text-xs">
                 DR
               </div>
             </div>

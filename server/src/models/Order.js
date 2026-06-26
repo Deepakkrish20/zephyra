@@ -69,6 +69,15 @@ const OrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    deliveryRating: {
+      type: Number,
+      min: 1,
+      max: 5,
+    },
+    deliveryTip: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
