@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import RoleRoute from './RoleRoute';
@@ -101,13 +101,7 @@ export const AppRoutes = () => {
         {/* Delivery Agent Private Routes */}
         <Route
           path="/delivery"
-          element={
-            <ProtectedRoute>
-              <RoleRoute allowedRoles={[ROLES.DELIVERY_AGENT]}>
-                <DeliveryLayout />
-              </RoleRoute>
-            </ProtectedRoute>
-          }
+          element={<DeliveryLayout />}
         >
           <Route index element={<DeliveryDashboard />} />
           <Route path="available-orders" element={<AvailableOrders />} />
