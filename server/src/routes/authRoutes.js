@@ -30,4 +30,19 @@ router.get('/me', protect, authController.getCurrentUser);
 // @access  Public
 router.post('/verify', authController.verify);
 
+// @route   GET /api/auth/addresses
+// @desc    Get customer addresses
+// @access  Private
+router.get('/addresses', protect, authController.getAddresses);
+
+// @route   POST /api/auth/addresses
+// @desc    Add a new customer address
+// @access  Private
+router.post('/addresses', protect, authController.addAddress);
+
+// @route   DELETE /api/auth/addresses/:addressId
+// @desc    Delete a customer address
+// @access  Private
+router.delete('/addresses/:addressId', protect, authController.deleteAddress);
+
 export default router;

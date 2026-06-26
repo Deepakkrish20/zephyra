@@ -112,3 +112,92 @@ export const verify = async (req, res, next) => {
   }
 };
 
+/**
+ * Retrieve saved addresses for the customer
+ */
+export const getAddresses = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    return res.status(200).json({
+      success: true,
+      data: {
+        addresses: user.addresses || []
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Add a new shipping address to the customer's profile
+ */
+export const addAddress = async (req, res, next) => {
+  try {
+    const { fullName, phoneNumber, addressLine1, addressLine2, city, state, postalCode, landmark } = req.body;
+
+    if (!fullName || !phoneNumber || !addressLine1 || !city || !state || !postalCode) {
+      return res.status(400).json({ success: false, message: 'Required shipping details are missing.' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const newAddress = {
+      fullName,
+      phoneNumber,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      postalCode,
+      landmark
+    };
+
+    user.addresses.push(newAddress);
+    await user.save();
+
+    // Return the newly created address (the last one pushed)
+    const addedAddress = user.addresses[user.addresses.length - 1];
+
+    return res.status(201).json({
+      success: true,
+      message: 'Address added successfully.',
+      data: {
+        address: addedAddress
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Delete a shipping address from the customer's profile
+ */
+export const deleteAddress = async (req, res, next) => {
+  try {
+    const { addressId } = req.params;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Remove address using mongoose sub-document pull
+    user.addresses.pull({ _id: addressId });
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Address deleted successfully.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

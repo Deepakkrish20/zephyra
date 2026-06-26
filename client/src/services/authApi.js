@@ -24,6 +24,21 @@ export const authApi = {
   verifyEmail: async (email, code) => {
     const response = await api.post('/auth/verify', { email, code });
     return response.data;
+  },
+
+  getAddresses: async () => {
+    const response = await api.get('/auth/addresses');
+    return response.data;
+  },
+
+  addAddress: async (addressData) => {
+    const response = await api.post('/auth/addresses', addressData);
+    return response.data;
+  },
+
+  deleteAddress: async (addressId) => {
+    const response = await api.delete(`/auth/addresses/${addressId}`);
+    return response.data;
   }
 };
 

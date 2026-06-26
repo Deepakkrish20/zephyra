@@ -10,7 +10,7 @@ export const registerTrackingSocket = (socket, io) => {
       const { orderId, agentId, lat, lng } = data;
       
       // Execute database update or processing logic
-      const result = await updateLiveLocation(orderId, agentId, { lat, lng });
+      await updateLiveLocation(orderId, agentId, { lat, lng });
 
       // Notify customer listening room
       io.to(`order-${orderId}`).emit('agent-gps-coordinates', {

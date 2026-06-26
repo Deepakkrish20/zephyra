@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -18,15 +18,17 @@ export const VerifyEmail = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const email = searchParams.get('email') || '';
+  const codeParam = searchParams.get('code') || '';
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: zodResolver(verifySchema),
-    defaultValues: { code: '' },
+    defaultValues: { code: codeParam },
   });
 
   const onSubmit = async (data) => {
@@ -45,6 +47,14 @@ export const VerifyEmail = () => {
       toast.error(errorMsg);
     }
   };
+
+  useEffect(() => {
+    if (codeParam && email) {
+      setValue('code', codeParam);
+      onSubmit({ code: codeParam });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codeParam, email, setValue]);
 
   return (
     <div className="max-w-md mx-auto my-12 p-6 bg-app-bg-primary border border-app-border rounded-xl shadow-sm">

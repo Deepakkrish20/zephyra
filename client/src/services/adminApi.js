@@ -28,6 +28,16 @@ export const adminApi = {
   createDeliveryAgent: async (agentData) => {
     const response = await api.post('/admin/delivery-agents', agentData);
     return response.data;
+  },
+
+  getCustomers: async () => {
+    const response = await api.get('/admin/customers');
+    return response.data;
+  },
+
+  sendVerificationReminder: async (id) => {
+    const response = await api.post(`/admin/customers/${id}/send-reminder`);
+    return response.data;
   }
 };
 
