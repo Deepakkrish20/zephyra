@@ -101,7 +101,13 @@ export const AppRoutes = () => {
         {/* Delivery Agent Private Routes */}
         <Route
           path="/delivery"
-          element={<DeliveryLayout />}
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowedRoles={[ROLES.DELIVERY_AGENT]}>
+                <DeliveryLayout />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
         >
           <Route index element={<DeliveryDashboard />} />
           <Route path="available-orders" element={<AvailableOrders />} />

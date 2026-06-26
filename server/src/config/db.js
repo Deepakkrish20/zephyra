@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import Product from '../models/Product.js';
+import User from '../models/User.js';
+import { hashPassword } from '../utils/passwordUtil.js';
 
 const seedProducts = async () => {
   try {
@@ -109,9 +111,57 @@ const seedProducts = async () => {
   }
 };
 
+const seedUsers = async () => {
+  try {
+    const adminExists = await User.findOne({ email: 'krishdeepak747@gmail.com' });
+    if (!adminExists) {
+      console.log('[Seeding] Seeding admin user krishdeepak747@gmail.com...');
+      const adminPassword = await hashPassword('deepak@123');
+      await User.create({
+        name: 'Deepak Admin',
+        email: 'krishdeepak747@gmail.com',
+        password: adminPassword,
+        role: 'admin',
+        isVerified: true
+      });
+      console.log('[Seeding] Seeded admin user successfully.');
+    }
+
+    const deliveryCount = await User.countDocuments({ role: 'delivery_agent' });
+    if (deliveryCount === 0) {
+      console.log('[Seeding] No delivery agents found. Seeding default delivery agent...');
+      const deliveryPassword = await hashPassword('delivery123');
+      await User.create({
+        name: 'John Doe (Courier)',
+        email: 'delivery@zephyra.com',
+        password: deliveryPassword,
+        role: 'delivery_agent',
+        isVerified: true
+      });
+      console.log('[Seeding] Seeded default delivery agent successfully.');
+    }
+
+    const customerCount = await User.countDocuments({ role: 'customer' });
+    if (customerCount === 0) {
+      console.log('[Seeding] No customer users found. Seeding default customer...');
+      const customerPassword = await hashPassword('customer123');
+      await User.create({
+        name: 'Jane Smith',
+        email: 'customer@zephyra.com',
+        password: customerPassword,
+        role: 'customer',
+        isVerified: true
+      });
+      console.log('[Seeding] Seeded default customer successfully.');
+    }
+  } catch (error) {
+    console.error('[Seeding] Error seeding users:', error.message);
+  }
+};
+
 export const connectDB = async () => {
   try {
-    const connStr = process.env.MONGO_URI || 'mongodb://localhost:27017/zephyra';
+    const connStr = process.env.MONGO_URI || 'mongodb+srv://zephyra:Nosn0dJI5e5DS4ma@cluster0.6kylk2y.mongodb.net/zephyra?retryWrites=true&w=majority&appName=Cluster0';
     const conn = await mongoose.connect(connStr);
     console.log(`[Database] MongoDB connected: ${conn.connection.host}`);
     
@@ -120,6 +170,9 @@ export const connectDB = async () => {
     
     // Seed default products
     await seedProducts();
+
+    // Seed default users
+    await seedUsers();
   } catch (error) {
     console.error(`[Database] MongoDB connection error: ${error.message}`);
     process.exit(1);
