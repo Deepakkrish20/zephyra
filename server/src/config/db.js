@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
 import { hashPassword } from '../utils/passwordUtil.js';
+import Notification from '../models/Notification.js';
 
 const seedProducts = async () => {
   try {
@@ -136,6 +137,25 @@ const seedUsers = async () => {
     const deletedCustomer = await User.deleteOne({ email: 'customer@zephyra.com' });
     if (deletedCustomer.deletedCount > 0) {
       console.log('[Cleanup] Removed mock customer (customer@zephyra.com) from database.');
+    }
+
+    // Clean up notifications for mock users, orphaned notifications, or mock messages
+    const allNotifications = await Notification.find({});
+    const userIds = (await User.find({}, '_id')).map(u => u._id.toString());
+    
+    let deletedNotifCount = 0;
+    for (const notif of allNotifications) {
+      if (
+        !notif.recipient || 
+        !userIds.includes(notif.recipient.toString()) || 
+        /mock/i.test(notif.message)
+      ) {
+        await Notification.deleteOne({ _id: notif._id });
+        deletedNotifCount++;
+      }
+    }
+    if (deletedNotifCount > 0) {
+      console.log(`[Cleanup] Removed ${deletedNotifCount} mock/orphaned notifications from database.`);
     }
   } catch (error) {
     console.error('[Seeding] Error seeding users:', error.message);
