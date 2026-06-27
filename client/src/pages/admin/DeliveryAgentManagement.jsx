@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,8 +16,27 @@ const agentSchema = z.object({
 });
 
 export const DeliveryAgentManagement = () => {
+  const [agents, setAgents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newlyCreatedAgents, setNewlyCreatedAgents] = useState([]);
+  const [isFetchLoading, setIsFetchLoading] = useState(true);
+
+  const fetchAgents = async () => {
+    try {
+      const response = await adminApi.getDeliveryAgents();
+      if (response.success && response.data) {
+        setAgents(response.data.agents);
+      }
+    } catch (error) {
+      console.error('Failed to fetch delivery agents:', error);
+      toast.error('Could not load delivery agents roster.');
+    } finally {
+      setIsFetchLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
 
   const {
     register,
@@ -37,8 +56,7 @@ export const DeliveryAgentManagement = () => {
       
       toast.success(`Delivery Agent "${createdAgent.name}" registered successfully!`);
       
-      // Append to local state list for immediate UI feedback
-      setNewlyCreatedAgents((prev) => [createdAgent, ...prev]);
+      setAgents((prev) => [createdAgent, ...prev]);
       reset();
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message || 'Failed to create delivery agent';
@@ -158,29 +176,32 @@ export const DeliveryAgentManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-app-border">
-                  {/* Dynamic newly created agents */}
-                  {newlyCreatedAgents.map((agent, index) => (
-                    <tr key={agent._id || index} className="hover:bg-app-bg-secondary/40 transition-colors">
-                      <td className="px-6 py-4 font-bold text-primary-600">
-                        #ZEP-DRV-{agent._id ? agent._id.substring(18).toUpperCase() : 'NEW'}
-                      </td>
-                      <td className="px-6 py-4 font-semibold">{agent.name}</td>
-                      <td className="px-6 py-4 text-app-text-secondary">{agent.email}</td>
-                      <td className="px-6 py-4">
-                        <Badge variant="success" dot>Registered (Ready)</Badge>
+                  {isFetchLoading ? (
+                    <tr>
+                      <td colSpan="4" className="px-6 py-8 text-center text-app-text-secondary">
+                        Loading delivery agents...
                       </td>
                     </tr>
-                  ))}
-
-                  {/* Seeded default agent */}
-                  <tr className="hover:bg-app-bg-secondary/40 transition-colors">
-                    <td className="px-6 py-4 font-bold text-primary-600">#ZEP-DRV-09</td>
-                    <td className="px-6 py-4 font-semibold">Alex Mercer</td>
-                    <td className="px-6 py-4 text-app-text-secondary">alex.mercer@zephyra.io</td>
-                    <td className="px-6 py-4">
-                      <Badge variant="secondary" dot>Active (On Duty)</Badge>
-                    </td>
-                  </tr>
+                  ) : agents.length === 0 ? (
+                    <tr>
+                      <td colSpan="4" className="px-6 py-8 text-center text-app-text-secondary">
+                        No delivery agents registered yet.
+                      </td>
+                    </tr>
+                  ) : (
+                    agents.map((agent) => (
+                      <tr key={agent._id} className="hover:bg-app-bg-secondary/40 transition-colors">
+                        <td className="px-6 py-4 font-bold text-primary-600">
+                          #ZEP-DRV-{agent._id.substring(18).toUpperCase()}
+                        </td>
+                        <td className="px-6 py-4 font-semibold">{agent.name}</td>
+                        <td className="px-6 py-4 text-app-text-secondary">{agent.email}</td>
+                        <td className="px-6 py-4">
+                          <Badge variant="success" dot>Registered (Ready)</Badge>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </CardBody>

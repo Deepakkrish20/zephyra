@@ -25,7 +25,7 @@ const addressSchema = z.object({
   postalCode: z.string()
     .min(5, 'Postal code must be at least 5 characters')
     .regex(/^[0-9A-Za-z\s-]+$/, 'Invalid postal code format'),
-  landmark: z.string().optional(),
+  landmark: z.string().min(3, 'Landmark is required to help delivery agents locate you'),
 });
 
 export const Profile = () => {
@@ -266,7 +266,7 @@ export const Profile = () => {
               {...register('postalCode')}
             />
             <Input
-              label="Landmark (Optional)"
+              label="Landmark"
               placeholder="Opposite Central Park"
               disabled={actionLoading}
               error={errors.landmark?.message}

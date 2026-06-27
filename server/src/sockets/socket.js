@@ -22,6 +22,12 @@ export const initSocket = (server) => {
       console.log(`[Sockets] Socket ${socket.id} joined room: order-${orderId}`);
     });
 
+    // Join room for targeting user-specific notifications
+    socket.on('join-user-room', (userId) => {
+      socket.join(`user-${userId}`);
+      console.log(`[Sockets] Socket ${socket.id} joined user room: user-${userId}`);
+    });
+
     // Event Skeletons
 
     // Order Creation Dispatch

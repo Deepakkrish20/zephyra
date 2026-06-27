@@ -1,26 +1,26 @@
 import api from './api';
 
 export const adminApi = {
-  createProduct: async (productData) => {
-    // const response = await api.post('/admin/products', productData);
+  createProduct: async () => {
+    // const response = await api.post('/admin/products', ...);
     // return response.data;
     return {};
   },
 
-  updateProduct: async (id, productData) => {
-    // const response = await api.put(`/admin/products/${id}`, productData);
+  updateProduct: async () => {
+    // const response = await api.put(`/admin/products/...`, ...);
     // return response.data;
     return {};
   },
 
-  deleteProduct: async (id) => {
-    // const response = await api.delete(`/admin/products/${id}`);
+  deleteProduct: async () => {
+    // const response = await api.delete(`/admin/products/...`);
     // return response.data;
     return {};
   },
 
-  approveOrder: async (orderId) => {
-    // const response = await api.post(`/admin/orders/${orderId}/approve`);
+  approveOrder: async () => {
+    // const response = await api.post(`/admin/orders/.../approve`);
     // return response.data;
     return {};
   },
@@ -30,8 +30,18 @@ export const adminApi = {
     return response.data;
   },
 
+  getDeliveryAgents: async () => {
+    const response = await api.get('/admin/delivery-agents');
+    return response.data;
+  },
+
   getCustomers: async () => {
     const response = await api.get('/admin/customers');
+    return response.data;
+  },
+
+  getDashboardStats: async () => {
+    const response = await api.get('/admin/dashboard');
     return response.data;
   },
 

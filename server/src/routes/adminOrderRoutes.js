@@ -2,6 +2,7 @@ import { Router } from 'express';
 import mongoose from 'mongoose';
 import Order from '../models/Order.js';
 import User from '../models/User.js';
+import { createNotification } from '../utils/notificationUtil.js';
 
 const router = Router();
 
@@ -120,6 +121,17 @@ router.put('/:id/approve', async (req, res, next) => {
     order.status = 'approved';
     await order.save();
 
+    // Notify Customer
+    try {
+      await createNotification(
+        order.customerId,
+        `Your order ${order.orderNumber} has been approved and is being prepared.`,
+        'order-approved'
+      );
+    } catch (notifyError) {
+      console.error('[Notifications] Failed to notify customer of order approval:', notifyError.message);
+    }
+
     res.json(order);
   } catch (error) {
     if (error.kind === 'ObjectId') {
@@ -147,6 +159,17 @@ router.put('/:id/reject', async (req, res, next) => {
 
     order.status = 'rejected';
     await order.save();
+
+    // Notify Customer
+    try {
+      await createNotification(
+        order.customerId,
+        `Your order ${order.orderNumber} has been rejected.`,
+        'order-rejected'
+      );
+    } catch (notifyError) {
+      console.error('[Notifications] Failed to notify customer of order rejection:', notifyError.message);
+    }
 
     res.json(order);
   } catch (error) {

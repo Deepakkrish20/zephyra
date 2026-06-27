@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  Map, 
   Layers, 
   Compass, 
   LogOut, 
@@ -15,9 +14,12 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
+import { NotificationBell } from '@/components/NotificationBell';
+import { useNotificationStore } from '@/store/notificationStore';
 
 export const DeliveryLayout = () => {
   const { user, logout } = useAuthStore();
+  const { connectSocket, disconnectSocket } = useNotificationStore();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -25,7 +27,15 @@ export const DeliveryLayout = () => {
   useEffect(() => {
     initTheme();
     setIsDark(document.documentElement.classList.contains('dark'));
-  }, []);
+
+    if (user) {
+      connectSocket(user);
+    }
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [user, connectSocket, disconnectSocket]);
 
   const handleThemeToggle = () => {
     const darkState = toggleDarkMode();
@@ -117,6 +127,7 @@ export const DeliveryLayout = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <NotificationBell />
             <button 
               onClick={handleThemeToggle} 
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"

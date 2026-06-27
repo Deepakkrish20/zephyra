@@ -127,32 +127,15 @@ const seedUsers = async () => {
       console.log('[Seeding] Seeded admin user successfully.');
     }
 
-    const deliveryCount = await User.countDocuments({ role: 'delivery_agent' });
-    if (deliveryCount === 0) {
-      console.log('[Seeding] No delivery agents found. Seeding default delivery agent...');
-      const deliveryPassword = await hashPassword('delivery123');
-      await User.create({
-        name: 'John Doe (Courier)',
-        email: 'delivery@zephyra.com',
-        password: deliveryPassword,
-        role: 'delivery_agent',
-        isVerified: true
-      });
-      console.log('[Seeding] Seeded default delivery agent successfully.');
+    // Clean up mock default users if they exist in the database
+    const deletedDelivery = await User.deleteOne({ email: 'delivery@zephyra.com' });
+    if (deletedDelivery.deletedCount > 0) {
+      console.log('[Cleanup] Removed mock delivery agent (delivery@zephyra.com) from database.');
     }
 
-    const customerCount = await User.countDocuments({ role: 'customer' });
-    if (customerCount === 0) {
-      console.log('[Seeding] No customer users found. Seeding default customer...');
-      const customerPassword = await hashPassword('customer123');
-      await User.create({
-        name: 'Jane Smith',
-        email: 'customer@zephyra.com',
-        password: customerPassword,
-        role: 'customer',
-        isVerified: true
-      });
-      console.log('[Seeding] Seeded default customer successfully.');
+    const deletedCustomer = await User.deleteOne({ email: 'customer@zephyra.com' });
+    if (deletedCustomer.deletedCount > 0) {
+      console.log('[Cleanup] Removed mock customer (customer@zephyra.com) from database.');
     }
   } catch (error) {
     console.error('[Seeding] Error seeding users:', error.message);

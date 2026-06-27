@@ -2,6 +2,8 @@ import User from '../models/User.js';
 import { hashPassword } from '../utils/passwordUtil.js';
 import ROLES from '../constants/roles.js';
 import { sendVerificationReminderEmail } from '../utils/emailUtil.js';
+import Order from '../models/Order.js';
+import Product from '../models/Product.js';
 
 /**
  * Admin creates a new delivery agent account
@@ -67,6 +69,26 @@ export const getCustomers = async (req, res, next) => {
 };
 
 /**
+ * Admin retrieves all delivery agent accounts
+ */
+export const getDeliveryAgents = async (req, res, next) => {
+  try {
+    const agents = await User.find({ role: ROLES.DELIVERY_AGENT })
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        agents,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Admin sends a verification reminder to a customer
  */
 export const sendVerificationReminder = async (req, res, next) => {
@@ -96,6 +118,52 @@ export const sendVerificationReminder = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: 'Verification reminder sent successfully.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Admin retrieves dashboard stats and analytics
+ */
+export const getDashboardStats = async (req, res, next) => {
+  try {
+    // 1. Gross Revenue
+    const revenueResult = await Order.aggregate([
+      { $match: { status: 'delivered' } },
+      { $group: { _id: null, total: { $sum: '$totalAmount' } } },
+    ]);
+    const grossRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
+
+    // 2. Active dispatches count
+    const totalActiveOrders = await Order.countDocuments({
+      status: { $in: ['approved', 'accepted', 'picked_up', 'out_for_delivery'] },
+    });
+
+    // 3. Pending approval count
+    const pendingApprovalCount = await Order.countDocuments({ status: 'pending_approval' });
+
+    // 4. Products metrics
+    const totalProducts = await Product.countDocuments();
+    const draftProducts = await Product.countDocuments({ status: 'draft' });
+
+    // 5. Recent transactions
+    const recentOrders = await Order.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('deliveryAgent', 'name');
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        grossRevenue,
+        totalActiveOrders,
+        pendingApprovalCount,
+        totalProducts,
+        draftProducts,
+        recentOrders,
+      },
     });
   } catch (error) {
     next(error);

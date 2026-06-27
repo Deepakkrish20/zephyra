@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
-import { User, LogOut, Package, ClipboardList, MapPin, Moon, Sun, ShoppingBag } from 'lucide-react';
+import { User, LogOut, Package, MapPin, Moon, Sun, ShoppingBag } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
+import { NotificationBell } from '@/components/NotificationBell';
+import { useNotificationStore } from '@/store/notificationStore';
 
 export const CustomerLayout = () => {
   const { user, logout } = useAuthStore();
+  const { connectSocket, disconnectSocket } = useNotificationStore();
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     initTheme();
     setIsDark(document.documentElement.classList.contains('dark'));
-  }, []);
+
+    if (user) {
+      connectSocket(user);
+    }
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [user, connectSocket, disconnectSocket]);
 
   const handleThemeToggle = () => {
     const darkState = toggleDarkMode();
@@ -50,6 +61,7 @@ export const CustomerLayout = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <NotificationBell />
             <button 
               onClick={handleThemeToggle} 
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"

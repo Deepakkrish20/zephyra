@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, PackagePlus, AlertTriangle } from 'lucide-react';
 import { useProductStore } from '@/store/productStore';
 import { Card, CardBody } from '@/components/Card';
@@ -13,7 +13,6 @@ export const ProductManagement = () => {
     products,
     loading,
     error,
-    getProducts,
     createProduct,
     updateProduct,
     deleteProduct,
@@ -33,11 +32,13 @@ export const ProductManagement = () => {
   const [status, setStatus] = useState('draft');
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
+  const [imageSourceType, setImageSourceType] = useState('link'); // 'link' | 'file'
+  const [imagePreview, setImagePreview] = useState('');
 
   // Load all products (including drafts) on mount
   useEffect(() => {
     setShowAll(true);
-  }, []);
+  }, [setShowAll]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -49,6 +50,8 @@ export const ProductManagement = () => {
     setImageUrl('');
     setStatus('draft');
     setFormError('');
+    setImageSourceType('link');
+    setImagePreview('');
     setIsModalOpen(true);
   };
 
@@ -62,7 +65,28 @@ export const ProductManagement = () => {
     setImageUrl(product.imageUrl || '');
     setStatus(product.status || 'draft');
     setFormError('');
+    const isBase64 = product.imageUrl && product.imageUrl.startsWith('data:image');
+    setImageSourceType(isBase64 ? 'file' : 'link');
+    setImagePreview(product.imageUrl || '');
     setIsModalOpen(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 3 * 1024 * 1024) {
+      setFormError('Image size exceeds 3MB. Please select a smaller file or use a link.');
+      return;
+    }
+
+    setFormError('');
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+      setImageUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSaveProduct = async (e) => {
@@ -167,7 +191,7 @@ export const ProductManagement = () => {
                   {products.length === 0 ? (
                     <tr>
                       <td colSpan="6" className="px-6 py-12 text-center text-app-text-secondary font-medium">
-                        No products registered in the database. Click "Add New Product" to start seeding.
+                        No products registered in the database. Click &quot;Add New Product&quot; to start seeding.
                       </td>
                     </tr>
                   ) : (
@@ -294,13 +318,71 @@ export const ProductManagement = () => {
             </select>
           </div>
 
-          <Input
-            label="Image URL (Optional)"
-            placeholder="https://images.unsplash.com/..."
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            disabled={formLoading}
-          />
+          <div className="flex flex-col gap-1.5 w-full">
+            <label className="text-xs font-semibold text-app-text-secondary uppercase tracking-wider">
+              Product Image Option
+            </label>
+            <div className="flex gap-4 mb-1">
+              <label className="flex items-center gap-1.5 text-xs font-bold text-app-text-primary cursor-pointer">
+                <input
+                  type="radio"
+                  name="imageSourceType"
+                  value="link"
+                  checked={imageSourceType === 'link'}
+                  onChange={() => {
+                    setImageSourceType('link');
+                    setFormError('');
+                  }}
+                  className="text-primary-500 focus:ring-primary-500 w-3.5 h-3.5"
+                  disabled={formLoading}
+                />
+                Paste Image Link
+              </label>
+              <label className="flex items-center gap-1.5 text-xs font-bold text-app-text-primary cursor-pointer">
+                <input
+                  type="radio"
+                  name="imageSourceType"
+                  value="file"
+                  checked={imageSourceType === 'file'}
+                  onChange={() => {
+                    setImageSourceType('file');
+                    setFormError('');
+                  }}
+                  className="text-primary-500 focus:ring-primary-500 w-3.5 h-3.5"
+                  disabled={formLoading}
+                />
+                Upload from Computer
+              </label>
+            </div>
+
+            {imageSourceType === 'link' ? (
+              <Input
+                placeholder="https://images.unsplash.com/..."
+                value={imageUrl.startsWith('data:image') ? '' : imageUrl}
+                onChange={(e) => {
+                  setImageUrl(e.target.value);
+                  setImagePreview(e.target.value);
+                }}
+                disabled={formLoading}
+              />
+            ) : (
+              <div className="space-y-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  disabled={formLoading}
+                  className="w-full text-xs text-app-text-secondary file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-500/10 dark:file:text-primary-400 cursor-pointer"
+                />
+              </div>
+            )}
+
+            {imagePreview && (
+              <div className="relative w-16 h-16 mt-1 border border-app-border rounded-xl overflow-hidden bg-app-bg-secondary flex items-center justify-center shadow-inner">
+                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-col gap-1.5 w-full">
             <label className="text-xs font-semibold text-app-text-secondary uppercase tracking-wider">

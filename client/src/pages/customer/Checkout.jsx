@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -18,15 +18,15 @@ const shippingSchema = z.object({
   phoneNumber: z.string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number is too long')
-    .regex(/^\+?[0-9\s\-()]+$/, 'Invalid phone number format'),
+    .regex(/^\+?[0-9\s() -]+$/, 'Invalid phone number format'),
   addressLine1: z.string().min(5, 'Address must be at least 5 characters'),
   addressLine2: z.string().optional(),
   city: z.string().min(2, 'City must be at least 2 characters'),
   state: z.string().min(2, 'State is required'),
   postalCode: z.string()
     .min(5, 'Postal code must be at least 5 characters')
-    .regex(/^[0-9A-Za-z\s\-]+$/, 'Invalid postal code format'),
-  landmark: z.string().optional(),
+    .regex(/^[0-9A-Za-z\s-]+$/, 'Invalid postal code format'),
+  landmark: z.string().min(3, 'Landmark is required to help delivery agents locate you'),
 });
 
 export const Checkout = () => {
@@ -36,7 +36,6 @@ export const Checkout = () => {
     checkoutSummary,
     totalAmount,
     loading: checkoutLoading,
-    error: checkoutError,
     getCheckoutSummary,
     validateCheckout,
     saveShippingInfo,
@@ -72,7 +71,7 @@ export const Checkout = () => {
 
   useEffect(() => {
     getCheckoutSummary();
-  }, []);
+  }, [getCheckoutSummary]);
 
   const handleCheckoutSubmit = async (data) => {
     setValidationSuccess(false);
@@ -267,7 +266,7 @@ export const Checkout = () => {
                     {...register('postalCode')}
                   />
                   <Input
-                    label="Landmark (Optional)"
+                    label="Landmark"
                     placeholder="Opposite Central Park"
                     disabled={validationSuccess || checkoutLoading}
                     error={errors.landmark?.message}

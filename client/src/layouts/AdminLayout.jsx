@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -15,9 +15,12 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
+import { NotificationBell } from '@/components/NotificationBell';
+import { useNotificationStore } from '@/store/notificationStore';
 
 export const AdminLayout = () => {
   const { user, logout } = useAuthStore();
+  const { connectSocket, disconnectSocket } = useNotificationStore();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDark, setIsDark] = useState(false);
@@ -25,7 +28,15 @@ export const AdminLayout = () => {
   useEffect(() => {
     initTheme();
     setIsDark(document.documentElement.classList.contains('dark'));
-  }, []);
+
+    if (user) {
+      connectSocket(user);
+    }
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [user, connectSocket, disconnectSocket]);
 
   const handleThemeToggle = () => {
     const darkState = toggleDarkMode();
@@ -123,6 +134,7 @@ export const AdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <NotificationBell />
             {/* Dark Mode */}
             <button 
               onClick={handleThemeToggle} 

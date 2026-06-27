@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import Order from '../models/Order.js';
+import User from '../models/User.js';
 import protect, { restrictTo } from '../middlewares/authMiddleware.js';
+import { createNotification } from '../utils/notificationUtil.js';
 
 const router = Router();
 
@@ -44,6 +46,19 @@ router.post('/accept/:orderId', protect, restrictTo('delivery_agent'), async (re
     order.deliveryAgent = agentId;
     order.status = 'accepted';
     await order.save();
+
+    // Notify Customer
+    try {
+      const agent = await User.findById(agentId).select('name');
+      const agentName = agent ? agent.name : 'A courier';
+      await createNotification(
+        order.customerId,
+        `${agentName} has accepted your order ${order.orderNumber}.`,
+        'order-accepted'
+      );
+    } catch (notifyError) {
+      console.error('[Notifications] Failed to notify customer of courier assignment:', notifyError.message);
+    }
 
     res.json(order);
   } catch (error) {
@@ -98,6 +113,26 @@ router.post('/status/:orderId', protect, restrictTo('delivery_agent'), async (re
 
     order.status = status;
     await order.save();
+
+    // Notify Customer of status update
+    try {
+      let statusMsg = '';
+      if (status === 'picked_up') {
+        statusMsg = `Your order ${order.orderNumber} has been picked up from the store.`;
+      } else if (status === 'out_for_delivery') {
+        statusMsg = `Your order ${order.orderNumber} is out for delivery!`;
+      } else if (status === 'delivered') {
+        statusMsg = `Your order ${order.orderNumber} has been successfully delivered.`;
+      } else if (status === 'accepted') {
+        statusMsg = `Courier assigned to your order ${order.orderNumber}.`;
+      }
+
+      if (statusMsg) {
+        await createNotification(order.customerId, statusMsg, `order-${status}`);
+      }
+    } catch (notifyError) {
+      console.error('[Notifications] Failed to notify customer of order status update:', notifyError.message);
+    }
 
     res.json(order);
   } catch (error) {

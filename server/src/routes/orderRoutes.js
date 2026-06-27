@@ -2,7 +2,9 @@ import { Router } from 'express';
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
+import User from '../models/User.js';
 import protect from '../middlewares/authMiddleware.js';
+import { createNotification } from '../utils/notificationUtil.js';
 
 const router = Router();
 
@@ -120,6 +122,20 @@ router.post('/', protect, async (req, res, next) => {
     // 5. Clear Cart items
     cart.items = [];
     await cart.save();
+
+    // 6. Notify Admins
+    try {
+      const admins = await User.find({ role: 'admin' });
+      for (const admin of admins) {
+        await createNotification(
+          admin._id,
+          `New order placed: ${orderNumber} for $${order.totalAmount.toFixed(2)}.`,
+          'order-created'
+        );
+      }
+    } catch (notifyError) {
+      console.error('[Notifications] Failed to notify admins of new order:', notifyError.message);
+    }
 
     res.status(201).json(order);
   } catch (error) {
