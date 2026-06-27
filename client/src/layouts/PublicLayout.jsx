@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, NavLink } from 'react-router-dom';
-import { ShoppingCart, Moon, Sun, ShieldAlert, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, Moon, Sun, ShoppingBag } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
@@ -31,11 +31,11 @@ export const PublicLayout = () => {
               ZEPHYRA
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <NavLink to="/" className={({ isActive }) => `text-[10px] font-mono tracking-widest uppercase hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
-                INDEX // HOME
+              <NavLink to="/" className={({ isActive }) => `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+                Home
               </NavLink>
-              <NavLink to="/products" className={({ isActive }) => `text-[10px] font-mono tracking-widest uppercase hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
-                DIR // CATALOG
+              <NavLink to="/products" className={({ isActive }) => `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+                Catalog
               </NavLink>
             </nav>
           </div>

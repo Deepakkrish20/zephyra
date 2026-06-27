@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Package, Truck, Compass, CheckCircle, Receipt } from 'lucide-react';
+import { Package, Compass, Receipt } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useOrderStore } from '@/store/orderStore';
 import { Card, CardHeader, CardBody, CardFooter } from '@/components/Card';
@@ -39,7 +39,7 @@ export const Orders = () => {
         <div>
           <h3 className="font-bold text-app-text-primary text-lg">No Orders Found</h3>
           <p className="text-sm text-app-text-secondary mt-1">
-            You haven't placed any orders yet.
+            You haven&apos;t placed any orders yet.
           </p>
         </div>
         <Link to="/products">

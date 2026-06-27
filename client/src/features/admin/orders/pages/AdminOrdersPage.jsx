@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAdminOrderStore } from '../store/adminOrderStore';
-import { Card, CardHeader, CardBody, CardFooter } from '@/components/Card';
+import { Card, CardBody, CardFooter } from '@/components/Card';
 import { Button } from '@/components/Button';
 import { Badge } from '@/components/Badge';
 import { Loader } from '@/components/Loader';
@@ -174,7 +174,7 @@ export const AdminOrdersPage = () => {
               <div>
                 <p className="font-extrabold text-app-text-primary text-base">No Orders Found</p>
                 <p className="text-xs text-app-text-secondary mt-0.5">
-                  We couldn't find any orders matching your criteria.
+                  We couldn&apos;t find any orders matching your criteria.
                 </p>
               </div>
             </div>

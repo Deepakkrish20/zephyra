@@ -1,7 +1,7 @@
-import api from './api';
+// Removed unused import api
 
 export const orderApi = {
-  createOrder: async (orderData) => {
+  createOrder: async (_orderData) => {
     // const response = await api.post('/orders', orderData);
     // return response.data;
     return {};
@@ -13,7 +13,7 @@ export const orderApi = {
     return [];
   },
 
-  getOrderById: async (id) => {
+  getOrderById: async (_id) => {
     // const response = await api.get(`/orders/${id}`);
     // return response.data;
     return {};

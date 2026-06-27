@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, ShieldCheck, Tag, Info, AlertTriangle, Inbox } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, ShieldCheck, Info, AlertTriangle, Inbox } from 'lucide-react';
 import { useProductStore } from '../store/productStore';
 import { useCartStore } from '@/store/cartStore';
 import { Loader } from '@/components/Loader';

@@ -36,6 +36,7 @@ export const useAuthStore = create((set) => ({
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('role', user.role);
+      localStorage.setItem('lastActivityTime', Date.now().toString());
       
       set({ 
         isAuthenticated: true, 
@@ -106,6 +107,7 @@ export const useAuthStore = create((set) => ({
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('role');
+        localStorage.removeItem('lastActivityTime');
         
         set({
           user: null,
@@ -131,6 +133,7 @@ export const useAuthStore = create((set) => ({
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('role');
+      localStorage.removeItem('lastActivityTime');
       
       set({ 
         user: null, 

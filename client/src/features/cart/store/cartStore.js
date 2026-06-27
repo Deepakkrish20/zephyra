@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import cartService from '../services/cartService';
 
-export const useCartStore = create((set, get) => ({
+export const useCartStore = create((set) => ({
   // State
   cartItems: [],
   totalItems: 0,

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardBody } from '@/components/Card';
 import { Badge } from '@/components/Badge';
 import { Button } from '@/components/Button';
-import { MapPin, Navigation, Send } from 'lucide-react';
+import { Navigation } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { useTrackingStore } from '@/store/trackingStore';
-import L from 'leaflet';
+
 
 export const DeliveryTracking = () => {
-  const { agentLocation, updateAgentLocation, startTracking } = useTrackingStore();
+  const { updateAgentLocation, startTracking } = useTrackingStore();
   const [coordinatesLog, setCoordinatesLog] = useState([]);
 
   const customerCoords = [37.7749, -122.4194]; // Target

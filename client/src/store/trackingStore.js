@@ -8,7 +8,7 @@ export const useTrackingStore = create((set) => ({
   error: null,
 
   // Action placeholders
-  startTracking: (orderId) => {
+  startTracking: (_orderId) => {
     set({ isTracking: true });
   },
 

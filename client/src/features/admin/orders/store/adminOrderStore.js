@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import adminOrderService from '../services/adminOrderService';
 
-export const useAdminOrderStore = create((set, get) => ({
+export const useAdminOrderStore = create((set) => ({
   // State
   orders: [],
   pagination: {

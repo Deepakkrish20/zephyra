@@ -88,7 +88,7 @@ export const VerifyEmail = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-zinc-950 hover:bg-zinc-900 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 text-white font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="w-full bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isLoading ? 'Verifying...' : 'Verify Code'}
         </button>

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Compass, Inbox } from 'lucide-react';
+import React from 'react';
+import { Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { useTrackingStore } from '@/store/trackingStore';
@@ -38,7 +38,7 @@ export const TrackOrder = () => {
         <div>
           <h3 className="font-bold text-app-text-primary text-lg">No Active Tracking</h3>
           <p className="text-sm text-app-text-secondary mt-1">
-            You don't have any active deliveries to track at the moment.
+            You don&apos;t have any active deliveries to track at the moment.
           </p>
         </div>
         <Link to="/customer/orders">

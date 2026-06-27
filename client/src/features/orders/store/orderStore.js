@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import orderService from '../services/orderService';
 
-export const useOrderStore = create((set, get) => ({
+export const useOrderStore = create((set) => ({
   // State
   orders: [],
   selectedOrder: null,

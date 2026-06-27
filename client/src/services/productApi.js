@@ -1,4 +1,4 @@
-import api from './api';
+// Removed unused import api
 
 export const productApi = {
   getProducts: async () => {
@@ -7,7 +7,7 @@ export const productApi = {
     return [];
   },
 
-  getProduct: async (id) => {
+  getProduct: async (_id) => {
     // const response = await api.get(`/products/${id}`);
     // return response.data;
     return {};

@@ -19,6 +19,7 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     getProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePrevPage = () => {
@@ -38,7 +39,7 @@ export const ProductsPage = () => {
       {/* Title Header */}
       <div className="border-b border-app-border pb-4">
         <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 font-mono tracking-widest uppercase">
-          // CURATED COLLECTION
+          {"// CURATED COLLECTION"}
         </span>
         <h1 className="text-3xl font-extrabold tracking-tight text-app-text-primary mt-1">
           Explore Products
@@ -77,7 +78,7 @@ export const ProductsPage = () => {
           <div>
             <h3 className="font-bold text-app-text-primary text-lg">No Products Found</h3>
             <p className="text-sm text-app-text-secondary mt-1">
-              We couldn't find any products matching your active filter criteria.
+              We couldn&apos;t find any products matching your active filter criteria.
             </p>
           </div>
           <Button variant="outline" size="sm" onClick={clearFilters} className="font-bold cursor-pointer">

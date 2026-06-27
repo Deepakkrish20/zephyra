@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, ShieldCheck, ShoppingCart } from 'lucide-react';
-import { Card, CardHeader, CardBody, CardFooter } from '@/components/Card';
+import { Eye, ShoppingCart } from 'lucide-react';
+import { Card, CardBody, CardFooter } from '@/components/Card';
 import { Button } from '@/components/Button';
 import { Badge } from '@/components/Badge';
 import { useCartStore } from '@/store/cartStore';

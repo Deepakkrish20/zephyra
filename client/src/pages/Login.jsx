@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useAuthStore from '@/store/authStore';
 import { ROLES } from '@/constants/roles';
@@ -16,6 +16,8 @@ const loginSchema = z.object({
 export const Login = () => {
   const { login, isLoading } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '';
 
   const {
     register,
@@ -32,7 +34,9 @@ export const Login = () => {
       const user = await login(data.email, data.password);
       toast.success(`Welcome back, ${user.name}!`);
       
-      if (user.role === ROLES.ADMIN) {
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (user.role === ROLES.ADMIN) {
         navigate('/admin');
       } else if (user.role === ROLES.DELIVERY_AGENT) {
         navigate('/delivery');
@@ -93,7 +97,7 @@ export const Login = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-zinc-950 hover:bg-zinc-900 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 text-white font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="w-full bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>

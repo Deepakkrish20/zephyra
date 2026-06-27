@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import checkoutService from '../services/checkoutService';
 
-export const useCheckoutStore = create((set, get) => ({
+export const useCheckoutStore = create((set) => ({
   // State
   shippingInfo: null,
   checkoutSummary: {

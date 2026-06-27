@@ -3,17 +3,12 @@ import { Link } from 'react-router-dom';
 import { 
   ArrowUpRight, 
   ArrowRight,
-  ShieldCheck, 
   Compass, 
   ShoppingBag, 
-  Cpu, 
   MapPin, 
-  Activity, 
   Truck, 
   CheckCircle2, 
-  Lock,
-  ChevronLeft,
-  ChevronRight
+  Lock
 } from 'lucide-react';
 import { Button } from '@/components/Button';
 
@@ -74,7 +69,7 @@ const HardwareHeader = ({ address = '0x4F8A', bus = 'BUS_01' }) => (
         <span className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
         <span className="w-1.5 h-1.5 rounded-full bg-[#71eb44]" />
       </div>
-      <span className="font-bold tracking-wider text-slate-500">DEV_{address} // {bus}</span>
+      <span className="font-bold tracking-wider text-slate-500">DEV_{address} {"//"} {bus}</span>
     </div>
     <div className="flex items-center gap-1.5">
       <span className="w-1 h-1 rounded-full bg-[#71eb44] animate-pulse" />
@@ -179,6 +174,7 @@ export const Home = () => {
   useEffect(() => {
     const timer = setInterval(handleNext, 8000);
     return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const slide = slides[activeSlide];
@@ -235,7 +231,7 @@ export const Home = () => {
             <span>ZEPHYRA // CATALOG COLLECTION 2026</span>
           </div>
           <div className="px-3 py-1 rounded-full border border-slate-800 dark:border-app-border bg-slate-950/20">
-            <span>SLIDE {slide.index} // 0{slides.length}</span>
+            <span>SLIDE {slide.index} {"//"} 0{slides.length}</span>
           </div>
         </div>
 
@@ -269,7 +265,7 @@ export const Home = () => {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800 dark:border-app-border max-w-lg font-mono">
               {slide.specs.map((spec, i) => (
                 <div key={i} className="space-y-1">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-500 dark:text-app-text-secondary font-semibold">// {spec.label}</span>
+                  <span className="text-[9px] uppercase tracking-wider text-slate-500 dark:text-app-text-secondary font-semibold">{"//"} {spec.label}</span>
                   <div className="text-sm font-bold text-white dark:text-app-text-primary uppercase">{spec.value}</div>
                 </div>
               ))}
@@ -347,7 +343,7 @@ export const Home = () => {
           <div className="space-y-2">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-app-border bg-app-bg-secondary text-xs font-bold text-app-text-secondary font-mono tracking-widest uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#71eb44] animate-ping" />
-              // CATALOG SELECTIONS
+              {"// CATALOG SELECTIONS"}
             </span>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-app-text-primary leading-[0.85] pt-2">
               Featured <span className="text-[#71eb44]">Instruments</span>
@@ -542,7 +538,7 @@ export const Home = () => {
           <div className="lg:col-span-5 space-y-6">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-200 dark:border-app-border bg-slate-50 dark:bg-app-bg-secondary text-xs font-bold text-slate-500 dark:text-app-text-secondary tracking-widest font-mono uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#71eb44] animate-ping" />
-              // DISPATCH TELEMETRY
+              {"// DISPATCH TELEMETRY"}
             </span>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-app-text-primary leading-[0.9] uppercase pt-2">
               Micro-second logistics <span className="text-[#71eb44]">tracking</span>.

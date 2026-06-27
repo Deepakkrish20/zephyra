@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody } from '@/components/Card';
-import { Activity, Compass, Award, ClipboardCheck, Loader2 } from 'lucide-react';
+import { Activity, Award, ClipboardCheck, Loader2 } from 'lucide-react';
 import { deliveryApi } from '@/services/deliveryApi';
 import toast from 'react-hot-toast';
 

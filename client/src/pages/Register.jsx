@@ -105,7 +105,7 @@ export const Register = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary-500 hover:bg-primary-600 text-zinc-950 font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="w-full bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isLoading ? 'Registering...' : 'Register'}
         </button>
