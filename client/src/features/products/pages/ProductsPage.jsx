@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Inbox, AlertTriangle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Inbox, AlertTriangle, MapPin, X } from 'lucide-react';
+import useAuthStore from '@/store/authStore';
+import authApi from '@/services/authApi';
 import { useProductStore } from '../store/productStore';
 import ProductCard from '../components/ProductCard';
 import ProductFilters from '../components/ProductFilters';
@@ -17,10 +20,28 @@ export const ProductsPage = () => {
     clearFilters,
   } = useProductStore();
 
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const [showAddressPrompt, setShowAddressPrompt] = useState(false);
+
   useEffect(() => {
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (user && user.role === 'customer') {
+      authApi.getAddresses()
+        .then((res) => {
+          if (!res.addresses || res.addresses.length === 0) {
+            setShowAddressPrompt(true);
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch addresses for notification:', err);
+        });
+    }
+  }, [user]);
 
   const handlePrevPage = () => {
     if (pagination.currentPage > 1) {
@@ -148,6 +169,55 @@ export const ProductsPage = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {showAddressPrompt && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-100 dark:border-[#71eb44]/20 rounded-3xl p-8 shadow-2xl animate-fade-up text-center space-y-6">
+            
+            {/* Close button */}
+            <button
+              onClick={() => setShowAddressPrompt(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-650 dark:text-slate-500 dark:hover:text-slate-205 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Glowing MapPin icon */}
+            <div className="mx-auto w-16 h-16 bg-[#71eb44]/10 dark:bg-[#71eb44]/5 rounded-full flex items-center justify-center border border-[#71eb44]/20 dark:border-[#71eb44]/10 relative">
+              <span className="absolute inset-0 rounded-full bg-[#71eb44]/10 animate-ping opacity-75" />
+              <MapPin className="w-8 h-8 text-[#71eb44]" />
+            </div>
+
+            {/* Title & Description */}
+            <div className="space-y-2">
+              <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase font-mono">
+                {"// Profile Incomplete"}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+                Set up your shipping address to enable express coordinates lock, websocket telemetry tracking, and quick checkout.
+              </p>
+            </div>
+
+            {/* Action buttons */}
+            <div className="space-y-3 pt-2">
+              <button
+                onClick={() => navigate('/customer/profile')}
+                className="w-full bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 font-extrabold py-3 px-4 rounded-xl text-xs transition-colors cursor-pointer font-mono uppercase tracking-wider shadow-lg shadow-[#71eb44]/10"
+              >
+                Set Address Now
+              </button>
+              <button
+                onClick={() => setShowAddressPrompt(false)}
+                className="w-full text-center text-xs font-semibold text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-350 cursor-pointer transition-colors pt-1"
+              >
+                Remind Me Later
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
     </div>

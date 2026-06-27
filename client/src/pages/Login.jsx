@@ -41,7 +41,7 @@ export const Login = () => {
       } else if (user.role === ROLES.DELIVERY_AGENT) {
         navigate('/delivery');
       } else {
-        navigate('/customer');
+        navigate('/products');
       }
       reset();
     } catch (error) {

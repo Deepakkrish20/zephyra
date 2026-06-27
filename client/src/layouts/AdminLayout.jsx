@@ -17,6 +17,8 @@ import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
 import { NotificationBell } from '@/components/NotificationBell';
 import { useNotificationStore } from '@/store/notificationStore';
+import { Modal } from '@/components/Modal';
+import { Button } from '@/components/Button';
 
 export const AdminLayout = () => {
   const { user, logout } = useAuthStore();
@@ -43,8 +45,15 @@ export const AdminLayout = () => {
     setIsDark(darkState);
   };
 
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
     logout();
+    setIsLogoutModalOpen(false);
     navigate('/');
   };
 
@@ -163,6 +172,21 @@ export const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
+      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+        <div className="space-y-4">
+          <p className="text-sm text-app-text-secondary leading-relaxed">
+            Are you sure you want to sign out of the administrator control panel? Any pending dashboard updates will pause until you log back in.
+          </p>
+          <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
+            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">
+              Confirm Logout
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

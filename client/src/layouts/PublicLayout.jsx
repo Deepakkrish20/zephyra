@@ -4,6 +4,8 @@ import { ShoppingCart, Moon, Sun, ShoppingBag } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
+import { Modal } from '@/components/Modal';
+import { Button } from '@/components/Button';
 
 export const PublicLayout = () => {
   const { user, logout } = useAuthStore();
@@ -18,6 +20,17 @@ export const PublicLayout = () => {
   const handleThemeToggle = () => {
     const darkState = toggleDarkMode();
     setIsDark(darkState);
+  };
+
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
+    logout();
+    setIsLogoutModalOpen(false);
   };
 
   return (
@@ -67,7 +80,7 @@ export const PublicLayout = () => {
                   Dashboard ({user.role})
                 </Link>
                 <button 
-                  onClick={logout} 
+                  onClick={handleLogout} 
                   className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   Logout
@@ -102,6 +115,22 @@ export const PublicLayout = () => {
           </div>
         </div>
       </footer>
+
+      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+        <div className="space-y-4">
+          <p className="text-sm text-app-text-secondary leading-relaxed">
+            Are you sure you want to sign out of your Zephyra account? Any active order tracking session will continue in the background.
+          </p>
+          <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
+            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">
+              Confirm Logout
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
