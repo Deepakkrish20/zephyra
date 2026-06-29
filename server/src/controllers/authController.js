@@ -8,7 +8,7 @@ export const register = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
     const user = await authService.registerUser({ name, email, password, role });
-    
+
     return res.status(201).json({
       success: true,
       message: 'User registered successfully.',
@@ -26,7 +26,7 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const { user, token } = await authService.loginUser({ email, password });
-    
+
     return res.status(200).json({
       success: true,
       message: 'User logged in successfully.',
@@ -80,7 +80,9 @@ export const verify = async (req, res, next) => {
     const { email, code } = req.body;
 
     if (!email || !code) {
-      return res.status(400).json({ success: false, message: 'Email and verification code are required.' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Email and verification code are required.' });
     }
 
     const user = await User.findOne({ email });
@@ -94,7 +96,9 @@ export const verify = async (req, res, next) => {
 
     // Check if code matches and has not expired
     if (user.verificationCode !== code || user.verificationExpires < new Date()) {
-      return res.status(400).json({ success: false, message: 'Invalid or expired verification code.' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Invalid or expired verification code.' });
     }
 
     // Clear verification fields and set verified to true
@@ -124,8 +128,8 @@ export const getAddresses = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       data: {
-        addresses: user.addresses || []
-      }
+        addresses: user.addresses || [],
+      },
     });
   } catch (error) {
     next(error);
@@ -137,10 +141,13 @@ export const getAddresses = async (req, res, next) => {
  */
 export const addAddress = async (req, res, next) => {
   try {
-    const { fullName, phoneNumber, addressLine1, addressLine2, city, state, postalCode, landmark } = req.body;
+    const { fullName, phoneNumber, addressLine1, addressLine2, city, state, postalCode, landmark } =
+      req.body;
 
     if (!fullName || !phoneNumber || !addressLine1 || !city || !state || !postalCode) {
-      return res.status(400).json({ success: false, message: 'Required shipping details are missing.' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Required shipping details are missing.' });
     }
 
     const user = await User.findById(req.user.id);
@@ -156,7 +163,7 @@ export const addAddress = async (req, res, next) => {
       city,
       state,
       postalCode,
-      landmark
+      landmark,
     };
 
     user.addresses.push(newAddress);
@@ -169,8 +176,8 @@ export const addAddress = async (req, res, next) => {
       success: true,
       message: 'Address added successfully.',
       data: {
-        address: addedAddress
-      }
+        address: addedAddress,
+      },
     });
   } catch (error) {
     next(error);
@@ -194,10 +201,9 @@ export const deleteAddress = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Address deleted successfully.'
+      message: 'Address deleted successfully.',
     });
   } catch (error) {
     next(error);
   }
 };
-

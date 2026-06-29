@@ -16,41 +16,37 @@ router.get('/', async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const query = {};
-    
+
     // Status Filtering
     if (req.query.status && req.query.status !== 'all') {
       query.status = req.query.status;
     }
-    
+
     // Search by Order Number
     if (req.query.search) {
       query.orderNumber = { $regex: req.query.search, $options: 'i' };
     }
 
     const total = await Order.countDocuments(query);
-    const orders = await Order.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const orders = await Order.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean();
 
     // Dynamically resolve customer name & email
     const ordersWithCustomer = await Promise.all(
       orders.map(async (order) => {
         let customer = { name: 'Guest User', email: 'guest@example.com' };
-        
+
         if (order.customerId && mongoose.Types.ObjectId.isValid(order.customerId)) {
           const user = await User.findById(order.customerId).select('name email');
           if (user) {
             customer = { name: user.name, email: user.email };
           }
         } else if (order.customerId) {
-          customer = { 
-            name: `Mock Customer (${order.customerId})`, 
-            email: `${order.customerId}@example.com` 
+          customer = {
+            name: `Mock Customer (${order.customerId})`,
+            email: `${order.customerId}@example.com`,
           };
         }
-        
+
         return { ...order, customer };
       })
     );
@@ -61,8 +57,8 @@ router.get('/', async (req, res, next) => {
         total,
         page,
         limit,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     next(error);
@@ -80,16 +76,16 @@ router.get('/:id', async (req, res, next) => {
     }
 
     let customer = { name: 'Guest User', email: 'guest@example.com' };
-    
+
     if (order.customerId && mongoose.Types.ObjectId.isValid(order.customerId)) {
       const user = await User.findById(order.customerId).select('name email');
       if (user) {
         customer = { name: user.name, email: user.email };
       }
     } else if (order.customerId) {
-      customer = { 
-        name: `Mock Customer (${order.customerId})`, 
-        email: `${order.customerId}@example.com` 
+      customer = {
+        name: `Mock Customer (${order.customerId})`,
+        email: `${order.customerId}@example.com`,
       };
     }
 
@@ -114,7 +110,7 @@ router.put('/:id/approve', async (req, res, next) => {
 
     if (order.status !== 'pending_approval') {
       return res.status(400).json({
-        message: `Invalid status transition. Cannot approve order in "${order.status}" status.`
+        message: `Invalid status transition. Cannot approve order in "${order.status}" status.`,
       });
     }
 
@@ -129,7 +125,10 @@ router.put('/:id/approve', async (req, res, next) => {
         'order-approved'
       );
     } catch (notifyError) {
-      console.error('[Notifications] Failed to notify customer of order approval:', notifyError.message);
+      console.error(
+        '[Notifications] Failed to notify customer of order approval:',
+        notifyError.message
+      );
     }
 
     res.json(order);
@@ -153,7 +152,7 @@ router.put('/:id/reject', async (req, res, next) => {
 
     if (order.status !== 'pending_approval') {
       return res.status(400).json({
-        message: `Invalid status transition. Cannot reject order in "${order.status}" status.`
+        message: `Invalid status transition. Cannot reject order in "${order.status}" status.`,
       });
     }
 
@@ -168,7 +167,10 @@ router.put('/:id/reject', async (req, res, next) => {
         'order-rejected'
       );
     } catch (notifyError) {
-      console.error('[Notifications] Failed to notify customer of order rejection:', notifyError.message);
+      console.error(
+        '[Notifications] Failed to notify customer of order rejection:',
+        notifyError.message
+      );
     }
 
     res.json(order);

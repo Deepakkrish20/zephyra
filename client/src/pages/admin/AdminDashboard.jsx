@@ -12,7 +12,7 @@ export const AdminDashboard = () => {
     pendingApprovalCount: 0,
     totalProducts: 0,
     draftProducts: 0,
-    recentOrders: []
+    recentOrders: [],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -77,16 +77,36 @@ export const AdminDashboard = () => {
   }
 
   const metrics = [
-    { title: 'Gross Revenue', value: `$${stats.grossRevenue.toFixed(2)}`, icon: Activity, change: 'Settled deliveries', color: 'primary' },
-    { title: 'Total Dispatched Orders', value: `${stats.totalActiveOrders} Active`, icon: Truck, change: `${stats.pendingApprovalCount} pending approval`, color: 'secondary' },
-    { title: 'Total Catalog Products', value: `${stats.totalProducts} Items`, icon: Package, change: `${stats.draftProducts} in draft state`, color: 'neutral' },
+    {
+      title: 'Gross Revenue',
+      value: `$${stats.grossRevenue.toFixed(2)}`,
+      icon: Activity,
+      change: 'Settled deliveries',
+      color: 'primary',
+    },
+    {
+      title: 'Total Dispatched Orders',
+      value: `${stats.totalActiveOrders} Active`,
+      icon: Truck,
+      change: `${stats.pendingApprovalCount} pending approval`,
+      color: 'secondary',
+    },
+    {
+      title: 'Total Catalog Products',
+      value: `${stats.totalProducts} Items`,
+      icon: Package,
+      change: `${stats.draftProducts} in draft state`,
+      color: 'neutral',
+    },
   ];
 
   return (
     <div className="space-y-8 animate-fadeIn">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Admin Operations Console</h1>
-        <p className="text-sm text-app-text-secondary">Global metrics, live dispatches, and catalog controls.</p>
+        <p className="text-sm text-app-text-secondary">
+          Global metrics, live dispatches, and catalog controls.
+        </p>
       </div>
 
       {/* Metrics Row */}
@@ -97,9 +117,13 @@ export const AdminDashboard = () => {
             <Card key={idx} hoverEffect>
               <CardBody className="flex items-center justify-between p-6">
                 <div className="space-y-2">
-                  <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">{m.title}</p>
+                  <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">
+                    {m.title}
+                  </p>
                   <p className="text-3xl font-extrabold text-app-text-primary">{m.value}</p>
-                  <p className="text-xs text-secondary-600 dark:text-secondary-400 font-bold">{m.change}</p>
+                  <p className="text-xs text-secondary-600 dark:text-secondary-400 font-bold">
+                    {m.change}
+                  </p>
                 </div>
                 <div className="p-4 bg-app-bg-secondary border border-app-border rounded-2xl">
                   <Icon className="w-6 h-6 text-primary-500" />
@@ -130,7 +154,10 @@ export const AdminDashboard = () => {
               <tbody className="divide-y divide-app-border">
                 {stats.recentOrders.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-8 text-center text-app-text-secondary font-medium">
+                    <td
+                      colSpan="5"
+                      className="px-6 py-8 text-center text-app-text-secondary font-medium"
+                    >
                       No order transactions found in the database.
                     </td>
                   </tr>
@@ -138,7 +165,10 @@ export const AdminDashboard = () => {
                   stats.recentOrders.map((order) => {
                     const badge = getBadgeProps(order.status);
                     return (
-                      <tr key={order._id} className="hover:bg-app-bg-secondary/40 transition-colors">
+                      <tr
+                        key={order._id}
+                        className="hover:bg-app-bg-secondary/40 transition-colors"
+                      >
                         <td className="px-6 py-4 font-bold text-primary-600">
                           #ZEP-{order._id.substring(18).toUpperCase()}
                         </td>
@@ -146,7 +176,9 @@ export const AdminDashboard = () => {
                           {order.shippingAddress?.fullName || 'Guest'}
                         </td>
                         <td className="px-6 py-4">
-                          <Badge variant={badge.variant} dot>{badge.text}</Badge>
+                          <Badge variant={badge.variant} dot>
+                            {badge.text}
+                          </Badge>
                         </td>
                         <td className="px-6 py-4 text-app-text-secondary">
                           {order.deliveryAgent?.name || 'Unassigned'}

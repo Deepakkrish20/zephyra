@@ -10,15 +10,8 @@ import { Loader } from '@/components/Loader';
 import { Button } from '@/components/Button';
 
 export const ProductsPage = () => {
-  const {
-    products,
-    loading,
-    error,
-    pagination,
-    getProducts,
-    setCurrentPage,
-    clearFilters,
-  } = useProductStore();
+  const { products, loading, error, pagination, getProducts, setCurrentPage, clearFilters } =
+    useProductStore();
 
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -31,7 +24,8 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     if (user && user.role === 'customer') {
-      authApi.getAddresses()
+      authApi
+        .getAddresses()
         .then((res) => {
           if (!res.addresses || res.addresses.length === 0) {
             setShowAddressPrompt(true);
@@ -60,7 +54,7 @@ export const ProductsPage = () => {
       {/* Title Header */}
       <div className="border-b border-app-border pb-4">
         <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 font-mono tracking-widest uppercase">
-          {"// CURATED COLLECTION"}
+          {'// CURATED COLLECTION'}
         </span>
         <h1 className="text-3xl font-extrabold tracking-tight text-app-text-primary mt-1">
           Explore Products
@@ -84,10 +78,17 @@ export const ProductsPage = () => {
             <AlertTriangle className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="font-bold text-danger-900 dark:text-danger-400 text-lg">Error Loading Products</h3>
+            <h3 className="font-bold text-danger-900 dark:text-danger-400 text-lg">
+              Error Loading Products
+            </h3>
             <p className="text-sm text-danger-700 dark:text-danger-500/90 mt-1">{error}</p>
           </div>
-          <Button variant="danger" size="sm" onClick={() => getProducts()} className="font-bold cursor-pointer">
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => getProducts()}
+            className="font-bold cursor-pointer"
+          >
             Retry Loading
           </Button>
         </div>
@@ -102,7 +103,12 @@ export const ProductsPage = () => {
               We couldn&apos;t find any products matching your active filter criteria.
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={clearFilters} className="font-bold cursor-pointer">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearFilters}
+            className="font-bold cursor-pointer"
+          >
             Reset All Filters
           </Button>
         </div>
@@ -134,7 +140,7 @@ export const ProductsPage = () => {
                 >
                   Prev
                 </Button>
-                
+
                 {Array.from({ length: pagination.totalPages }, (_, index) => {
                   const pageNum = index + 1;
                   const isCurrent = pagination.currentPage === pageNum;
@@ -175,7 +181,6 @@ export const ProductsPage = () => {
       {showAddressPrompt && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-100 dark:border-[#71eb44]/20 rounded-3xl p-8 shadow-2xl animate-fade-up text-center space-y-6">
-            
             {/* Close button */}
             <button
               onClick={() => setShowAddressPrompt(false)}
@@ -194,10 +199,11 @@ export const ProductsPage = () => {
             {/* Title & Description */}
             <div className="space-y-2">
               <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase font-mono">
-                {"// Profile Incomplete"}
+                {'// Profile Incomplete'}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-                Set up your shipping address to enable express coordinates lock, websocket telemetry tracking, and quick checkout.
+                Set up your shipping address to enable express coordinates lock, websocket telemetry
+                tracking, and quick checkout.
               </p>
             </div>
 
@@ -216,7 +222,6 @@ export const ProductsPage = () => {
                 Remind Me Later
               </button>
             </div>
-
           </div>
         </div>
       )}

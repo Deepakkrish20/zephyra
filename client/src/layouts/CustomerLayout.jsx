@@ -50,19 +50,35 @@ export const CustomerLayout = () => {
       <header className="sticky top-0 z-40 bg-app-bg-primary border-b border-app-border backdrop-blur-md bg-opacity-80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
+            <Link
+              to="/"
+              className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity"
+            >
               <ShoppingBag className="w-5 h-5 text-primary-600" />
               ZEPHYRA
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <NavLink to="/products" className="text-sm font-semibold text-app-text-secondary hover:text-primary-600 transition-colors">
+              <NavLink
+                to="/products"
+                className="text-sm font-semibold text-app-text-secondary hover:text-primary-600 transition-colors"
+              >
                 Products Catalogue
               </NavLink>
-              <NavLink to="/customer/orders" className={({ isActive }) => `text-sm font-semibold hover:text-primary-600 transition-colors flex items-center gap-1.5 ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`}>
+              <NavLink
+                to="/customer/orders"
+                className={({ isActive }) =>
+                  `text-sm font-semibold hover:text-primary-600 transition-colors flex items-center gap-1.5 ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`
+                }
+              >
                 <Package className="w-4 h-4" />
                 My Orders
               </NavLink>
-              <NavLink to="/customer/track" className={({ isActive }) => `text-sm font-semibold hover:text-primary-600 transition-colors flex items-center gap-1.5 ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`}>
+              <NavLink
+                to="/customer/track"
+                className={({ isActive }) =>
+                  `text-sm font-semibold hover:text-primary-600 transition-colors flex items-center gap-1.5 ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`
+                }
+              >
                 <MapPin className="w-4 h-4" />
                 Live Tracking
               </NavLink>
@@ -71,8 +87,8 @@ export const CustomerLayout = () => {
 
           <div className="flex items-center gap-4">
             <NotificationBell />
-            <button 
-              onClick={handleThemeToggle} 
+            <button
+              onClick={handleThemeToggle}
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"
               aria-label="Toggle theme"
             >
@@ -82,13 +98,22 @@ export const CustomerLayout = () => {
             {/* Profile Dropdown Simulation */}
             <div className="flex items-center gap-3 pl-3 border-l border-app-border">
               <div className="hidden text-right lg:block">
-                <p className="text-sm font-bold text-app-text-primary">{user?.name || 'Customer'}</p>
-                <p className="text-xs text-app-text-secondary">{user?.email || 'customer@zephyra.io'}</p>
+                <p className="text-sm font-bold text-app-text-primary">
+                  {user?.name || 'Customer'}
+                </p>
+                <p className="text-xs text-app-text-secondary">
+                  {user?.email || 'customer@zephyra.io'}
+                </p>
               </div>
-              <NavLink to="/customer/profile" className={({ isActive }) => `p-2 rounded-lg hover:bg-app-bg-secondary transition-colors ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`}>
+              <NavLink
+                to="/customer/profile"
+                className={({ isActive }) =>
+                  `p-2 rounded-lg hover:bg-app-bg-secondary transition-colors ${isActive ? 'text-primary-600' : 'text-app-text-secondary'}`
+                }
+              >
                 <User className="w-5 h-5" />
               </NavLink>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="p-2 rounded-lg text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-500/10 transition-colors cursor-pointer"
                 title="Log Out"
@@ -122,19 +147,33 @@ export const CustomerLayout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between text-xs text-app-text-secondary">
           <p>&copy; {new Date().getFullYear()} Zephyra Inc. Customer Console.</p>
           <div className="flex gap-4">
-            <Link to="/" className="hover:underline">Home</Link>
-            <a href="#" className="hover:underline">Help & Support</a>
+            <Link to="/" className="hover:underline">
+              Home
+            </Link>
+            <a href="#" className="hover:underline">
+              Help & Support
+            </a>
           </div>
         </div>
       </footer>
 
-      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="Confirm Logout"
+        size="sm"
+      >
         <div className="space-y-4">
           <p className="text-sm text-app-text-secondary leading-relaxed">
-            Are you sure you want to sign out of your Zephyra account? Any active order tracking session will continue in the background.
+            Are you sure you want to sign out of your Zephyra account? Any active order tracking
+            session will continue in the background.
           </p>
           <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
-            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="font-semibold cursor-pointer"
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">

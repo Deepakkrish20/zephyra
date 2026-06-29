@@ -1,11 +1,6 @@
 import React from 'react';
 
-export const Card = ({
-  children,
-  className = '',
-  hoverEffect = false,
-  ...props
-}) => {
+export const Card = ({ children, className = '', hoverEffect = false, ...props }) => {
   return (
     <div
       className={`bg-app-bg-primary border border-app-border rounded-xl shadow-sm overflow-hidden transition-all duration-200
@@ -32,7 +27,10 @@ export const CardBody = ({ children, className = '', ...props }) => (
 );
 
 export const CardFooter = ({ children, className = '', ...props }) => (
-  <div className={`px-5 py-4 border-t border-app-border bg-app-bg-secondary ${className}`} {...props}>
+  <div
+    className={`px-5 py-4 border-t border-app-border bg-app-bg-secondary ${className}`}
+    {...props}
+  >
     {children}
   </div>
 );

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Layers, 
-  Compass, 
-  LogOut, 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
+import {
+  LayoutDashboard,
+  Layers,
+  Compass,
+  LogOut,
+  Menu,
+  X,
+  Sun,
+  Moon,
   ShieldCheck,
-  UserCheck
+  UserCheck,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
@@ -66,18 +66,21 @@ export const DeliveryLayout = () => {
   return (
     <div className="min-h-screen flex bg-app-bg-secondary text-app-text-primary">
       {/* Sidebar for Delivery Agent */}
-      <aside 
+      <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-app-bg-primary border-r border-app-border transition-transform duration-300 ease-in-out md:static md:translate-x-0
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-app-border">
-          <Link to="/" className="flex items-center gap-2 font-black text-base tracking-tight text-primary-600 dark:text-primary-400">
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-black text-base tracking-tight text-primary-600 dark:text-primary-400"
+          >
             <Compass className="w-5 h-5 text-primary-600" />
             ZEPHYRA DRIVER
           </Link>
-          <button 
-            onClick={() => setIsSidebarOpen(false)} 
+          <button
+            onClick={() => setIsSidebarOpen(false)}
             className="md:hidden p-1.5 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary"
           >
             <X className="w-5 h-5" />
@@ -93,10 +96,13 @@ export const DeliveryLayout = () => {
                 to={item.path}
                 end={item.path === '/delivery'}
                 onClick={() => setIsSidebarOpen(false)}
-                className={({ isActive }) => `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all
-                  ${isActive 
-                    ? 'bg-primary-500 text-white shadow-md shadow-primary-500/10' 
-                    : 'text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary'
+                className={({
+                  isActive,
+                }) => `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all
+                  ${
+                    isActive
+                      ? 'bg-primary-500 text-white shadow-md shadow-primary-500/10'
+                      : 'text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary'
                   }
                 `}
               >
@@ -137,8 +143,8 @@ export const DeliveryLayout = () => {
 
           <div className="flex items-center gap-4">
             <NotificationBell />
-            <button 
-              onClick={handleThemeToggle} 
+            <button
+              onClick={handleThemeToggle}
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -147,9 +153,7 @@ export const DeliveryLayout = () => {
             <div className="flex items-center gap-3 pl-3 border-l border-app-border">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-app-text-primary">{user?.name || 'Agent'}</p>
-                <p className="text-[10px] text-app-text-secondary font-semibold">
-                  ID: #ZEP-DRV-09
-                </p>
+                <p className="text-[10px] text-app-text-secondary font-semibold">ID: #ZEP-DRV-09</p>
               </div>
               <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-500/10 flex items-center justify-center text-primary-600 font-bold text-xs">
                 DR
@@ -163,13 +167,23 @@ export const DeliveryLayout = () => {
           <Outlet />
         </main>
       </div>
-      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="Confirm Logout"
+        size="sm"
+      >
         <div className="space-y-4">
           <p className="text-sm text-app-text-secondary leading-relaxed">
-            Are you sure you want to sign out of the delivery agent console? Active dispatch routes will remain locked until you log back in.
+            Are you sure you want to sign out of the delivery agent console? Active dispatch routes
+            will remain locked until you log back in.
           </p>
           <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
-            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="font-semibold cursor-pointer"
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">

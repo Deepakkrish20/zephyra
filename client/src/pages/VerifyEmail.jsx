@@ -8,7 +8,8 @@ import useAuthStore from '@/store/authStore';
 
 // Form validation schema
 const verifySchema = z.object({
-  code: z.string()
+  code: z
+    .string()
     .length(6, 'Verification code must be exactly 6 digits')
     .regex(/^\d+$/, 'Verification code must only contain digits'),
 });
@@ -58,11 +59,15 @@ export const VerifyEmail = () => {
 
   return (
     <div className="max-w-md mx-auto my-12 p-6 bg-app-bg-primary border border-app-border rounded-xl shadow-sm">
-      <h2 className="text-2xl font-bold text-center text-app-text-primary mb-2">Verify Your Account</h2>
+      <h2 className="text-2xl font-bold text-center text-app-text-primary mb-2">
+        Verify Your Account
+      </h2>
       <p className="text-sm text-center text-app-text-secondary mb-6">
-        We sent a 6-digit verification code to <span className="font-semibold text-app-text-primary">{email || 'your email'}</span>. Please enter it below.
+        We sent a 6-digit verification code to{' '}
+        <span className="font-semibold text-app-text-primary">{email || 'your email'}</span>. Please
+        enter it below.
       </p>
-      
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Verification Code */}
         <div>
@@ -80,7 +85,9 @@ export const VerifyEmail = () => {
             disabled={isLoading}
           />
           {errors.code && (
-            <p className="mt-1 text-xs text-danger-500 font-medium text-center">{errors.code.message}</p>
+            <p className="mt-1 text-xs text-danger-500 font-medium text-center">
+              {errors.code.message}
+            </p>
           )}
         </div>
 

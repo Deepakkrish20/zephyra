@@ -2,7 +2,15 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardBody } from '@/components/Card';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
-import { User as UserIcon, Mail, ShieldAlert, MapPin, Trash2, Plus, AlertTriangle } from 'lucide-react';
+import {
+  User as UserIcon,
+  Mail,
+  ShieldAlert,
+  MapPin,
+  Trash2,
+  Plus,
+  AlertTriangle,
+} from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import authApi from '@/services/authApi';
 import { Modal } from '@/components/Modal';
@@ -14,7 +22,8 @@ import toast from 'react-hot-toast';
 // 1. Zod Validation Schema matching Checkout requirements
 const addressSchema = z.object({
   fullName: z.string().min(2, 'Full Name must be at least 2 characters'),
-  phoneNumber: z.string()
+  phoneNumber: z
+    .string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number is too long')
     .regex(/^\+?[0-9\s()-]+$/, 'Invalid phone number format'),
@@ -22,7 +31,8 @@ const addressSchema = z.object({
   addressLine2: z.string().optional(),
   city: z.string().min(2, 'City must be at least 2 characters'),
   state: z.string().min(2, 'State is required'),
-  postalCode: z.string()
+  postalCode: z
+    .string()
     .min(5, 'Postal code must be at least 5 characters')
     .regex(/^[0-9A-Za-z\s-]+$/, 'Invalid postal code format'),
   landmark: z.string().min(3, 'Landmark is required to help delivery agents locate you'),
@@ -105,8 +115,12 @@ export const Profile = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fadeIn">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-app-text-primary">Your Account Profile</h1>
-        <p className="text-sm text-app-text-secondary mt-0.5">Update your credentials and contact preferences.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-app-text-primary">
+          Your Account Profile
+        </h1>
+        <p className="text-sm text-app-text-secondary mt-0.5">
+          Update your credentials and contact preferences.
+        </p>
       </div>
 
       {/* Account Info Card */}
@@ -119,14 +133,21 @@ export const Profile = () => {
         </CardHeader>
         <CardBody className="space-y-4 pt-3">
           <Input label="Full Name" defaultValue={user?.name || 'Jane Doe'} readOnly disabled />
-          <Input label="Email Address" defaultValue={user?.email || 'jane@example.com'} icon={Mail} readOnly disabled />
-          
+          <Input
+            label="Email Address"
+            defaultValue={user?.email || 'jane@example.com'}
+            icon={Mail}
+            readOnly
+            disabled
+          />
+
           <div className="bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-100 dark:border-yellow-500/20 p-4 rounded-xl flex items-start gap-3">
             <ShieldAlert className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
             <div className="text-xs space-y-1">
               <p className="font-bold text-yellow-800 dark:text-yellow-400">Security Credentials</p>
               <p className="text-yellow-700 dark:text-yellow-300">
-                Email and password editing is managed by the security provider. Contact support for registration modifications.
+                Email and password editing is managed by the security provider. Contact support for
+                registration modifications.
               </p>
             </div>
           </div>
@@ -140,7 +161,12 @@ export const Profile = () => {
             <MapPin className="w-5 h-5 text-secondary-600" />
             <h3 className="font-bold text-base text-app-text-primary">Saved Shipping Addresses</h3>
           </div>
-          <Button size="sm" icon={Plus} onClick={() => setIsModalOpen(true)} className="font-bold cursor-pointer">
+          <Button
+            size="sm"
+            icon={Plus}
+            onClick={() => setIsModalOpen(true)}
+            className="font-bold cursor-pointer"
+          >
             Add Address
           </Button>
         </CardHeader>
@@ -185,12 +211,20 @@ export const Profile = () => {
                   <div className="space-y-1">
                     <p className="font-extrabold text-sm text-app-text-primary">{addr.fullName}</p>
                     <p className="text-xs text-app-text-secondary">{addr.addressLine1}</p>
-                    {addr.addressLine2 && <p className="text-xs text-app-text-secondary">{addr.addressLine2}</p>}
+                    {addr.addressLine2 && (
+                      <p className="text-xs text-app-text-secondary">{addr.addressLine2}</p>
+                    )}
                     <p className="text-xs text-app-text-secondary">
                       {addr.city}, {addr.state} {addr.postalCode}
                     </p>
-                    {addr.landmark && <p className="text-[10px] text-primary-600 dark:text-primary-400 font-bold">Landmark: {addr.landmark}</p>}
-                    <p className="text-[10px] text-app-text-secondary font-mono pt-1">Phone: {addr.phoneNumber}</p>
+                    {addr.landmark && (
+                      <p className="text-[10px] text-primary-600 dark:text-primary-400 font-bold">
+                        Landmark: {addr.landmark}
+                      </p>
+                    )}
+                    <p className="text-[10px] text-app-text-secondary font-mono pt-1">
+                      Phone: {addr.phoneNumber}
+                    </p>
                   </div>
                   <div className="flex justify-end pt-3 mt-3 border-t border-app-border">
                     <Button
@@ -211,7 +245,11 @@ export const Profile = () => {
       </Card>
 
       {/* Add Address Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => !actionLoading && setIsModalOpen(false)} title="Register Shipping Address">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => !actionLoading && setIsModalOpen(false)}
+        title="Register Shipping Address"
+      >
         <form onSubmit={handleSubmit(handleAddAddress)} className="space-y-4">
           <Input
             label="Full Name"
@@ -274,7 +312,12 @@ export const Profile = () => {
             />
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-app-border">
-            <Button variant="outline" onClick={() => setIsModalOpen(false)} isDisabled={actionLoading} className="font-bold cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={() => setIsModalOpen(false)}
+              isDisabled={actionLoading}
+              className="font-bold cursor-pointer"
+            >
               Cancel
             </Button>
             <Button type="submit" isLoading={actionLoading} className="font-bold cursor-pointer">

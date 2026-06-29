@@ -28,10 +28,10 @@ export const registerUser = async ({ name, email, password, role }) => {
 
   // Generate verification code for customers
   const isCustomer = role === 'customer';
-  const verificationCode = isCustomer 
-    ? Math.floor(100000 + Math.random() * 900000).toString() 
+  const verificationCode = isCustomer
+    ? Math.floor(100000 + Math.random() * 900000).toString()
     : undefined;
-  const verificationExpires = isCustomer 
+  const verificationExpires = isCustomer
     ? new Date(Date.now() + 15 * 60 * 1000) // 15 mins expiry
     : undefined;
 
@@ -56,7 +56,7 @@ export const registerUser = async ({ name, email, password, role }) => {
   delete userObj.password;
   delete userObj.verificationCode;
   delete userObj.verificationExpires;
-  
+
   return userObj;
 };
 

@@ -39,15 +39,28 @@ export const PublicLayout = () => {
       <header className="sticky top-0 z-40 bg-app-bg-primary border-b border-app-border backdrop-blur-md bg-opacity-80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
+            <Link
+              to="/"
+              className="flex items-center gap-2 font-mono font-bold text-lg tracking-widest text-app-text-primary hover:opacity-90 transition-opacity"
+            >
               <ShoppingBag className="w-5 h-5 text-primary-600" />
               ZEPHYRA
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <NavLink to="/" className={({ isActive }) => `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`
+                }
+              >
                 Home
               </NavLink>
-              <NavLink to="/products" className={({ isActive }) => `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`}>
+              <NavLink
+                to="/products"
+                className={({ isActive }) =>
+                  `text-sm font-semibold hover:text-primary-500 transition-colors ${isActive ? 'text-primary-500' : 'text-app-text-secondary'}`
+                }
+              >
                 Catalog
               </NavLink>
             </nav>
@@ -55,8 +68,8 @@ export const PublicLayout = () => {
 
           <div className="flex items-center gap-4">
             {/* Dark Mode */}
-            <button 
-              onClick={handleThemeToggle} 
+            <button
+              onClick={handleThemeToggle}
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"
               aria-label="Toggle theme"
             >
@@ -64,7 +77,10 @@ export const PublicLayout = () => {
             </button>
 
             {/* Cart Icon */}
-            <Link to="/cart" className="relative p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors">
+            <Link
+              to="/cart"
+              className="relative p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors"
+            >
               <ShoppingCart className="w-5 h-5" />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary-500 text-zinc-950 font-extrabold text-[10px] w-5 h-5 flex items-center justify-center rounded-full ring-2 ring-app-bg-primary animate-pulse">
@@ -76,11 +92,20 @@ export const PublicLayout = () => {
             {/* User Profile / Dashboard Link */}
             {user ? (
               <div className="flex items-center gap-2">
-                <Link to={user.role === 'admin' ? '/admin' : user.role === 'delivery_agent' ? '/delivery' : '/customer/profile'} className="text-sm font-bold bg-primary-500 hover:bg-primary-600 text-zinc-950 px-4 py-2 rounded-lg transition-colors">
+                <Link
+                  to={
+                    user.role === 'admin'
+                      ? '/admin'
+                      : user.role === 'delivery_agent'
+                        ? '/delivery'
+                        : '/customer/profile'
+                  }
+                  className="text-sm font-bold bg-primary-500 hover:bg-primary-600 text-zinc-950 px-4 py-2 rounded-lg transition-colors"
+                >
                   Dashboard ({user.role})
                 </Link>
-                <button 
-                  onClick={handleLogout} 
+                <button
+                  onClick={handleLogout}
                   className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   Logout
@@ -88,7 +113,10 @@ export const PublicLayout = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link to="/login" className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer">
+                <Link
+                  to="/login"
+                  className="text-sm font-bold bg-[#71eb44] hover:bg-[#71eb44]/90 text-zinc-950 px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                >
                   Login
                 </Link>
               </div>
@@ -109,20 +137,36 @@ export const PublicLayout = () => {
             &copy; {new Date().getFullYear()} Zephyra Inc. Smart Commerce. Real-Time Delivery.
           </p>
           <div className="flex items-center gap-6 text-xs text-app-text-secondary">
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="#" className="hover:underline">Terms of Service</a>
-            <a href="#" className="hover:underline">Contact Support</a>
+            <a href="#" className="hover:underline">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:underline">
+              Terms of Service
+            </a>
+            <a href="#" className="hover:underline">
+              Contact Support
+            </a>
           </div>
         </div>
       </footer>
 
-      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="Confirm Logout"
+        size="sm"
+      >
         <div className="space-y-4">
           <p className="text-sm text-app-text-secondary leading-relaxed">
-            Are you sure you want to sign out of your Zephyra account? Any active order tracking session will continue in the background.
+            Are you sure you want to sign out of your Zephyra account? Any active order tracking
+            session will continue in the background.
           </p>
           <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
-            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="font-semibold cursor-pointer"
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">

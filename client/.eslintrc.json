@@ -18,14 +18,9 @@
       "version": "19.0"
     }
   },
-  "plugins": [
-    "react-refresh"
-  ],
+  "plugins": ["react-refresh"],
   "rules": {
-    "react-refresh/only-export-components": [
-      "warn",
-      { "allowConstantExport": true }
-    ],
+    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
     "react/prop-types": "off",
     "no-unused-vars": ["warn", { "varsIgnorePattern": "^React$", "argsIgnorePattern": "^_" }]
   }

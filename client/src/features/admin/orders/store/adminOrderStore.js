@@ -55,9 +55,10 @@ export const useAdminOrderStore = create((set) => ({
         const updatedOrders = state.orders.map((o) =>
           o._id === id ? { ...o, status: 'approved' } : o
         );
-        const updatedSelected = state.selectedOrder?._id === id
-          ? { ...state.selectedOrder, status: 'approved' }
-          : state.selectedOrder;
+        const updatedSelected =
+          state.selectedOrder?._id === id
+            ? { ...state.selectedOrder, status: 'approved' }
+            : state.selectedOrder;
         return {
           orders: updatedOrders,
           selectedOrder: updatedSelected,
@@ -80,9 +81,10 @@ export const useAdminOrderStore = create((set) => ({
         const updatedOrders = state.orders.map((o) =>
           o._id === id ? { ...o, status: 'rejected' } : o
         );
-        const updatedSelected = state.selectedOrder?._id === id
-          ? { ...state.selectedOrder, status: 'rejected' }
-          : state.selectedOrder;
+        const updatedSelected =
+          state.selectedOrder?._id === id
+            ? { ...state.selectedOrder, status: 'rejected' }
+            : state.selectedOrder;
         return {
           orders: updatedOrders,
           selectedOrder: updatedSelected,

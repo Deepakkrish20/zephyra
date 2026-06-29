@@ -1,11 +1,6 @@
 import React from 'react';
 
-export const Loader = ({
-  size = 'md',
-  color = 'primary',
-  text = '',
-  className = '',
-}) => {
+export const Loader = ({ size = 'md', color = 'primary', text = '', className = '' }) => {
   const sizes = {
     sm: 'w-5 h-5 border-2',
     md: 'w-8 h-8 border-3',
@@ -27,9 +22,7 @@ export const Loader = ({
         aria-label="loading"
       />
       {text && (
-        <span className="text-sm font-medium text-app-text-secondary animate-pulse">
-          {text}
-        </span>
+        <span className="text-sm font-medium text-app-text-secondary animate-pulse">{text}</span>
       )}
     </div>
   );

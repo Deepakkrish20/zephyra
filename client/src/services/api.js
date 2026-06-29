@@ -27,12 +27,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response ? error.response.status : null;
-    
+
     if (status === 401) {
       // Unauthorized: Clear token and trigger redirect or store action
       localStorage.removeItem('token');
     }
-    
+
     return Promise.reject(error);
   }
 );

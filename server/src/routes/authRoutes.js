@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import * as authController from '../controllers/authController.js';
-import { registerValidationRules, loginValidationRules, validate } from '../validators/authValidator.js';
+import {
+  registerValidationRules,
+  loginValidationRules,
+  validate,
+} from '../validators/authValidator.js';
 import protect from '../middlewares/authMiddleware.js';
 
 const router = Router();

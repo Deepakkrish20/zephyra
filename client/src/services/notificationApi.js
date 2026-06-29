@@ -14,7 +14,7 @@ export const notificationApi = {
   markAllAsRead: async () => {
     const response = await api.patch('/notifications/read-all');
     return response.data;
-  }
+  },
 };
 
 export default notificationApi;

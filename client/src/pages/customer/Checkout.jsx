@@ -15,7 +15,8 @@ import { Loader } from '@/components/Loader';
 // 1. Define Zod Schema for Shipping Address
 const shippingSchema = z.object({
   fullName: z.string().min(2, 'Full Name must be at least 2 characters'),
-  phoneNumber: z.string()
+  phoneNumber: z
+    .string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number is too long')
     .regex(/^\+?[0-9\s() -]+$/, 'Invalid phone number format'),
@@ -23,7 +24,8 @@ const shippingSchema = z.object({
   addressLine2: z.string().optional(),
   city: z.string().min(2, 'City must be at least 2 characters'),
   state: z.string().min(2, 'State is required'),
-  postalCode: z.string()
+  postalCode: z
+    .string()
     .min(5, 'Postal code must be at least 5 characters')
     .regex(/^[0-9A-Za-z\s-]+$/, 'Invalid postal code format'),
   landmark: z.string().min(3, 'Landmark is required to help delivery agents locate you'),
@@ -153,9 +155,7 @@ export const Checkout = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-app-text-primary">
-          Checkout Order
-        </h1>
+        <h1 className="text-2xl font-black tracking-tight text-app-text-primary">Checkout Order</h1>
         <p className="text-xs text-app-text-secondary mt-0.5">
           Please provide your shipping address to validate your delivery coordinates.
         </p>
@@ -191,9 +191,15 @@ export const Checkout = () => {
             <span>Checkout Validation Passed!</span>
           </div>
           <p className="text-xs font-medium">
-            Shipping address meets format checks, and product stocks have been locked. Order records will be generated in the next phase.
+            Shipping address meets format checks, and product stocks have been locked. Order records
+            will be generated in the next phase.
           </p>
-          <Button variant="ghost" size="sm" onClick={handleResetForm} className="font-bold text-xs cursor-pointer">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleResetForm}
+            className="font-bold text-xs cursor-pointer"
+          >
             Edit Address Form
           </Button>
         </div>
@@ -274,7 +280,7 @@ export const Checkout = () => {
                   />
                 </div>
               </CardBody>
-              
+
               {validationSuccess ? (
                 <CardFooter>
                   <Button
@@ -328,7 +334,9 @@ export const Checkout = () => {
                       </span>
                     </div>
                   </div>
-                  <span className="font-black text-app-text-primary">${item.subtotal.toFixed(2)}</span>
+                  <span className="font-black text-app-text-primary">
+                    ${item.subtotal.toFixed(2)}
+                  </span>
                 </div>
               ))}
 
@@ -340,14 +348,18 @@ export const Checkout = () => {
               </div>
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Shipping</span>
-                <span className="text-success-600 dark:text-success-400 font-bold uppercase">Free</span>
+                <span className="text-success-600 dark:text-success-400 font-bold uppercase">
+                  Free
+                </span>
               </div>
 
               <hr className="border-app-border" />
 
               <div className="flex justify-between items-baseline font-black text-base text-app-text-primary">
                 <span>Total</span>
-                <span className="text-primary-600 dark:text-primary-400">${totalAmount.toFixed(2)}</span>
+                <span className="text-primary-600 dark:text-primary-400">
+                  ${totalAmount.toFixed(2)}
+                </span>
               </div>
             </CardBody>
             <CardBody className="bg-app-bg-secondary border-t border-app-border rounded-b-xl flex items-center gap-2.5 text-app-text-secondary">

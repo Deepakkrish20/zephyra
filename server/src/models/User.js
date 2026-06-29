@@ -6,10 +6,10 @@ const UserSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // will be encrypted via bcrypt
-    role: { 
-      type: String, 
-      enum: Object.values(ROLES), 
-      default: ROLES.CUSTOMER 
+    role: {
+      type: String,
+      enum: Object.values(ROLES),
+      default: ROLES.CUSTOMER,
     },
     isVerified: {
       type: Boolean,
@@ -30,12 +30,12 @@ const UserSchema = new mongoose.Schema(
         city: { type: String, required: true },
         state: { type: String, required: true },
         postalCode: { type: String, required: true },
-        landmark: { type: String }
-      }
-    ]
+        landmark: { type: String },
+      },
+    ],
   },
-  { 
-    timestamps: true 
+  {
+    timestamps: true,
   }
 );
 

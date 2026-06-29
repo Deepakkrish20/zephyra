@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-primary-50: var(--primary-50);
@@ -154,7 +154,7 @@ body {
 /* Premium 2026 Grid & Design Patterns */
 .bg-grid-pattern {
   background-size: 50px 50px;
-  background-image: 
+  background-image:
     linear-gradient(to right, var(--border) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
 }
@@ -181,7 +181,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -190,7 +191,8 @@ body {
 }
 
 @keyframes pulse-slow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.15;
   }
   50% {
@@ -211,7 +213,8 @@ body {
 }
 
 @keyframes blob-float-1 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0px, 0px) scale(1);
   }
   33% {
@@ -223,7 +226,8 @@ body {
 }
 
 @keyframes blob-float-2 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0px, 0px) scale(1);
   }
   50% {
@@ -251,7 +255,9 @@ body {
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
-  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .glow-card:hover::after {
@@ -348,7 +354,7 @@ body {
 /* High precision layout lines */
 .bg-blueprint-grid-fine {
   background-size: 25px 25px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
 }
@@ -356,5 +362,3 @@ body {
 .dark .bg-blueprint-grid-fine {
   background-image: none;
 }
-
-

@@ -29,22 +29,22 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await authApi.login({ email, password });
-      
+
       // Expected backend response: { success: true, message: '...', data: { user, token } }
       const { user, token } = response.data;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('role', user.role);
       localStorage.setItem('lastActivityTime', Date.now().toString());
-      
-      set({ 
-        isAuthenticated: true, 
+
+      set({
+        isAuthenticated: true,
         user,
         role: user.role,
         token,
         isLoading: false,
-        error: null
+        error: null,
       });
       return user;
     } catch (err) {
@@ -97,7 +97,7 @@ export const useAuthStore = create((set) => ({
         role: user.role,
         isAuthenticated: true,
         isLoading: false,
-        error: null
+        error: null,
       });
       return user;
     } catch (err) {
@@ -108,7 +108,7 @@ export const useAuthStore = create((set) => ({
         localStorage.removeItem('user');
         localStorage.removeItem('role');
         localStorage.removeItem('lastActivityTime');
-        
+
         set({
           user: null,
           role: null,
@@ -134,14 +134,14 @@ export const useAuthStore = create((set) => ({
       localStorage.removeItem('user');
       localStorage.removeItem('role');
       localStorage.removeItem('lastActivityTime');
-      
-      set({ 
-        user: null, 
+
+      set({
+        user: null,
         role: null,
-        token: null, 
-        isAuthenticated: false, 
+        token: null,
+        isAuthenticated: false,
         isLoading: false,
-        error: null
+        error: null,
       });
     }
   },
@@ -149,14 +149,14 @@ export const useAuthStore = create((set) => ({
   // Helper action for testing different roles in UI (Developer Toolbar)
   setMockRole: (role) => {
     set((state) => {
-      const updatedUser = state.user 
-        ? { ...state.user, role } 
+      const updatedUser = state.user
+        ? { ...state.user, role }
         : { id: 'mock-user-123', name: 'Alex Mercer', email: 'alex@zephyra.io', role };
       localStorage.setItem('user', JSON.stringify(updatedUser));
       localStorage.setItem('role', role);
       return { user: updatedUser, role };
     });
-  }
+  },
 }));
 
 export default useAuthStore;

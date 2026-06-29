@@ -131,7 +131,10 @@ export const Cart = () => {
             const isMaxStock = quantity >= product.stock;
 
             return (
-              <Card key={product._id} className="relative overflow-hidden bg-app-bg-primary border border-app-border rounded-xl">
+              <Card
+                key={product._id}
+                className="relative overflow-hidden bg-app-bg-primary border border-app-border rounded-xl"
+              >
                 {isUpdating && (
                   <div className="absolute inset-0 bg-app-bg-primary/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
                     <Loader size="sm" color="primary" />
@@ -243,7 +246,11 @@ export const Cart = () => {
             </CardBody>
             <CardFooter className="px-5 py-4 border-t border-app-border bg-app-bg-secondary">
               <Link to="/customer/checkout" className="w-full">
-                <Button className="w-full font-bold cursor-pointer" icon={ArrowRight} iconPosition="right">
+                <Button
+                  className="w-full font-bold cursor-pointer"
+                  icon={ArrowRight}
+                  iconPosition="right"
+                >
                   Proceed to Checkout
                 </Button>
               </Link>

@@ -9,8 +9,10 @@ export const registerValidationRules = [
   body('email').isEmail().withMessage('Provide a valid email address.'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters.'),
   body('role')
-    .notEmpty().withMessage('Role field is required.')
-    .isIn(Object.values(ROLES)).withMessage(`Role must be one of: ${Object.values(ROLES).join(', ')}`),
+    .notEmpty()
+    .withMessage('Role field is required.')
+    .isIn(Object.values(ROLES))
+    .withMessage(`Role must be one of: ${Object.values(ROLES).join(', ')}`),
 ];
 
 /**
@@ -29,10 +31,9 @@ export const validate = (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  
+
   return res.status(400).json({
     success: false,
-    errors: errors.array().map(err => ({ field: err.path, message: err.msg }))
+    errors: errors.array().map((err) => ({ field: err.path, message: err.msg })),
   });
 };
-

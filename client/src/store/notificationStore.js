@@ -9,7 +9,7 @@ export const playNotificationSound = () => {
     if (!AudioContext) return;
     const ctx = new AudioContext();
     const now = ctx.currentTime;
-    
+
     // Low pleasant chime tone (E.g. D5)
     const osc1 = ctx.createOscillator();
     const gain1 = ctx.createGain();
@@ -26,7 +26,7 @@ export const playNotificationSound = () => {
     const osc2 = ctx.createOscillator();
     const gain2 = ctx.createGain();
     osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(880.00, now + 0.08); // A5
+    osc2.frequency.setValueAtTime(880.0, now + 0.08); // A5
     gain2.gain.setValueAtTime(0.08, now + 0.08);
     gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
     osc2.connect(gain2);
@@ -95,7 +95,7 @@ export const useNotificationStore = create((set, get) => ({
       const unreadCount = notifications.filter((n) => !n.isRead).length;
       return { notifications, unreadCount };
     });
-    
+
     // Play chime sound
     playNotificationSound();
   },

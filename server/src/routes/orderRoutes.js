@@ -12,17 +12,17 @@ const router = Router();
 const generateOrderNumber = async () => {
   let isUnique = false;
   let orderNo = '';
-  
+
   while (!isUnique) {
     const randomSuffix = Math.floor(100000 + Math.random() * 900000);
     orderNo = `ZEP-${randomSuffix}`;
-    
+
     const existingOrder = await Order.findOne({ orderNumber: orderNo });
     if (!existingOrder) {
       isUnique = true;
     }
   }
-  
+
   return orderNo;
 };
 

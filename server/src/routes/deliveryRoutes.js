@@ -13,10 +13,7 @@ router.get('/available', protect, restrictTo('delivery_agent'), async (req, res,
   try {
     const orders = await Order.find({
       status: 'approved',
-      $or: [
-        { deliveryAgent: { $exists: false } },
-        { deliveryAgent: null }
-      ]
+      $or: [{ deliveryAgent: { $exists: false } }, { deliveryAgent: null }],
     }).sort({ createdAt: -1 });
 
     res.json(orders);
@@ -57,7 +54,10 @@ router.post('/accept/:orderId', protect, restrictTo('delivery_agent'), async (re
         'order-accepted'
       );
     } catch (notifyError) {
-      console.error('[Notifications] Failed to notify customer of courier assignment:', notifyError.message);
+      console.error(
+        '[Notifications] Failed to notify customer of courier assignment:',
+        notifyError.message
+      );
     }
 
     res.json(order);
@@ -77,7 +77,7 @@ router.get('/active', protect, restrictTo('delivery_agent'), async (req, res, ne
     const agentId = req.user.id;
     const orders = await Order.find({
       deliveryAgent: agentId,
-      status: { $in: ['accepted', 'picked_up', 'out_for_delivery'] }
+      status: { $in: ['accepted', 'picked_up', 'out_for_delivery'] },
     }).sort({ updatedAt: -1 });
 
     res.json(orders);
@@ -108,7 +108,9 @@ router.post('/status/:orderId', protect, restrictTo('delivery_agent'), async (re
 
     // Check if order belongs to the agent
     if (!order.deliveryAgent || order.deliveryAgent.toString() !== agentId) {
-      return res.status(403).json({ message: 'Permission denied: This order is not assigned to you.' });
+      return res
+        .status(403)
+        .json({ message: 'Permission denied: This order is not assigned to you.' });
     }
 
     order.status = status;
@@ -131,7 +133,10 @@ router.post('/status/:orderId', protect, restrictTo('delivery_agent'), async (re
         await createNotification(order.customerId, statusMsg, `order-${status}`);
       }
     } catch (notifyError) {
-      console.error('[Notifications] Failed to notify customer of order status update:', notifyError.message);
+      console.error(
+        '[Notifications] Failed to notify customer of order status update:',
+        notifyError.message
+      );
     }
 
     res.json(order);
@@ -153,7 +158,7 @@ router.get('/stats', protect, restrictTo('delivery_agent'), async (req, res, nex
     // Find all completed orders
     const completedOrders = await Order.find({
       deliveryAgent: agentId,
-      status: 'delivered'
+      status: 'delivered',
     });
 
     let completedOrdersCount = completedOrders.length;
@@ -162,9 +167,9 @@ router.get('/stats', protect, restrictTo('delivery_agent'), async (req, res, nex
     let ratedCount = 0;
     let ratingSum = 0;
 
-    completedOrders.forEach(order => {
+    completedOrders.forEach((order) => {
       // Payout Rate: $8.50 base + 5% of order value
-      const basePayout = 8.50 + order.totalAmount * 0.05;
+      const basePayout = 8.5 + order.totalAmount * 0.05;
       const tip = order.deliveryTip || 0;
       totalEarnings += basePayout + tip;
       totalTips += tip;
@@ -181,7 +186,7 @@ router.get('/stats', protect, restrictTo('delivery_agent'), async (req, res, nex
       completedOrdersCount,
       totalEarnings: parseFloat(totalEarnings.toFixed(2)),
       totalTips: parseFloat(totalTips.toFixed(2)),
-      averageRating
+      averageRating,
     });
   } catch (error) {
     next(error);

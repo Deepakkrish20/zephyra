@@ -59,7 +59,9 @@ export const ProductDetailsPage = () => {
           <AlertTriangle className="w-8 h-8" />
         </div>
         <div>
-          <h3 className="font-bold text-danger-900 dark:text-danger-400 text-lg">Failed to Load Details</h3>
+          <h3 className="font-bold text-danger-900 dark:text-danger-400 text-lg">
+            Failed to Load Details
+          </h3>
           <p className="text-sm text-danger-700 dark:text-danger-500/90 mt-1">{error}</p>
         </div>
         <Link to="/products">
@@ -95,12 +97,11 @@ export const ProductDetailsPage = () => {
   const { name, price, description, category, stock, images = [], imageUrl } = selectedProduct;
   const isOutOfStock = stock <= 0;
   const isLowStock = stock > 0 && stock <= 10;
-  
+
   // Create list of all unique images for gallery (combining images array and imageUrl)
-  const imageGallery = Array.from(new Set([
-    ...(images && images.length > 0 ? images : []),
-    imageUrl
-  ])).filter(Boolean);
+  const imageGallery = Array.from(
+    new Set([...(images && images.length > 0 ? images : []), imageUrl])
+  ).filter(Boolean);
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -116,7 +117,6 @@ export const ProductDetailsPage = () => {
       {/* Detail Showcase Card */}
       <Card className="overflow-hidden bg-app-bg-primary border border-app-border rounded-2xl shadow-sm">
         <CardBody className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6 sm:p-10">
-          
           {/* Left Column: Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-app-bg-secondary border border-app-border">
@@ -131,7 +131,7 @@ export const ProductDetailsPage = () => {
                   No Image Available
                 </div>
               )}
-              
+
               {/* Category Floating Badge */}
               <div className="absolute top-4 left-4">
                 <Badge variant="secondary" size="md">
@@ -153,7 +153,11 @@ export const ProductDetailsPage = () => {
                         ${isActive ? 'border-primary-500 scale-[1.03] shadow-sm' : 'border-app-border hover:border-primary-400/50'}
                       `}
                     >
-                      <img src={img} alt={`${name} preview ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img
+                        src={img}
+                        alt={`${name} preview ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   );
                 })}
@@ -168,13 +172,19 @@ export const ProductDetailsPage = () => {
                 <Badge variant="primary" size="sm" className="uppercase font-bold tracking-wider">
                   {category || 'Uncategorized'}
                 </Badge>
-                
+
                 {isOutOfStock ? (
-                  <Badge variant="danger" size="sm" dot>Out of Stock</Badge>
+                  <Badge variant="danger" size="sm" dot>
+                    Out of Stock
+                  </Badge>
                 ) : isLowStock ? (
-                  <Badge variant="warning" size="sm" dot>Only {stock} Left</Badge>
+                  <Badge variant="warning" size="sm" dot>
+                    Only {stock} Left
+                  </Badge>
                 ) : (
-                  <Badge variant="success" size="sm" dot>In Stock</Badge>
+                  <Badge variant="success" size="sm" dot>
+                    In Stock
+                  </Badge>
                 )}
               </div>
 
@@ -221,9 +231,7 @@ export const ProductDetailsPage = () => {
                 {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
               </Button>
             </div>
-
           </div>
-
         </CardBody>
       </Card>
     </div>

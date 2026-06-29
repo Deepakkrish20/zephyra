@@ -17,9 +17,9 @@ export const validate = (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  
+
   return res.status(400).json({
     success: false,
-    errors: errors.array().map(err => ({ field: err.path, message: err.msg }))
+    errors: errors.array().map((err) => ({ field: err.path, message: err.msg })),
   });
 };

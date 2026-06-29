@@ -9,15 +9,8 @@ import { Modal } from '@/components/Modal';
 import { Loader } from '@/components/Loader';
 
 export const ProductManagement = () => {
-  const {
-    products,
-    loading,
-    error,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-    setShowAll,
-  } = useProductStore();
+  const { products, loading, error, createProduct, updateProduct, deleteProduct, setShowAll } =
+    useProductStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -136,7 +129,11 @@ export const ProductManagement = () => {
   };
 
   const handleDeleteProduct = async (product) => {
-    if (window.confirm(`Are you sure you want to delete "${product.name}"? This action cannot be undone.`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${product.name}"? This action cannot be undone.`
+      )
+    ) {
       try {
         await deleteProduct(product._id);
       } catch (err) {
@@ -190,8 +187,12 @@ export const ProductManagement = () => {
                 <tbody className="divide-y divide-app-border">
                   {products.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="px-6 py-12 text-center text-app-text-secondary font-medium">
-                        No products registered in the database. Click &quot;Add New Product&quot; to start seeding.
+                      <td
+                        colSpan="6"
+                        className="px-6 py-12 text-center text-app-text-secondary font-medium"
+                      >
+                        No products registered in the database. Click &quot;Add New Product&quot; to
+                        start seeding.
                       </td>
                     </tr>
                   ) : (
@@ -201,7 +202,11 @@ export const ProductManagement = () => {
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-app-bg-secondary rounded overflow-hidden border border-app-border flex-shrink-0">
                               {p.imageUrl ? (
-                                <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                                <img
+                                  src={p.imageUrl}
+                                  alt={p.name}
+                                  className="w-full h-full object-cover"
+                                />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-[10px] text-app-text-secondary font-bold">
                                   No Img
@@ -223,7 +228,16 @@ export const ProductManagement = () => {
                           {p.stock} Units
                         </td>
                         <td className="px-6 py-4">
-                          <Badge variant={p.status === 'published' ? 'success' : p.status === 'hidden' ? 'danger' : 'neutral'} dot>
+                          <Badge
+                            variant={
+                              p.status === 'published'
+                                ? 'success'
+                                : p.status === 'hidden'
+                                  ? 'danger'
+                                  : 'neutral'
+                            }
+                            dot
+                          >
                             {p.status}
                           </Badge>
                         </td>

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Product from '../models/Product.js';
-import protect from '../middlewares/authMiddleware.js';
+import protect, { restrictTo } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -39,10 +39,7 @@ router.get('/', async (req, res, next) => {
 
     // Fetch products and count total matching documents in parallel
     const [products, totalProducts] = await Promise.all([
-      Product.find(query)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limitNum),
+      Product.find(query).sort({ createdAt: -1 }).skip(skip).limit(limitNum),
       Product.countDocuments(query),
     ]);
 
@@ -87,7 +84,7 @@ router.get('/:id', async (req, res, next) => {
 // @route   POST /api/products
 // @desc    Create a new product catalog entry
 // @access  Private (Admin)
-router.post('/', protect, async (req, res, next) => {
+router.post('/', protect, restrictTo('admin'), async (req, res, next) => {
   try {
     const { name, price, description, imageUrl, images, category, stock, status } = req.body;
 
@@ -96,7 +93,9 @@ router.post('/', protect, async (req, res, next) => {
     }
 
     // Default main image url if none given, or use unsplash placeholder
-    const defaultImage = imageUrl || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60';
+    const defaultImage =
+      imageUrl ||
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60';
 
     const product = await Product.create({
       name,
@@ -118,7 +117,7 @@ router.post('/', protect, async (req, res, next) => {
 // @route   PUT /api/products/:id
 // @desc    Update a product catalog entry
 // @access  Private (Admin)
-router.put('/:id', protect, async (req, res, next) => {
+router.put('/:id', protect, restrictTo('admin'), async (req, res, next) => {
   try {
     const { name, price, description, imageUrl, images, category, stock, status } = req.body;
 
@@ -149,7 +148,7 @@ router.put('/:id', protect, async (req, res, next) => {
 // @route   DELETE /api/products/:id
 // @desc    Delete a product catalog entry
 // @access  Private (Admin)
-router.delete('/:id', protect, async (req, res, next) => {
+router.delete('/:id', protect, restrictTo('admin'), async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {

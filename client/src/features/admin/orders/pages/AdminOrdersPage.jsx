@@ -6,7 +6,16 @@ import { Badge } from '@/components/Badge';
 import { Loader } from '@/components/Loader';
 import { Input } from '@/components/Input';
 import { AdminOrderDetailsModal } from '../components/AdminOrderDetailsModal';
-import { Search, Eye, Check, X, AlertTriangle, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import {
+  Search,
+  Eye,
+  Check,
+  X,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
+  RefreshCw,
+} from 'lucide-react';
 
 export const AdminOrdersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -112,7 +121,9 @@ export const AdminOrdersPage = () => {
           variant="outline"
           size="sm"
           icon={RefreshCw}
-          onClick={() => getOrders({ page: currentPage, limit: 10, status: statusFilter, search: searchTerm })}
+          onClick={() =>
+            getOrders({ page: currentPage, limit: 10, status: statusFilter, search: searchTerm })
+          }
           isLoading={loading && orders.length > 0}
           className="cursor-pointer font-bold text-xs"
         >
@@ -193,10 +204,7 @@ export const AdminOrdersPage = () => {
                 </thead>
                 <tbody className="divide-y divide-app-border">
                   {orders.map((order) => (
-                    <tr
-                      key={order._id}
-                      className="hover:bg-app-bg-secondary/20 transition-colors"
-                    >
+                    <tr key={order._id} className="hover:bg-app-bg-secondary/20 transition-colors">
                       <td className="px-6 py-4 font-black text-app-text-primary">
                         {order.orderNumber}
                       </td>
@@ -231,7 +239,7 @@ export const AdminOrdersPage = () => {
                         >
                           Details
                         </Button>
-                        
+
                         {order.status === 'pending_approval' && (
                           <>
                             <Button

@@ -23,10 +23,7 @@ router.get('/', protect, async (req, res, next) => {
 // @access  Private
 router.patch('/read-all', protect, async (req, res, next) => {
   try {
-    await Notification.updateMany(
-      { recipient: req.user.id, isRead: false },
-      { isRead: true }
-    );
+    await Notification.updateMany({ recipient: req.user.id, isRead: false }, { isRead: true });
     res.json({ success: true, message: 'All notifications marked as read' });
   } catch (error) {
     next(error);

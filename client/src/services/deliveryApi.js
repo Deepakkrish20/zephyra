@@ -24,7 +24,7 @@ export const deliveryApi = {
   getStats: async () => {
     const response = await api.get('/delivery/stats');
     return response.data;
-  }
+  },
 };
 
 export default deliveryApi;

@@ -1,6 +1,13 @@
 import { useState, useEffect, Fragment } from 'react';
 import { Card, CardHeader, CardBody } from '@/components/Card';
-import { AlertTriangle, Send, CheckCircle2, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  AlertTriangle,
+  Send,
+  CheckCircle2,
+  ShieldAlert,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 import adminApi from '@/services/adminApi';
 import { TableSkeleton } from '@/components/Skeleton';
 import { Badge } from '@/components/Badge';
@@ -21,7 +28,8 @@ export const CustomerManagement = () => {
       const response = await adminApi.getCustomers();
       setCustomers(response?.data?.customers || []);
     } catch (err) {
-      const errMsg = err.response?.data?.message || err.message || 'Failed to retrieve registered customers';
+      const errMsg =
+        err.response?.data?.message || err.message || 'Failed to retrieve registered customers';
       setError(errMsg);
     } finally {
       setLoading(false);
@@ -38,7 +46,8 @@ export const CustomerManagement = () => {
       await adminApi.sendVerificationReminder(customerId);
       toast.success(`Verification reminder sent to ${email}!`);
     } catch (err) {
-      const errMsg = err.response?.data?.message || err.message || 'Failed to send verification reminder';
+      const errMsg =
+        err.response?.data?.message || err.message || 'Failed to send verification reminder';
       toast.error(errMsg);
     } finally {
       setSendingId(null);
@@ -62,17 +71,32 @@ export const CustomerManagement = () => {
               Saved Shipping Addresses ({addrs.length})
             </h4>
             {addrs.length === 0 ? (
-              <p className="text-xs text-app-text-secondary italic">No saved addresses for this customer.</p>
+              <p className="text-xs text-app-text-secondary italic">
+                No saved addresses for this customer.
+              </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
                 {addrs.map((addr, idx) => (
-                  <div key={addr._id || idx} className="p-3 border border-app-border rounded-lg bg-app-bg-primary text-xs space-y-1">
+                  <div
+                    key={addr._id || idx}
+                    className="p-3 border border-app-border rounded-lg bg-app-bg-primary text-xs space-y-1"
+                  >
                     <p className="font-bold text-app-text-primary">{addr.fullName}</p>
                     <p className="text-app-text-secondary">{addr.addressLine1}</p>
-                    {addr.addressLine2 && <p className="text-app-text-secondary">{addr.addressLine2}</p>}
-                    <p className="text-app-text-secondary">{addr.city}, {addr.state} {addr.postalCode}</p>
-                    {addr.landmark && <p className="text-[10px] text-primary-600 dark:text-primary-400 font-bold">Landmark: {addr.landmark}</p>}
-                    <p className="text-[10px] text-app-text-secondary font-mono pt-1">Phone: {addr.phoneNumber}</p>
+                    {addr.addressLine2 && (
+                      <p className="text-app-text-secondary">{addr.addressLine2}</p>
+                    )}
+                    <p className="text-app-text-secondary">
+                      {addr.city}, {addr.state} {addr.postalCode}
+                    </p>
+                    {addr.landmark && (
+                      <p className="text-[10px] text-primary-600 dark:text-primary-400 font-bold">
+                        Landmark: {addr.landmark}
+                      </p>
+                    )}
+                    <p className="text-[10px] text-app-text-secondary font-mono pt-1">
+                      Phone: {addr.phoneNumber}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -87,8 +111,12 @@ export const CustomerManagement = () => {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-app-text-primary">Customer Registries</h1>
-          <p className="text-sm text-app-text-secondary mt-0.5">Manage user verification states and view saved addresses.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-app-text-primary">
+            Customer Registries
+          </h1>
+          <p className="text-sm text-app-text-secondary mt-0.5">
+            Manage user verification states and view saved addresses.
+          </p>
         </div>
       </div>
 
@@ -118,7 +146,9 @@ export const CustomerManagement = () => {
               <ShieldAlert className="w-5 h-5 text-warning-500" />
               <div>
                 <h3 className="font-bold text-base text-app-text-primary">Pending Verification</h3>
-                <p className="text-xs text-app-text-secondary">Customers who haven&apos;t completed email verification.</p>
+                <p className="text-xs text-app-text-secondary">
+                  Customers who haven&apos;t completed email verification.
+                </p>
               </div>
             </CardHeader>
             <CardBody className="p-0 overflow-x-auto">
@@ -133,7 +163,10 @@ export const CustomerManagement = () => {
                 <tbody className="divide-y divide-app-border">
                   {unverifiedCustomers.length === 0 ? (
                     <tr>
-                      <td colSpan="3" className="px-6 py-12 text-center text-app-text-secondary font-medium">
+                      <td
+                        colSpan="3"
+                        className="px-6 py-12 text-center text-app-text-secondary font-medium"
+                      >
                         No pending verifications.
                       </td>
                     </tr>
@@ -152,8 +185,12 @@ export const CustomerManagement = () => {
                                 <ChevronDown className="w-4 h-4 text-app-text-secondary" />
                               )}
                               <div>
-                                <div className="font-bold text-app-text-primary">{customer.name}</div>
-                                <div className="text-xs text-app-text-secondary font-mono">{customer.email}</div>
+                                <div className="font-bold text-app-text-primary">
+                                  {customer.name}
+                                </div>
+                                <div className="text-xs text-app-text-secondary font-mono">
+                                  {customer.email}
+                                </div>
                               </div>
                             </div>
                           </td>
@@ -161,10 +198,13 @@ export const CustomerManagement = () => {
                             {new Date(customer.createdAt).toLocaleDateString(undefined, {
                               month: 'short',
                               day: 'numeric',
-                              year: 'numeric'
+                              year: 'numeric',
                             })}
                           </td>
-                          <td className="px-4 py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
+                          <td
+                            className="px-4 py-3.5 text-right"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <Button
                               variant="warning"
                               size="sm"
@@ -208,7 +248,10 @@ export const CustomerManagement = () => {
                 <tbody className="divide-y divide-app-border">
                   {verifiedCustomers.length === 0 ? (
                     <tr>
-                      <td colSpan="3" className="px-6 py-12 text-center text-app-text-secondary font-medium">
+                      <td
+                        colSpan="3"
+                        className="px-6 py-12 text-center text-app-text-secondary font-medium"
+                      >
                         No verified customer accounts.
                       </td>
                     </tr>
@@ -227,8 +270,12 @@ export const CustomerManagement = () => {
                                 <ChevronDown className="w-4 h-4 text-app-text-secondary" />
                               )}
                               <div>
-                                <div className="font-bold text-app-text-primary">{customer.name}</div>
-                                <div className="text-xs text-app-text-secondary font-mono">{customer.email}</div>
+                                <div className="font-bold text-app-text-primary">
+                                  {customer.name}
+                                </div>
+                                <div className="text-xs text-app-text-secondary font-mono">
+                                  {customer.email}
+                                </div>
                               </div>
                             </div>
                           </td>
@@ -236,7 +283,7 @@ export const CustomerManagement = () => {
                             {new Date(customer.createdAt).toLocaleDateString(undefined, {
                               month: 'short',
                               day: 'numeric',
-                              year: 'numeric'
+                              year: 'numeric',
                             })}
                           </td>
                           <td className="px-4 py-3.5 text-right">

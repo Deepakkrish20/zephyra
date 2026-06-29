@@ -28,11 +28,14 @@ gitGraph
 ```
 
 ### Main Branches
+
 - **`main`**: Reflects the production-ready state. No direct commits allowed. Only accepts pull requests (PRs) from `develop`.
 - **`develop`**: The main integration branch for active development. Features are branched out of and merged back into this branch.
 
 ### Feature Branches
+
 Developers work on dedicated feature branches categorized by domain boundaries:
+
 - `feature/customer/*` - Frontend/backend features scoped for customer pages or cart/ordering logic.
 - `feature/admin/*` - Admin analytics, product registry panel, or override tools.
 - `feature/delivery/*` - Delivery agent available jobs lists, GPS coordinates, location sockets.
@@ -45,6 +48,7 @@ Developers work on dedicated feature branches categorized by domain boundaries:
 We use structured semantic commits: `<type>(<scope>): <description>`
 
 ### Allowed Types:
+
 - `feat`: A new feature or endpoint.
 - `fix`: A bug fix.
 - `docs`: Documentation changes only.
@@ -53,6 +57,7 @@ We use structured semantic commits: `<type>(<scope>): <description>`
 - `chore`: Updating build tasks, packages, or config dependencies.
 
 ### Examples:
+
 - `feat(client-cart): bind zustand cartStore quantity controls to Button component`
 - `fix(server-sockets): catch null coordinate reference on agent location-update`
 - `docs(root): update installation guidelines for Node.js subpath imports`
@@ -62,6 +67,7 @@ We use structured semantic commits: `<type>(<scope>): <description>`
 ## 3. Minimizing Merge Conflicts
 
 To prevent simultaneous edits on shared files, developers must follow these modular conventions:
+
 1. **Scope dependencies in features**: Implement business logic inside separate files under `client/src/features/` or `server/src/tracking/` rather than adding logic directly to layouts or global routers.
 2. **Rebase regularly**: Before opening a Pull Request, rebase your feature branch onto `develop` to resolve conflicts locally:
    ```bash

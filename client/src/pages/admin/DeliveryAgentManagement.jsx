@@ -53,13 +53,14 @@ export const DeliveryAgentManagement = () => {
     try {
       const response = await adminApi.createDeliveryAgent(data);
       const createdAgent = response.data.user;
-      
+
       toast.success(`Delivery Agent "${createdAgent.name}" registered successfully!`);
-      
+
       setAgents((prev) => [createdAgent, ...prev]);
       reset();
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message || 'Failed to create delivery agent';
+      const errorMsg =
+        error.response?.data?.message || error.message || 'Failed to create delivery agent';
       toast.error(errorMsg);
     } finally {
       setIsLoading(false);
@@ -70,7 +71,9 @@ export const DeliveryAgentManagement = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Delivery Agent Dispatch Roster</h1>
-        <p className="text-sm text-app-text-secondary">Verify, add, and monitor active dispatch agent locations.</p>
+        <p className="text-sm text-app-text-secondary">
+          Verify, add, and monitor active dispatch agent locations.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -100,7 +103,9 @@ export const DeliveryAgentManagement = () => {
                     disabled={isLoading}
                   />
                   {errors.name && (
-                    <p className="mt-1 text-xs text-danger-500 font-medium">{errors.name.message}</p>
+                    <p className="mt-1 text-xs text-danger-500 font-medium">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -119,7 +124,9 @@ export const DeliveryAgentManagement = () => {
                     disabled={isLoading}
                   />
                   {errors.email && (
-                    <p className="mt-1 text-xs text-danger-500 font-medium">{errors.email.message}</p>
+                    <p className="mt-1 text-xs text-danger-500 font-medium">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
 
@@ -132,13 +139,17 @@ export const DeliveryAgentManagement = () => {
                     type="password"
                     {...register('password')}
                     className={`w-full px-3 py-2 text-sm border rounded-lg bg-app-bg-primary text-app-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500 transition-shadow ${
-                      errors.password ? 'border-danger-500 focus:ring-danger-500' : 'border-app-border'
+                      errors.password
+                        ? 'border-danger-500 focus:ring-danger-500'
+                        : 'border-app-border'
                     }`}
                     placeholder="••••••••"
                     disabled={isLoading}
                   />
                   {errors.password && (
-                    <p className="mt-1 text-xs text-danger-500 font-medium">{errors.password.message}</p>
+                    <p className="mt-1 text-xs text-danger-500 font-medium">
+                      {errors.password.message}
+                    </p>
                   )}
                 </div>
 
@@ -190,14 +201,19 @@ export const DeliveryAgentManagement = () => {
                     </tr>
                   ) : (
                     agents.map((agent) => (
-                      <tr key={agent._id} className="hover:bg-app-bg-secondary/40 transition-colors">
+                      <tr
+                        key={agent._id}
+                        className="hover:bg-app-bg-secondary/40 transition-colors"
+                      >
                         <td className="px-6 py-4 font-bold text-primary-600">
                           #ZEP-DRV-{agent._id.substring(18).toUpperCase()}
                         </td>
                         <td className="px-6 py-4 font-semibold">{agent.name}</td>
                         <td className="px-6 py-4 text-app-text-secondary">{agent.email}</td>
                         <td className="px-6 py-4">
-                          <Badge variant="success" dot>Registered (Ready)</Badge>
+                          <Badge variant="success" dot>
+                            Registered (Ready)
+                          </Badge>
                         </td>
                       </tr>
                     ))

@@ -7,7 +7,12 @@ const router = Router();
 // @route   POST /api/admin/delivery-agents
 // @desc    Create a new delivery agent account (Admin only)
 // @access  Private (Admin)
-router.post('/delivery-agents', createDeliveryAgentValidationRules, validate, adminController.createDeliveryAgent);
+router.post(
+  '/delivery-agents',
+  createDeliveryAgentValidationRules,
+  validate,
+  adminController.createDeliveryAgent
+);
 
 // @route   GET /api/admin/delivery-agents
 // @desc    Get all registered delivery agent accounts (Admin only)

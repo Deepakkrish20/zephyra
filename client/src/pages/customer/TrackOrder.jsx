@@ -21,7 +21,7 @@ const agentIcon = new L.Icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
   iconSize: [38, 38],
   iconAnchor: [19, 38],
-  popupAnchor: [0, -38]
+  popupAnchor: [0, -38],
 });
 
 export const TrackOrder = () => {
@@ -55,19 +55,24 @@ export const TrackOrder = () => {
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Track Your Shipment</h1>
-          <p className="text-sm text-app-text-secondary">Delivery Status: <strong className="text-app-text-primary">{deliveryStatus || 'In Transit'}</strong></p>
+          <p className="text-sm text-app-text-secondary">
+            Delivery Status:{' '}
+            <strong className="text-app-text-primary">{deliveryStatus || 'In Transit'}</strong>
+          </p>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="secondary" dot>Live Tracking Active</Badge>
+          <Badge variant="secondary" dot>
+            Live Tracking Active
+          </Badge>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map Column */}
         <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-app-border h-[400px] shadow-sm relative z-10">
-          <MapContainer 
-            center={clientCoords} 
-            zoom={13} 
+          <MapContainer
+            center={clientCoords}
+            zoom={13}
             scrollWheelZoom={false}
             style={{ height: '100%', width: '100%' }}
           >
@@ -77,27 +82,20 @@ export const TrackOrder = () => {
             />
             {/* Customer Marker */}
             <Marker position={clientCoords}>
-              <Popup>
-                Your Home Address
-              </Popup>
+              <Popup>Your Home Address</Popup>
             </Marker>
             {/* Delivery Agent Marker */}
             {agentLocation && (
               <Marker position={[agentLocation.lat, agentLocation.lng]} icon={agentIcon}>
-                <Popup>
-                  Delivery Agent
-                </Popup>
+                <Popup>Delivery Agent</Popup>
               </Marker>
             )}
             {/* Mock Route Polyline */}
             {agentLocation && (
-              <Polyline 
-                positions={[
-                  [agentLocation.lat, agentLocation.lng],
-                  clientCoords
-                ]} 
-                color="#8b5cf6" 
-                dashArray="5, 10" 
+              <Polyline
+                positions={[[agentLocation.lat, agentLocation.lng], clientCoords]}
+                color="#8b5cf6"
+                dashArray="5, 10"
               />
             )}
           </MapContainer>

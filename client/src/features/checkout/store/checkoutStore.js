@@ -26,7 +26,8 @@ export const useCheckoutStore = create((set) => ({
       return summary;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message || 'Failed to retrieve checkout summary',
+        error:
+          error.response?.data?.message || error.message || 'Failed to retrieve checkout summary',
         loading: false,
       });
     }
@@ -39,14 +40,15 @@ export const useCheckoutStore = create((set) => ({
       set({ loading: false });
       return result;
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message || 'Checkout validation failed';
+      const errorMsg =
+        error.response?.data?.message || error.message || 'Checkout validation failed';
       const errorsList = error.response?.data?.errors || [];
-      
+
       set({
         error: errorMsg,
         loading: false,
       });
-      
+
       const fullError = new Error(errorMsg);
       fullError.errors = errorsList;
       throw fullError;

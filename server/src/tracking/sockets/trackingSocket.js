@@ -8,7 +8,7 @@ export const registerTrackingSocket = (socket, io) => {
   socket.on(SOCKET_EVENTS.LOCATION_UPDATE, async (data) => {
     try {
       const { orderId, agentId, lat, lng } = data;
-      
+
       // Execute database update or processing logic
       await updateLiveLocation(orderId, agentId, { lat, lng });
 
@@ -16,9 +16,9 @@ export const registerTrackingSocket = (socket, io) => {
       io.to(`order-${orderId}`).emit('agent-gps-coordinates', {
         lat,
         lng,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
-      
+
       console.log(`[Tracking Socket] Broadcast coordinate update: order-${orderId}`);
     } catch (error) {
       console.error(`[Tracking Socket] Location update parsing error: ${error.message}`);

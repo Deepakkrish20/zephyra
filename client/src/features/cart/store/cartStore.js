@@ -47,7 +47,8 @@ export const useCartStore = create((set) => ({
         loading: false,
       });
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message || 'Failed to add item to cart';
+      const errorMsg =
+        error.response?.data?.message || error.message || 'Failed to add item to cart';
       set({
         error: errorMsg,
         loading: false,
@@ -69,7 +70,8 @@ export const useCartStore = create((set) => ({
         loading: false,
       });
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message || 'Failed to update quantity';
+      const errorMsg =
+        error.response?.data?.message || error.message || 'Failed to update quantity';
       set({
         error: errorMsg,
         loading: false,

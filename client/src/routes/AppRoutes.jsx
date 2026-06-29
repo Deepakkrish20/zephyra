@@ -139,7 +139,14 @@ export const AppRoutes = () => {
         </Route>
 
         {/* Fallback route */}
-        <Route path="*" element={<div className="flex items-center justify-center min-h-screen text-lg font-bold">404 - Section Not Found</div>} />
+        <Route
+          path="*"
+          element={
+            <div className="flex items-center justify-center min-h-screen text-lg font-bold">
+              404 - Section Not Found
+            </div>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

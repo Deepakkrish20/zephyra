@@ -6,7 +6,6 @@ import { Navigation } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { useTrackingStore } from '@/store/trackingStore';
 
-
 export const DeliveryTracking = () => {
   const { updateAgentLocation, startTracking } = useTrackingStore();
   const [coordinatesLog, setCoordinatesLog] = useState([]);
@@ -26,9 +25,11 @@ export const DeliveryTracking = () => {
     const stepSize = 0.0015;
     const latDiff = customerCoords[0] - currentLat;
     const lngDiff = customerCoords[1] - currentLng;
-    
-    const newLat = currentLat + (Math.abs(latDiff) > stepSize ? Math.sign(latDiff) * stepSize : latDiff);
-    const newLng = currentLng + (Math.abs(lngDiff) > stepSize ? Math.sign(lngDiff) * stepSize : lngDiff);
+
+    const newLat =
+      currentLat + (Math.abs(latDiff) > stepSize ? Math.sign(latDiff) * stepSize : latDiff);
+    const newLng =
+      currentLng + (Math.abs(lngDiff) > stepSize ? Math.sign(lngDiff) * stepSize : lngDiff);
 
     setCurrentLat(newLat);
     setCurrentLng(newLng);
@@ -41,19 +42,23 @@ export const DeliveryTracking = () => {
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">GPS Duty Log</h1>
-          <p className="text-sm text-app-text-secondary">Simulate live agent updates transmitted to customers.</p>
+          <p className="text-sm text-app-text-secondary">
+            Simulate live agent updates transmitted to customers.
+          </p>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="success" dot>GPS Broadcast Online</Badge>
+          <Badge variant="success" dot>
+            GPS Broadcast Online
+          </Badge>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Leaflet Map */}
         <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-app-border h-[400px] shadow-sm relative z-10">
-          <MapContainer 
-            center={[currentLat, currentLng]} 
-            zoom={14} 
+          <MapContainer
+            center={[currentLat, currentLng]}
+            zoom={14}
             scrollWheelZoom={false}
             style={{ height: '100%', width: '100%' }}
           >
@@ -70,9 +75,9 @@ export const DeliveryTracking = () => {
               <Popup>Customer Drop-off</Popup>
             </Marker>
             {/* Trail */}
-            <Polyline 
-              positions={coordinatesLog.map((c) => [c.lat, c.lng])} 
-              color="#71eb44" 
+            <Polyline
+              positions={coordinatesLog.map((c) => [c.lat, c.lng])}
+              color="#71eb44"
               weight={4}
             />
           </MapContainer>
@@ -86,9 +91,12 @@ export const DeliveryTracking = () => {
             </CardHeader>
             <CardBody className="space-y-6">
               <div className="space-y-2">
-                <span className="text-xs font-bold text-app-text-secondary uppercase">Current Node Broadcast</span>
+                <span className="text-xs font-bold text-app-text-secondary uppercase">
+                  Current Node Broadcast
+                </span>
                 <p className="font-mono text-sm bg-app-bg-secondary p-3 rounded-lg border border-app-border">
-                  Lat: {currentLat.toFixed(6)}<br />
+                  Lat: {currentLat.toFixed(6)}
+                  <br />
                   Lng: {currentLng.toFixed(6)}
                 </p>
               </div>
@@ -98,7 +106,8 @@ export const DeliveryTracking = () => {
                   Simulate Driving Step
                 </Button>
                 <p className="text-xs text-app-text-secondary leading-relaxed">
-                  Clicking the button shifts coordinates closer to the customer destination and records a polyline path on the map.
+                  Clicking the button shifts coordinates closer to the customer destination and
+                  records a polyline path on the map.
                 </p>
               </div>
             </CardBody>

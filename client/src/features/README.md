@@ -3,6 +3,7 @@
 To maintain clear ownership boundaries and minimize merge conflicts when developers work simultaneously, all business domain logic should be modularized within the `client/src/features/` directory.
 
 ## Recommended Feature Directory Layout
+
 Each feature module under `features/` should follow this structure:
 
 ```
@@ -14,6 +15,7 @@ features/[feature-name]/
 ```
 
 ## Features Registry
+
 - **auth/**: Sign in, registration, session management, and JWT state bindings.
 - **products/**: Catalogue browsing, inventory grids, and search queries.
 - **cart/**: Shopping cart logic, persistent state handlers.

@@ -5,13 +5,8 @@ import { Input } from '@/components/Input';
 import { Button } from '@/components/Button';
 
 export const ProductFilters = () => {
-  const {
-    searchTerm,
-    selectedCategory,
-    setSearchTerm,
-    setCategory,
-    clearFilters,
-  } = useProductStore();
+  const { searchTerm, selectedCategory, setSearchTerm, setCategory, clearFilters } =
+    useProductStore();
 
   const [localSearch, setLocalSearch] = useState(searchTerm);
 

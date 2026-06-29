@@ -13,11 +13,11 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       enum: ['draft', 'published', 'hidden'],
       default: 'draft',
-      required: true
-    }
+      required: true,
+    },
   },
-  { 
-    timestamps: true 
+  {
+    timestamps: true,
   }
 );
 

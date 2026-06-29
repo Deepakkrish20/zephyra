@@ -46,14 +46,18 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
           <div className="flex items-center gap-3">
             <Calendar className="w-5 h-5 text-app-text-secondary" />
             <div>
-              <p className="text-[10px] text-app-text-secondary font-bold uppercase tracking-wider">Date Placed</p>
+              <p className="text-[10px] text-app-text-secondary font-bold uppercase tracking-wider">
+                Date Placed
+              </p>
               <p className="font-extrabold text-app-text-primary">
                 {new Date(order.createdAt).toLocaleString()}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-app-text-secondary font-bold uppercase tracking-wider mb-1">Workflow State</p>
+            <p className="text-[10px] text-app-text-secondary font-bold uppercase tracking-wider mb-1">
+              Workflow State
+            </p>
             <Badge variant={getStatusVariant(order.status)} dot>
               {order.status}
             </Badge>
@@ -73,9 +77,7 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
             <p className="text-app-text-secondary font-medium">
               Email: {order.customer?.email || 'guest@example.com'}
             </p>
-            <p className="text-app-text-secondary font-medium">
-              Customer ID: {order.customerId}
-            </p>
+            <p className="text-app-text-secondary font-medium">Customer ID: {order.customerId}</p>
           </div>
         </div>
 
@@ -87,13 +89,16 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
           </div>
           <div className="p-4 bg-app-bg-primary border border-app-border rounded-xl space-y-1.5 text-xs">
             <p className="font-black text-app-text-primary">{order.shippingAddress.fullName}</p>
-            <p className="text-app-text-secondary font-semibold">Phone: {order.shippingAddress.phoneNumber}</p>
+            <p className="text-app-text-secondary font-semibold">
+              Phone: {order.shippingAddress.phoneNumber}
+            </p>
             <p className="text-app-text-secondary font-medium">
               {order.shippingAddress.addressLine1}
               {order.shippingAddress.addressLine2 && `, ${order.shippingAddress.addressLine2}`}
             </p>
             <p className="text-app-text-secondary font-medium">
-              {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.postalCode}
+              {order.shippingAddress.city}, {order.shippingAddress.state} -{' '}
+              {order.shippingAddress.postalCode}
             </p>
             {order.shippingAddress.landmark && (
               <p className="text-[10px] italic text-app-text-secondary font-medium">
@@ -121,10 +126,14 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
                   </div>
                   <div>
                     <p className="font-extrabold text-app-text-primary">{item.productName}</p>
-                    <p className="text-[10px] text-app-text-secondary">${parseFloat(item.productPrice).toFixed(2)} each</p>
+                    <p className="text-[10px] text-app-text-secondary">
+                      ${parseFloat(item.productPrice).toFixed(2)} each
+                    </p>
                   </div>
                 </div>
-                <span className="font-black text-app-text-primary">${parseFloat(item.subtotal).toFixed(2)}</span>
+                <span className="font-black text-app-text-primary">
+                  ${parseFloat(item.subtotal).toFixed(2)}
+                </span>
               </div>
             ))}
           </div>
@@ -134,7 +143,9 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
         <div className="p-4 bg-app-bg-secondary/25 rounded-xl border border-app-border space-y-2">
           <div className="flex justify-between text-xs font-semibold">
             <span className="text-app-text-secondary">Subtotal</span>
-            <span className="text-app-text-primary">${parseFloat(order.totalAmount).toFixed(2)}</span>
+            <span className="text-app-text-primary">
+              ${parseFloat(order.totalAmount).toFixed(2)}
+            </span>
           </div>
           <div className="flex justify-between text-xs font-semibold">
             <span className="text-app-text-secondary">Shipping Cost</span>
@@ -143,7 +154,9 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
           <hr className="border-app-border" />
           <div className="flex justify-between items-baseline font-black text-base text-app-text-primary">
             <span>Grand Total</span>
-            <span className="text-primary-600 dark:text-primary-400">${parseFloat(order.totalAmount).toFixed(2)}</span>
+            <span className="text-primary-600 dark:text-primary-400">
+              ${parseFloat(order.totalAmount).toFixed(2)}
+            </span>
           </div>
         </div>
 

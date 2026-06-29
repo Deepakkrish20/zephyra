@@ -65,7 +65,9 @@ export const sendVerificationEmail = async (email, code) => {
     console.log(`Verification email sent successfully to ${email}`);
   } catch (error) {
     console.error(`Failed to send verification email to ${email}:`, error.message);
-    console.log(`\n[Development Fallback] Verification Code: ${code} (Console output due to email failure)\n`);
+    console.log(
+      `\n[Development Fallback] Verification Code: ${code} (Console output due to email failure)\n`
+    );
   }
 };
 
@@ -121,6 +123,8 @@ export const sendVerificationReminderEmail = async (email, code) => {
     console.log(`Verification reminder email sent successfully to ${email}`);
   } catch (error) {
     console.error(`Failed to send verification reminder email to ${email}:`, error.message);
-    console.log(`\n[Development Fallback] Verification Code: ${code} (Console output due to email failure)\n`);
+    console.log(
+      `\n[Development Fallback] Verification Code: ${code} (Console output due to email failure)\n`
+    );
   }
 };

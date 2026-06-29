@@ -27,7 +27,10 @@ export const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card hoverEffect className="flex flex-col justify-between h-full bg-app-bg-primary border border-app-border rounded-xl shadow-sm overflow-hidden transition-all duration-200">
+    <Card
+      hoverEffect
+      className="flex flex-col justify-between h-full bg-app-bg-primary border border-app-border rounded-xl shadow-sm overflow-hidden transition-all duration-200"
+    >
       {/* Product Image */}
       <div className="relative aspect-video w-full bg-app-bg-secondary border-b border-app-border overflow-hidden group">
         {imageUrl ? (
@@ -71,7 +74,10 @@ export const ProductCard = ({ product }) => {
       {/* Product Information */}
       <CardBody className="p-5 flex-grow flex flex-col justify-between gap-3">
         <div>
-          <h3 className="font-extrabold text-base text-app-text-primary tracking-tight line-clamp-1 mb-1" title={name}>
+          <h3
+            className="font-extrabold text-base text-app-text-primary tracking-tight line-clamp-1 mb-1"
+            title={name}
+          >
             {name}
           </h3>
           <p className="text-xs text-app-text-secondary leading-relaxed line-clamp-2 min-h-[2.5rem]">
@@ -90,7 +96,12 @@ export const ProductCard = ({ product }) => {
       {/* Actions */}
       <CardFooter className="px-5 py-4 border-t border-app-border bg-app-bg-secondary flex gap-3">
         <Link to={`/products/${_id}`} className="flex-1">
-          <Button variant="outline" size="sm" className="w-full font-bold cursor-pointer" icon={Eye}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full font-bold cursor-pointer"
+            icon={Eye}
+          >
             Details
           </Button>
         </Link>

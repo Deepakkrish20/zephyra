@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppRoutes />
-      <Toaster 
+      <Toaster
         position="top-right"
         toastOptions={{
           style: {
@@ -40,7 +40,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             },
             style: {
               border: '1px solid rgba(113, 235, 68, 0.25)',
-              boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(113, 235, 68, 0.15)',
+              boxShadow:
+                '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(113, 235, 68, 0.15)',
             },
           },
           error: {
@@ -50,7 +51,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             },
             style: {
               border: '1px solid rgba(239, 68, 68, 0.25)',
-              boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(239, 68, 68, 0.15)',
+              boxShadow:
+                '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(239, 68, 68, 0.15)',
             },
           },
           duration: 4000,

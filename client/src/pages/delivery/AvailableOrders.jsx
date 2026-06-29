@@ -46,7 +46,9 @@ export const AvailableOrders = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
         <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
-        <p className="text-sm text-app-text-secondary font-medium animate-pulse">Scanning for nearby dispatch offers...</p>
+        <p className="text-sm text-app-text-secondary font-medium animate-pulse">
+          Scanning for nearby dispatch offers...
+        </p>
       </div>
     );
   }
@@ -55,7 +57,9 @@ export const AvailableOrders = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Available Delivery Job Offers</h1>
-        <p className="text-sm text-app-text-secondary">First-come first-served route dispatches. Accept tasks below.</p>
+        <p className="text-sm text-app-text-secondary">
+          First-come first-served route dispatches. Accept tasks below.
+        </p>
       </div>
 
       {orders.length === 0 ? (
@@ -65,9 +69,13 @@ export const AvailableOrders = () => {
           </div>
           <div className="space-y-1">
             <h3 className="font-bold text-base">No Job Offers Available</h3>
-            <p className="text-xs text-app-text-secondary max-w-sm">All orders have been dispatched or claimed. Refresh later for new routes.</p>
+            <p className="text-xs text-app-text-secondary max-w-sm">
+              All orders have been dispatched or claimed. Refresh later for new routes.
+            </p>
           </div>
-          <Button variant="primary" size="sm" onClick={fetchJobs}>Refresh Board</Button>
+          <Button variant="primary" size="sm" onClick={fetchJobs}>
+            Refresh Board
+          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -82,13 +90,17 @@ export const AvailableOrders = () => {
                     <span className="text-xs text-app-text-secondary">Order Reference</span>
                     <p className="font-bold text-sm">#{order.orderNumber}</p>
                   </div>
-                  <Badge variant="primary" dot>Available Now</Badge>
+                  <Badge variant="primary" dot>
+                    Available Now
+                  </Badge>
                 </CardHeader>
                 <CardBody className="space-y-3">
                   <div className="flex gap-2 items-start text-sm">
                     <User className="w-4 h-4 text-app-text-secondary mt-0.5" />
                     <div>
-                      <p className="font-bold text-xs text-app-text-secondary uppercase">Recipient</p>
+                      <p className="font-bold text-xs text-app-text-secondary uppercase">
+                        Recipient
+                      </p>
                       <p className="font-medium">{order.shippingAddress?.fullName || 'Customer'}</p>
                     </div>
                   </div>
@@ -96,11 +108,16 @@ export const AvailableOrders = () => {
                   <div className="flex gap-2 items-start text-sm">
                     <MapPin className="w-4 h-4 text-danger-500 mt-0.5" />
                     <div>
-                      <p className="font-bold text-xs text-app-text-secondary uppercase">Delivery Address</p>
+                      <p className="font-bold text-xs text-app-text-secondary uppercase">
+                        Delivery Address
+                      </p>
                       <p>
                         {order.shippingAddress?.addressLine1}
-                        {order.shippingAddress?.addressLine2 ? `, ${order.shippingAddress.addressLine2}` : ''}
-                        , {order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.postalCode}
+                        {order.shippingAddress?.addressLine2
+                          ? `, ${order.shippingAddress.addressLine2}`
+                          : ''}
+                        , {order.shippingAddress?.city}, {order.shippingAddress?.state}{' '}
+                        {order.shippingAddress?.postalCode}
                       </p>
                     </div>
                   </div>
@@ -108,14 +125,18 @@ export const AvailableOrders = () => {
                   <div className="flex gap-2 items-start text-sm">
                     <DollarSign className="w-4 h-4 text-success-500 mt-0.5" />
                     <div>
-                      <p className="font-bold text-xs text-app-text-secondary uppercase">Payout Rate</p>
-                      <p className="font-bold text-success-600">${payoutRate.toFixed(2)} base + tips</p>
+                      <p className="font-bold text-xs text-app-text-secondary uppercase">
+                        Payout Rate
+                      </p>
+                      <p className="font-bold text-success-600">
+                        ${payoutRate.toFixed(2)} base + tips
+                      </p>
                     </div>
                   </div>
                 </CardBody>
                 <CardFooter>
-                  <Button 
-                    className="w-full" 
+                  <Button
+                    className="w-full"
                     onClick={() => handleAcceptJob(order._id)}
                     loading={acceptingId === order._id}
                   >

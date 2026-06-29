@@ -9,7 +9,7 @@ export const DeliveryDashboard = () => {
     completedOrdersCount: 0,
     totalEarnings: 0,
     totalTips: 0,
-    averageRating: 5.0
+    averageRating: 5.0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,9 @@ export const DeliveryDashboard = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
         <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
-        <p className="text-sm text-app-text-secondary font-medium animate-pulse">Retrieving your shift summary...</p>
+        <p className="text-sm text-app-text-secondary font-medium animate-pulse">
+          Retrieving your shift summary...
+        </p>
       </div>
     );
   }
@@ -49,7 +51,9 @@ export const DeliveryDashboard = () => {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Driver Console</h1>
-        <p className="text-sm text-app-text-secondary">Accept, track, and complete live customer shipments.</p>
+        <p className="text-sm text-app-text-secondary">
+          Accept, track, and complete live customer shipments.
+        </p>
       </div>
 
       {/* Metrics Row */}
@@ -57,8 +61,12 @@ export const DeliveryDashboard = () => {
         <Card hoverEffect>
           <CardBody className="flex items-center justify-between p-6">
             <div className="space-y-1">
-              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">Shift Complete</p>
-              <p className="text-3xl font-extrabold text-app-text-primary">{stats.completedOrdersCount} {stats.completedOrdersCount === 1 ? 'Order' : 'Orders'}</p>
+              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">
+                Shift Complete
+              </p>
+              <p className="text-3xl font-extrabold text-app-text-primary">
+                {stats.completedOrdersCount} {stats.completedOrdersCount === 1 ? 'Order' : 'Orders'}
+              </p>
               <p className="text-xs text-success-600 font-semibold">100% on-time rate</p>
             </div>
             <div className="p-4 bg-app-bg-secondary border rounded-xl">
@@ -70,8 +78,12 @@ export const DeliveryDashboard = () => {
         <Card hoverEffect>
           <CardBody className="flex items-center justify-between p-6">
             <div className="space-y-1">
-              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">Active Earnings</p>
-              <p className="text-3xl font-extrabold text-app-text-primary">${stats.totalEarnings.toFixed(2)}</p>
+              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">
+                Active Earnings
+              </p>
+              <p className="text-3xl font-extrabold text-app-text-primary">
+                ${stats.totalEarnings.toFixed(2)}
+              </p>
               <p className="text-xs text-primary-600 dark:text-primary-400 font-semibold">
                 +${stats.totalTips.toFixed(2)} tips included
               </p>
@@ -85,9 +97,15 @@ export const DeliveryDashboard = () => {
         <Card hoverEffect>
           <CardBody className="flex items-center justify-between p-6">
             <div className="space-y-1">
-              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">Driver Rating</p>
-              <p className="text-3xl font-extrabold text-app-text-primary">{stats.averageRating.toFixed(2)} / 5</p>
-              <p className="text-xs text-primary-600 dark:text-primary-400 font-semibold">{getRatingSubtext(stats.averageRating)}</p>
+              <p className="text-xs text-app-text-secondary font-bold uppercase tracking-wider">
+                Driver Rating
+              </p>
+              <p className="text-3xl font-extrabold text-app-text-primary">
+                {stats.averageRating.toFixed(2)} / 5
+              </p>
+              <p className="text-xs text-primary-600 dark:text-primary-400 font-semibold">
+                {getRatingSubtext(stats.averageRating)}
+              </p>
             </div>
             <div className="p-4 bg-app-bg-secondary border rounded-xl">
               <Award className="w-6 h-6 text-primary-500" />

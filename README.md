@@ -1,4 +1,5 @@
 # Zephyra
+
 > **Smart Commerce. Real-Time Delivery.**
 
 Zephyra is an enterprise-grade, role-based E-Commerce platform with Real-Time Delivery GPS Tracking. It features a complete monorepo setup supporting Customers, Administrators, and Delivery Agents.
@@ -10,6 +11,7 @@ Zephyra is an enterprise-grade, role-based E-Commerce platform with Real-Time De
 This repository houses the base workspace architecture for Zephyra, built to minimize integration merge conflicts for simultaneous developers using domain-based folders, clean layout routes, centralized APIs, and unified state systems.
 
 ### Core Workflow:
+
 1. **Admin** registers/publishes a product via the Operations console.
 2. **Customer** adds product to cart and places an order.
 3. **Admin** approves the order, auto-dispatching a WebSocket request to couriers.
@@ -52,18 +54,23 @@ zephyra/
 ## 3. Installation Guide
 
 ### Prerequisites:
+
 - **Node.js**: LTS version (v18.x or above recommended)
 - **MongoDB**: Active database instance (Local or Atlas)
 
 ### Workspace Bootstrap:
+
 Run standard workspace package installations from the monorepo root:
+
 ```bash
 # Installs root dependencies, client, and server packages in a single run
 npm install
 ```
 
 ### Configuration:
+
 Verify environment variables are set inside the respective folders:
+
 - `client/.env` (Configured to port `http://localhost:5000/api`)
 - `server/.env` (Configured to database `mongodb://localhost:27017/zephyra` and port `5000`)
 
@@ -72,22 +79,28 @@ Verify environment variables are set inside the respective folders:
 ## 4. Development Workflow
 
 ### Starting the Servers Concurrently:
+
 Launch client and server in development mode simultaneously from the root:
+
 ```bash
 npm run dev
 ```
+
 - **Client App URL**: `http://localhost:5173`
 - **Server API URL**: `http://localhost:5000`
 
 ### Coding Standards:
+
 - **Linting & Formatting**: Ensure lint checks pass before commits.
+
   ```bash
   # Check formatting and syntax
   npm run lint
-  
+
   # Auto-format all client and server javascript files
   npm run format
   ```
+
 - **Path Aliases**:
   - **Client**: Import using the `@` alias referencing the `client/src` directory (e.g., `import Button from '@/components/Button'`).
   - **Server**: Import using Node.js native subpath imports `#src/*` (e.g., `import connectDB from '#src/config/db.js'`), eliminating complex relative path traversals.

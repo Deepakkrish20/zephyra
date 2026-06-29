@@ -1,5 +1,3 @@
-
-
 export const Skeleton = ({
   variant = 'text', // 'text' | 'rect' | 'circle'
   width,
@@ -20,11 +18,7 @@ export const Skeleton = ({
   if (height) style.height = height;
 
   return (
-    <div
-      className={`${baseClass} ${variants[variant]} ${className}`}
-      style={style}
-      {...props}
-    />
+    <div className={`${baseClass} ${variants[variant]} ${className}`} style={style} {...props} />
   );
 };
 

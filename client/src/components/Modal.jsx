@@ -55,9 +55,7 @@ export const Modal = ({
             </div>
 
             {/* Content */}
-            <div className="px-6 py-5 max-h-[75vh] overflow-y-auto">
-              {children}
-            </div>
+            <div className="px-6 py-5 max-h-[75vh] overflow-y-auto">{children}</div>
           </motion.div>
         </div>
       )}

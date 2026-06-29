@@ -105,9 +105,7 @@ router.post('/add', protect, async (req, res, next) => {
     }
 
     // Check if item already exists in cart
-    const existingItemIdx = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    const existingItemIdx = cart.items.findIndex((item) => item.productId.toString() === productId);
 
     if (existingItemIdx > -1) {
       // 2. Validate inventory limit before incrementing quantity
@@ -155,9 +153,7 @@ router.put('/update', protect, async (req, res, next) => {
       return res.status(404).json({ message: 'Cart not found' });
     }
 
-    const itemIdx = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    const itemIdx = cart.items.findIndex((item) => item.productId.toString() === productId);
 
     if (itemIdx === -1) {
       return res.status(404).json({ message: 'Product not found in cart' });
@@ -198,9 +194,7 @@ router.delete('/remove/:productId', protect, async (req, res, next) => {
       return res.status(404).json({ message: 'Cart not found' });
     }
 
-    const itemIdx = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    const itemIdx = cart.items.findIndex((item) => item.productId.toString() === productId);
 
     if (itemIdx === -1) {
       return res.status(404).json({ message: 'Product not found in cart' });

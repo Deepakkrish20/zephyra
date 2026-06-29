@@ -21,7 +21,7 @@ const formatRelativeTime = (dateString) => {
 };
 
 const getNotificationIcon = (type) => {
-  const iconClass = "w-4 h-4";
+  const iconClass = 'w-4 h-4';
   if (type.includes('created')) {
     return (
       <div className="p-2 bg-blue-500/10 text-blue-500 rounded-xl">
@@ -43,7 +43,11 @@ const getNotificationIcon = (type) => {
       </div>
     );
   }
-  if (type.includes('accepted') || type.includes('picked_up') || type.includes('out_for_delivery')) {
+  if (
+    type.includes('accepted') ||
+    type.includes('picked_up') ||
+    type.includes('out_for_delivery')
+  ) {
     return (
       <div className="p-2 bg-amber-500/10 text-amber-500 rounded-xl">
         <Truck className={iconClass} />
@@ -67,13 +71,13 @@ const getNotificationIcon = (type) => {
 export const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   const bellRef = useRef(null);
-  const { 
-    notifications, 
-    unreadCount, 
-    fetchNotifications, 
-    markAsRead, 
+  const {
+    notifications,
+    unreadCount,
+    fetchNotifications,
+    markAsRead,
     markAllAsRead,
-    clearNotifications 
+    clearNotifications,
   } = useNotificationStore();
 
   useEffect(() => {
@@ -148,7 +152,9 @@ export const NotificationBell = () => {
                 <div className="p-4 bg-app-bg-secondary rounded-full border border-app-border">
                   <Bell className="w-6 h-6 text-app-text-secondary opacity-60" />
                 </div>
-                <p className="text-xs text-app-text-secondary font-medium">All caught up! No notifications yet.</p>
+                <p className="text-xs text-app-text-secondary font-medium">
+                  All caught up! No notifications yet.
+                </p>
               </div>
             ) : (
               notifications.map((notification) => (
@@ -159,15 +165,15 @@ export const NotificationBell = () => {
                   }`}
                 >
                   {/* Icon Wrapper */}
-                  <div className="flex-shrink-0">
-                    {getNotificationIcon(notification.type)}
-                  </div>
+                  <div className="flex-shrink-0">{getNotificationIcon(notification.type)}</div>
 
                   {/* Text Content */}
                   <div className="flex-grow space-y-1">
-                    <p className={`text-xs leading-relaxed text-app-text-primary ${
-                      !notification.isRead ? 'font-semibold' : 'font-medium'
-                    }`}>
+                    <p
+                      className={`text-xs leading-relaxed text-app-text-primary ${
+                        !notification.isRead ? 'font-semibold' : 'font-medium'
+                      }`}
+                    >
                       {notification.message}
                     </p>
                     <p className="text-[10px] text-app-text-secondary font-medium">

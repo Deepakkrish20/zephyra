@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  ClipboardList, 
-  Users, 
-  Truck, 
-  LogOut, 
-  Menu, 
-  X, 
-  Sun, 
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  ClipboardList,
+  Users,
+  Truck,
+  LogOut,
+  Menu,
+  X,
+  Sun,
   Moon,
-  ChevronRight
+  ChevronRight,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { toggleDarkMode, initTheme } from '@/utils/theme';
@@ -68,18 +68,24 @@ export const AdminLayout = () => {
   return (
     <div className="min-h-screen flex bg-app-bg-secondary text-app-text-primary">
       {/* Sidebar */}
-      <aside 
+      <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-app-bg-primary border-r border-app-border transition-transform duration-300 ease-in-out md:static md:translate-x-0
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Sidebar Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-app-border">
-          <Link to="/" className="flex items-center gap-2 font-mono font-bold text-base tracking-widest text-app-text-primary hover:opacity-90 transition-opacity">
-            ZEPHYRA <span className="text-[10px] bg-primary-100 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded-full font-sans tracking-normal font-bold">ADMIN</span>
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-mono font-bold text-base tracking-widest text-app-text-primary hover:opacity-90 transition-opacity"
+          >
+            ZEPHYRA{' '}
+            <span className="text-[10px] bg-primary-100 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded-full font-sans tracking-normal font-bold">
+              ADMIN
+            </span>
           </Link>
-          <button 
-            onClick={() => setIsSidebarOpen(false)} 
+          <button
+            onClick={() => setIsSidebarOpen(false)}
             className="md:hidden p-1.5 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary"
           >
             <X className="w-5 h-5" />
@@ -95,10 +101,13 @@ export const AdminLayout = () => {
                 key={item.path}
                 to={item.path}
                 end={item.path === '/admin'}
-                className={({ isActive }) => `flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-semibold transition-all group
-                  ${isActive 
-                    ? 'bg-primary-500 text-white shadow-md shadow-primary-500/10' 
-                    : 'text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary'
+                className={({
+                  isActive,
+                }) => `flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-semibold transition-all group
+                  ${
+                    isActive
+                      ? 'bg-primary-500 text-white shadow-md shadow-primary-500/10'
+                      : 'text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary'
                   }
                 `}
               >
@@ -135,7 +144,7 @@ export const AdminLayout = () => {
           >
             <Menu className="w-5 h-5" />
           </button>
-          
+
           <div className="hidden md:flex items-center gap-2">
             <span className="text-xs font-semibold text-app-text-secondary uppercase tracking-wider">
               Control Panel
@@ -145,8 +154,8 @@ export const AdminLayout = () => {
           <div className="flex items-center gap-4">
             <NotificationBell />
             {/* Dark Mode */}
-            <button 
-              onClick={handleThemeToggle} 
+            <button
+              onClick={handleThemeToggle}
               className="p-2 rounded-lg text-app-text-secondary hover:bg-app-bg-secondary hover:text-app-text-primary transition-colors cursor-pointer"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -155,7 +164,9 @@ export const AdminLayout = () => {
             {/* Profile Info */}
             <div className="flex items-center gap-3 pl-3 border-l border-app-border">
               <div className="text-right">
-                <p className="text-xs font-bold text-app-text-primary">{user?.name || 'Administrator'}</p>
+                <p className="text-xs font-bold text-app-text-primary">
+                  {user?.name || 'Administrator'}
+                </p>
                 <p className="text-[10px] text-app-text-secondary font-semibold uppercase tracking-wider">
                   Root Admin
                 </p>
@@ -172,13 +183,23 @@ export const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
-      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} title="Confirm Logout" size="sm">
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="Confirm Logout"
+        size="sm"
+      >
         <div className="space-y-4">
           <p className="text-sm text-app-text-secondary leading-relaxed">
-            Are you sure you want to sign out of the administrator control panel? Any pending dashboard updates will pause until you log back in.
+            Are you sure you want to sign out of the administrator control panel? Any pending
+            dashboard updates will pause until you log back in.
           </p>
           <div className="flex justify-end gap-3 pt-3 border-t border-app-border">
-            <Button variant="outline" onClick={() => setIsLogoutModalOpen(false)} className="font-semibold cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="font-semibold cursor-pointer"
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={confirmLogout} className="font-bold cursor-pointer">

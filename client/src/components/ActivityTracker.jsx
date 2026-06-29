@@ -50,7 +50,7 @@ export const ActivityTracker = () => {
 
     // Events to monitor user interaction
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    
+
     const handleActivity = () => {
       // Check if session has already expired before registering new activity
       // (important if the computer woke up from sleep/suspension)

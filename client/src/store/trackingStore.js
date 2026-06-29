@@ -26,7 +26,7 @@ export const useTrackingStore = create((set) => ({
 
   setDeliveryStatus: (status) => {
     set({ deliveryStatus: status });
-  }
+  },
 }));
 
 export default useTrackingStore;
