@@ -73,8 +73,23 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await authApi.verifyEmail(email, code);
-      set({ isLoading: false });
-      return response;
+      const { user, token } = response.data;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('role', user.role);
+      localStorage.setItem('lastActivityTime', Date.now().toString());
+
+      set({
+        isAuthenticated: true,
+        user,
+        role: user.role,
+        token,
+        isLoading: false,
+        error: null,
+      });
+
+      return user;
     } catch (err) {
       const errMsg = err.response?.data?.message || err.message || 'Verification failed';
       set({ error: errMsg, isLoading: false });

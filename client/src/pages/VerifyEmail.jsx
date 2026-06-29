@@ -40,9 +40,9 @@ export const VerifyEmail = () => {
 
     try {
       await verifyEmail(email, data.code);
-      toast.success('Account verified successfully! You can now log in.');
+      toast.success('Account verified and logged in successfully!');
       reset();
-      navigate('/login');
+      navigate('/products');
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message || 'Verification failed';
       toast.error(errorMsg);

@@ -1,5 +1,6 @@
 import * as authService from '../services/authService.js';
 import User from '../models/User.js';
+import { generateToken } from '../utils/jwtUtil.js';
 
 /**
  * Handle user registration
@@ -107,9 +108,22 @@ export const verify = async (req, res, next) => {
     user.verificationExpires = undefined;
     await user.save();
 
+    // Generate token for auto-login
+    const token = generateToken({ id: user._id, role: user.role });
+
+    // Convert to object and exclude password & verification fields
+    const userObj = user.toObject();
+    delete userObj.password;
+    delete userObj.verificationCode;
+    delete userObj.verificationExpires;
+
     return res.status(200).json({
       success: true,
-      message: 'Account verified successfully. You can now log in.',
+      message: 'Account verified successfully.',
+      data: {
+        user: userObj,
+        token,
+      },
     });
   } catch (error) {
     next(error);
