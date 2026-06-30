@@ -171,7 +171,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
           ),
           
-          // Logout Button
           Container(
             margin: const EdgeInsets.only(right: 16),
             decoration: BoxDecoration(
@@ -181,11 +180,31 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
             child: IconButton(
               icon: const Icon(Icons.logout, color: Colors.black, size: 20),
-              onPressed: () async {
-                await _apiService.deleteToken();
-                if (context.mounted) {
-                  Navigator.pushReplacementNamed(context, '/login');
-                }
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
+                    content: const Text('Are you sure you want to log out of your account?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel', style: TextStyle(color: Color(0xFF71717A))),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await _apiService.deleteToken();
+                          if (context.mounted) {
+                            Navigator.pushReplacementNamed(context, '/login');
+                          }
+                        },
+                        child: const Text('Logout', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),

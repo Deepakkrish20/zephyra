@@ -767,11 +767,31 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await _apiService.deleteToken();
-              if (context.mounted) {
-                Navigator.pushReplacementNamed(context, '/login');
-              }
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
+                  content: const Text('Are you sure you want to log out of the Admin Panel?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel', style: TextStyle(color: Color(0xFF71717A))),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await _apiService.deleteToken();
+                        if (context.mounted) {
+                          Navigator.pushReplacementNamed(context, '/login');
+                        }
+                      },
+                      child: const Text('Logout', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],
