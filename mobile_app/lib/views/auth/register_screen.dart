@@ -155,14 +155,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 24),
                     
                     // Brand Title
-                    const Center(
-                      child: Text(
-                        'CREATE ACCOUNT',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 4,
-                          color: Colors.black,
+                    Center(
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Color(0xFF71EB44), Color(0xFF22C55E), Color(0xFF10B981)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ).createShader(bounds),
+                        child: const Text(
+                          'CREATE ACCOUNT',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 4,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

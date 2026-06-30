@@ -95,19 +95,26 @@ class _CatalogScreenState extends State<CatalogScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'ZEPHYRA',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 20,
-                letterSpacing: 3,
-                color: Colors.black,
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [Color(0xFF71EB44), Color(0xFF22C55E), Color(0xFF10B981)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ).createShader(bounds),
+              child: const Text(
+                'ZEPHYRA',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 22,
+                  letterSpacing: 4,
+                  color: Colors.white,
+                ),
               ),
             ),
-            Text(
+            const Text(
               'Smart Commerce Platform',
               style: TextStyle(
                 fontSize: 10,
