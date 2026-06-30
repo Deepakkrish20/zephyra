@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
-  static const String baseUrl = 'https://curly-tips-cut.loca.lt/api'; // Target mobile backend
+  static const String baseUrl = 'http://10.186.155.222:5001/api'; // Target mobile backend
   final _storage = const FlutterSecureStorage();
 
   Future<String?> getToken() async {
