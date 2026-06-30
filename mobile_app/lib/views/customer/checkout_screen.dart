@@ -146,9 +146,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     try {
       final selectedAddr = _addresses[_selectedAddressIndex];
+      
+      final List<dynamic> checkoutItems = widget.items.map((item) {
+        final prod = item['productId'];
+        final String prodId = (prod is Map) ? prod['_id'] : prod.toString();
+        return {
+          'productId': prodId,
+          'quantity': item['quantity'],
+        };
+      }).toList();
+
       final response = await _apiService.post('/checkout', {
         'address': selectedAddr,
-        if (widget.isDirectBuy) 'items': widget.items,
+        if (widget.isDirectBuy) 'items': checkoutItems,
       });
 
       final body = jsonDecode(response.body);

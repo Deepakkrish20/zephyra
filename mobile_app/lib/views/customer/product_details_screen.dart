@@ -323,7 +323,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             final double total = prodPrice * _quantity;
                             final buyNowItems = [
                               {
-                                'productId': widget.product['_id'],
+                                'productId': widget.product,
                                 'quantity': _quantity,
                               }
                             ];
