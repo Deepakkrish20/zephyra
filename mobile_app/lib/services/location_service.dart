@@ -23,10 +23,10 @@ class LocationService {
       throw Exception('Location permissions are permanently denied, cannot request permissions.');
     }
 
-    // High accuracy location settings with 10 meters updates filter
+    // Medium accuracy location settings for indoor testing reliability
     const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
+      accuracy: LocationAccuracy.medium,
+      distanceFilter: 5,
     );
 
     yield* Geolocator.getPositionStream(locationSettings: locationSettings);
@@ -52,7 +52,7 @@ class LocationService {
 
     return await Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
+        accuracy: LocationAccuracy.medium,
       ),
     );
   }

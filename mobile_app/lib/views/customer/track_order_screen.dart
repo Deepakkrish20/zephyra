@@ -76,6 +76,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
       if (orderResponse.statusCode == 200) {
         final orderBody = jsonDecode(orderResponse.body);
         _geocodeCustomerAddress(orderBody['shippingAddress']);
+        setState(() {
+          _deliveryStatus = orderBody['status'] ?? 'accepted';
+        });
       }
 
       final response = await _apiService.get('/tracking/${widget.orderId}');

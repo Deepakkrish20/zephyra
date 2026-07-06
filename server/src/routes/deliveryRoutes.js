@@ -3,6 +3,7 @@ import Order from '../models/Order.js';
 import User from '../models/User.js';
 import protect, { restrictTo } from '../middlewares/authMiddleware.js';
 import { createNotification } from '../utils/notificationUtil.js';
+import { getIO } from '../sockets/socket.js';
 
 const router = Router();
 
@@ -64,6 +65,17 @@ router.post('/accept/:orderId', protect, restrictTo('delivery_agent'), async (re
         '[Notifications] Failed to notify customer of courier assignment:',
         notifyError.message
       );
+    }
+
+    // Emit status-update socket event to client room
+    try {
+      const io = getIO();
+      io.to(`order-${orderId}`).emit('status-update', {
+        status: 'accepted',
+        agentId,
+      });
+    } catch (socketError) {
+      console.error('[Sockets] Failed to emit accept status update:', socketError.message);
     }
 
     res.json({
@@ -152,6 +164,16 @@ router.post('/status/:orderId', protect, restrictTo('delivery_agent'), async (re
         '[Notifications] Failed to notify customer of order status update:',
         notifyError.message
       );
+    }
+
+    // Emit status-update socket event to client room
+    try {
+      const io = getIO();
+      io.to(`order-${orderId}`).emit('status-update', {
+        status,
+      });
+    } catch (socketError) {
+      console.error('[Sockets] Failed to emit status update event:', socketError.message);
     }
 
     res.json({
