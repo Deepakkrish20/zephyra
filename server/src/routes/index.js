@@ -17,6 +17,7 @@ const router = Router();
 // API Routes
 router.use('/auth', authRoutes);
 router.use('/admin', protect, restrictTo('admin'), adminRoutes);
+router.use('/admin/products', protect, restrictTo('admin'), productRoutes);
 router.use('/products', productRoutes);
 router.use('/cart', cartRoutes);
 router.use('/checkout', checkoutRoutes);
