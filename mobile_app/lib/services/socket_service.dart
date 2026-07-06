@@ -1,7 +1,7 @@
 import 'package:socket_io_client/socket_io_client.dart' as io_client;
 
 class SocketService {
-  static const String _socketUrl = 'http://10.186.155.222:5001';
+  static const String _socketUrl = 'https://zephyra-ku4d.onrender.com';
   io_client.Socket? _socket;
 
   // Initialize and connect to socket
