@@ -66,7 +66,13 @@ router.get('/', protect, async (req, res, next) => {
   try {
     const customerId = req.user.id;
     const cartResponse = await getPopulatedCartResponse(customerId);
-    res.json(cartResponse);
+    res.json({
+      success: true,
+      ...cartResponse,
+      data: {
+        cart: cartResponse,
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -129,7 +135,13 @@ router.post('/add', protect, async (req, res, next) => {
     await cart.save();
 
     const cartResponse = await getPopulatedCartResponse(customerId);
-    res.json(cartResponse);
+    res.json({
+      success: true,
+      ...cartResponse,
+      data: {
+        cart: cartResponse,
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -175,7 +187,13 @@ router.put('/update', protect, async (req, res, next) => {
     await cart.save();
 
     const cartResponse = await getPopulatedCartResponse(customerId);
-    res.json(cartResponse);
+    res.json({
+      success: true,
+      ...cartResponse,
+      data: {
+        cart: cartResponse,
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -204,7 +222,13 @@ router.delete('/remove/:productId', protect, async (req, res, next) => {
     await cart.save();
 
     const cartResponse = await getPopulatedCartResponse(customerId);
-    res.json(cartResponse);
+    res.json({
+      success: true,
+      ...cartResponse,
+      data: {
+        cart: cartResponse,
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -224,7 +248,13 @@ router.delete('/clear', protect, async (req, res, next) => {
     }
 
     const cartResponse = await getPopulatedCartResponse(customerId);
-    res.json(cartResponse);
+    res.json({
+      success: true,
+      ...cartResponse,
+      data: {
+        cart: cartResponse,
+      }
+    });
   } catch (error) {
     next(error);
   }
