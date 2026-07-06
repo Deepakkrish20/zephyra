@@ -52,6 +52,7 @@ router.get('/', async (req, res, next) => {
     );
 
     res.json({
+      success: true,
       orders: ordersWithCustomer,
       pagination: {
         total,
@@ -59,6 +60,9 @@ router.get('/', async (req, res, next) => {
         limit,
         pages: Math.ceil(total / limit),
       },
+      data: {
+        orders: ordersWithCustomer,
+      }
     });
   } catch (error) {
     next(error);
