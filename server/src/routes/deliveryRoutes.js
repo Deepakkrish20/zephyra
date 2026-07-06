@@ -66,7 +66,10 @@ router.post('/accept/:orderId', protect, restrictTo('delivery_agent'), async (re
       );
     }
 
-    res.json(order);
+    res.json({
+      success: true,
+      ...order.toObject(),
+    });
   } catch (error) {
     if (error.kind === 'ObjectId') {
       return res.status(404).json({ message: 'Order not found' });
@@ -151,7 +154,10 @@ router.post('/status/:orderId', protect, restrictTo('delivery_agent'), async (re
       );
     }
 
-    res.json(order);
+    res.json({
+      success: true,
+      ...order.toObject(),
+    });
   } catch (error) {
     if (error.kind === 'ObjectId') {
       return res.status(404).json({ message: 'Order not found' });
