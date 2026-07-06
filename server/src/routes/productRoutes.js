@@ -44,10 +44,14 @@ router.get('/', async (req, res, next) => {
     ]);
 
     res.json({
+      success: true,
       products,
       currentPage: pageNum,
       totalPages: Math.ceil(totalProducts / limitNum),
       totalProducts,
+      data: {
+        products,
+      }
     });
   } catch (error) {
     next(error);
@@ -108,7 +112,10 @@ router.post('/', protect, restrictTo('admin'), async (req, res, next) => {
       status: status || 'draft',
     });
 
-    res.status(201).json(product);
+    res.status(201).json({
+      success: true,
+      ...product.toObject(),
+    });
   } catch (error) {
     next(error);
   }
@@ -136,7 +143,10 @@ router.put('/:id', protect, restrictTo('admin'), async (req, res, next) => {
     if (status !== undefined) product.status = status;
 
     await product.save();
-    res.json(product);
+    res.json({
+      success: true,
+      ...product.toObject(),
+    });
   } catch (error) {
     if (error.kind === 'ObjectId') {
       return res.status(404).json({ message: 'Product not found' });
