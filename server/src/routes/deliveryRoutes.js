@@ -16,7 +16,13 @@ router.get('/available', protect, restrictTo('delivery_agent'), async (req, res,
       $or: [{ deliveryAgent: { $exists: false } }, { deliveryAgent: null }],
     }).sort({ createdAt: -1 });
 
-    res.json(orders);
+    res.json({
+      success: true,
+      orders,
+      data: {
+        orders,
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -80,7 +86,13 @@ router.get('/active', protect, restrictTo('delivery_agent'), async (req, res, ne
       status: { $in: ['accepted', 'picked_up', 'out_for_delivery'] },
     }).sort({ updatedAt: -1 });
 
-    res.json(orders);
+    res.json({
+      success: true,
+      orders,
+      data: {
+        orders,
+      }
+    });
   } catch (error) {
     next(error);
   }
