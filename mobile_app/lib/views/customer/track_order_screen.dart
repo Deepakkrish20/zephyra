@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../../services/api_service.dart';
 import '../../services/socket_service.dart';
 
@@ -24,7 +25,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   final _socketService = SocketService();
   final MapController _flutterMapController = MapController();
 
-  final LatLng _clientLocation = const LatLng(11.2681, 76.9587); // Customer destination
+  LatLng _clientLocation = const LatLng(11.2681, 76.9587); // Customer destination
   LatLng? _agentLocation;
   List<LatLng> _orderRoute = [];
   String _deliveryStatus = 'accepted';
@@ -39,8 +40,44 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
     _registerSocketListeners();
   }
 
+  Future<void> _geocodeCustomerAddress(Map<String, dynamic>? addr) async {
+    if (addr == null) return;
+    try {
+      final query = "${addr['addressLine1']}, ${addr['city']}, ${addr['state']}, ${addr['postalCode']}";
+      final url = Uri.parse("https://nominatim.openstreetmap.org/search?q=${Uri.encodeComponent(query)}&format=json&limit=1");
+      final response = await http.get(url, headers: {'User-Agent': 'com.zephyra.mobile'});
+      if (response.statusCode == 200) {
+        final list = jsonDecode(response.body) as List<dynamic>;
+        if (list.isNotEmpty) {
+          final lat = double.parse(list[0]['lat']);
+          final lon = double.parse(list[0]['lon']);
+          setState(() {
+            _clientLocation = LatLng(lat, lon);
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      // Ignore geocoding errors and proceed to fallback
+    }
+
+    final city = addr['city']?.toString().toLowerCase() ?? '';
+    if (city.contains('erode')) {
+      setState(() {
+        _clientLocation = const LatLng(11.3410, 77.7172); // Erode center
+      });
+    }
+  }
+
   Future<void> _fetchInitialTracking() async {
     try {
+      // Fetch order details to geocode the customer address
+      final orderResponse = await _apiService.get('/orders/${widget.orderId}');
+      if (orderResponse.statusCode == 200) {
+        final orderBody = jsonDecode(orderResponse.body);
+        _geocodeCustomerAddress(orderBody['shippingAddress']);
+      }
+
       final response = await _apiService.get('/tracking/${widget.orderId}');
       final body = jsonDecode(response.body);
       if (response.statusCode == 200 && body['success'] == true) {

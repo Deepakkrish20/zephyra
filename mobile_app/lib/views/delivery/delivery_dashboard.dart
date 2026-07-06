@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import '../../services/api_service.dart';
 import '../../services/location_service.dart';
 import '../../services/socket_service.dart';
@@ -181,6 +182,11 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
           _activeJobs = body['data']['orders'] ?? [];
         });
 
+        if (_activeJobs.isNotEmpty) {
+          final activeJob = _activeJobs.first;
+          _geocodeCustomerAddress(activeJob['shippingAddress']);
+        }
+
         // Auto-start tracking if there is an active job out for delivery
         final activeRun = _activeJobs.firstWhere(
           (o) => o['status'] == 'out_for_delivery',
@@ -194,6 +200,39 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
       //
     } finally {
       setState(() => _isLoadingActive = false);
+    }
+  }
+
+  Future<void> _geocodeCustomerAddress(Map<String, dynamic>? addr) async {
+    if (addr == null) return;
+    try {
+      final query = "${addr['addressLine1']}, ${addr['city']}, ${addr['state']}, ${addr['postalCode']}";
+      final url = Uri.parse("https://nominatim.openstreetmap.org/search?q=${Uri.encodeComponent(query)}&format=json&limit=1");
+      final response = await http.get(url, headers: {'User-Agent': 'com.zephyra.mobile'});
+      if (response.statusCode == 200) {
+        final list = jsonDecode(response.body) as List<dynamic>;
+        if (list.isNotEmpty) {
+          final lat = double.parse(list[0]['lat']);
+          final lon = double.parse(list[0]['lon']);
+          setState(() {
+            _customerLocation = LatLng(lat, lon);
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      // Ignore geocoding errors and proceed to fallback
+    }
+
+    final city = addr['city']?.toString().toLowerCase() ?? '';
+    if (city.contains('erode')) {
+      setState(() {
+        _customerLocation = const LatLng(11.3410, 77.7172); // Erode center
+      });
+    } else {
+      setState(() {
+        _customerLocation = LatLng(_currentLocation.latitude - 0.005, _currentLocation.longitude + 0.005);
+      });
     }
   }
 
