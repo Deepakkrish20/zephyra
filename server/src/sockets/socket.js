@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { SOCKET_EVENTS } from '../constants/socketEvents.js';
+import { updateLiveLocation } from '../tracking/services/agentTrackingService.js';
 
 let io = null;
 
@@ -60,15 +61,28 @@ export const initSocket = (server) => {
       });
     });
 
+
     // GPS Location Update Broadcasts
-    socket.on(SOCKET_EVENTS.LOCATION_UPDATE, (data) => {
+    socket.on(SOCKET_EVENTS.LOCATION_UPDATE, async (data) => {
       console.log(`[Sockets] Event ${SOCKET_EVENTS.LOCATION_UPDATE} received:`, data);
-      // Broadcast to client tracking room
-      socket.to(`order-${data.orderId}`).emit('agent-gps-coordinates', {
-        lat: data.lat,
-        lng: data.lng,
-        bearing: data.bearing,
-      });
+      try {
+        const { orderId, agentId, lat, lng, bearing } = data;
+        
+        // Persist to database in real-time
+        if (orderId && agentId) {
+          await updateLiveLocation(orderId, agentId, { lat, lng });
+        }
+
+        // Broadcast to client tracking room
+        io.to(`order-${orderId}`).emit('agent-gps-coordinates', {
+          lat,
+          lng,
+          bearing,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error(`[Sockets] Location update processing error: ${error.message}`);
+      }
     });
 
     // Final Delivery Confirmation

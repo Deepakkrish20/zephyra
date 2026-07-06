@@ -10,6 +10,7 @@ import cartRoutes from './routes/cartRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import deliveryRoutes from './routes/deliveryRoutes.js';
+import { updateLiveLocation } from './services/agentTrackingService.js';
 
 dotenv.config();
 
@@ -50,8 +51,39 @@ app.use((err, req, res, next) => {
   });
 });
 
+
 io.on('connection', (socket) => {
   console.log('Mobile client connected:', socket.id);
+
+  // Join room for real-time order monitoring
+  socket.on('join-order-room', (orderId) => {
+    socket.join(`order-${orderId}`);
+    console.log(`[Mobile Sockets] Socket ${socket.id} joined room: order-${orderId}`);
+  });
+
+  // Handle live location reports
+  socket.on('location-update', async (data) => {
+    console.log(`[Mobile Sockets] Event location-update received:`, data);
+    try {
+      const { orderId, agentId, lat, lng, bearing } = data;
+      
+      // Update MongoDB log
+      if (orderId && agentId) {
+        await updateLiveLocation(orderId, agentId, { lat, lng });
+      }
+
+      // Broadcast coordinates to room
+      io.to(`order-${orderId}`).emit('agent-gps-coordinates', {
+        lat,
+        lng,
+        bearing,
+        timestamp: Date.now()
+      });
+    } catch (error) {
+      console.error(`[Mobile Sockets] Location update error: ${error.message}`);
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log('Mobile client disconnected:', socket.id);
   });

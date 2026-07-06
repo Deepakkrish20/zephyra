@@ -97,7 +97,7 @@ export const Orders = () => {
             </CardBody>
             <CardFooter className="flex justify-end gap-3">
               {['approved', 'accepted', 'picked_up', 'out_for_delivery'].includes(order.status) && (
-                <Link to={`/customer/track`}>
+                <Link to={`/customer/track/${order._id}`}>
                   <Button size="sm" icon={Compass} className="cursor-pointer">
                     Track Live GPS Location
                   </Button>

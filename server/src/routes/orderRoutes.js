@@ -161,8 +161,17 @@ router.get('/', protect, async (req, res, next) => {
 // @access  Private
 router.get('/:id', protect, async (req, res, next) => {
   try {
-    const customerId = req.user.id;
-    const order = await Order.findOne({ _id: req.params.id, customerId });
+    const userId = req.user.id;
+    const userRole = req.user.role;
+    let order;
+
+    if (userRole === 'delivery_agent') {
+      order = await Order.findOne({ _id: req.params.id, deliveryAgent: userId });
+    } else if (userRole === 'admin') {
+      order = await Order.findById(req.params.id);
+    } else {
+      order = await Order.findOne({ _id: req.params.id, customerId: userId });
+    }
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });

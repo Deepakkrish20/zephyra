@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../services/api_service.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_input.dart';
+import 'track_order_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final double subtotal;
@@ -195,15 +196,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
               actions: [
-                Center(
-                  child: CustomButton(
-                    text: 'Continue Shopping',
-                    onPressed: () {
-                      Navigator.pop(context); // Close Dialog
-                      Navigator.pop(context); // Pop Checkout
-                      Navigator.pop(context); // Pop Cart
-                    },
-                  ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomButton(
+                      text: 'Track Order Live',
+                      onPressed: () {
+                        final orderId = body['data']['order']['_id']?.toString() ?? '';
+                        final orderNum = body['data']['order']['orderNumber']?.toString() ?? '';
+                        
+                        Navigator.pop(context); // Close Dialog
+                        Navigator.pop(context); // Pop Checkout
+                        Navigator.pop(context); // Pop Cart
+                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrackOrderScreen(
+                              orderId: orderId,
+                              orderNumber: orderNum,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close Dialog
+                        Navigator.pop(context); // Pop Checkout
+                        Navigator.pop(context); // Pop Cart
+                      },
+                      child: const Text(
+                        'Continue Shopping',
+                        style: TextStyle(
+                          color: Color(0xFF64748B),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
+import 'dart:async';
 import '../../services/api_service.dart';
+import '../../services/location_service.dart';
+import '../../services/socket_service.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../widgets/custom_button.dart';
 
 class DeliveryDashboard extends StatefulWidget {
@@ -14,11 +18,17 @@ class DeliveryDashboard extends StatefulWidget {
 
 class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTickerProviderStateMixin {
   final _apiService = ApiService();
+  final _socketService = SocketService();
+  final _locationService = LocationService();
+  final MapController _flutterMapController = MapController();
+  
   late TabController _tabController;
+  StreamSubscription<Position>? _positionSubscription;
   
   bool _isLoadingStats = true;
   bool _isLoadingAvailable = true;
   bool _isLoadingActive = true;
+  bool _isTrackingLocation = false;
 
   // Stats Data
   int _completedCount = 0;
@@ -30,8 +40,9 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
   List<dynamic> _availableJobs = [];
   List<dynamic> _activeJobs = [];
 
-  // Map configuration (centered around a mock city region)
-  final LatLng _mapCenter = const LatLng(40.7128, -74.0060);
+  // Map configuration
+  LatLng _currentLocation = const LatLng(11.2761, 76.9507);
+  LatLng _customerLocation = const LatLng(11.2681, 76.9587);
 
   @override
   void initState() {
@@ -39,10 +50,69 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabSelection);
     _fetchStats();
+    _initCurrentLocation();
+  }
+
+  Future<void> _initCurrentLocation() async {
+    try {
+      final pos = await _locationService.getCurrentPosition();
+      setState(() {
+        _currentLocation = LatLng(pos.latitude, pos.longitude);
+        _customerLocation = LatLng(pos.latitude - 0.005, pos.longitude + 0.005);
+      });
+    } catch (e) {
+      print('Failed to get init location: $e');
+    }
+  }
+
+  void _startLocationTracking(String orderId, String agentId) {
+    if (_isTrackingLocation) return;
+    
+    _socketService.connect();
+    _socketService.joinOrderRoom(orderId);
+
+    _positionSubscription = _locationService.getPositionStream().listen(
+      (position) {
+        final newLoc = LatLng(position.latitude, position.longitude);
+        setState(() {
+          _currentLocation = newLoc;
+        });
+
+        try {
+          _flutterMapController.move(newLoc, _flutterMapController.camera.zoom);
+        } catch (e) {
+          // ignore if map not initialized yet
+        }
+
+        _socketService.emitLocationUpdate(
+          orderId: orderId,
+          agentId: agentId,
+          latitude: position.latitude,
+          longitude: position.longitude,
+        );
+      },
+      onError: (err) {
+        print('Location stream error: $err');
+      }
+    );
+
+    setState(() {
+      _isTrackingLocation = true;
+    });
+  }
+
+  void _stopLocationTracking() {
+    _positionSubscription?.cancel();
+    _positionSubscription = null;
+    _socketService.disconnect();
+    setState(() {
+      _isTrackingLocation = false;
+    });
   }
 
   @override
   void dispose() {
+    _stopLocationTracking();
     _tabController.dispose();
     super.dispose();
   }
@@ -110,6 +180,15 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
         setState(() {
           _activeJobs = body['data']['orders'] ?? [];
         });
+
+        // Auto-start tracking if there is an active job out for delivery
+        final activeRun = _activeJobs.firstWhere(
+          (o) => o['status'] == 'out_for_delivery',
+          orElse: () => null,
+        );
+        if (activeRun != null) {
+          _startLocationTracking(activeRun['_id'], activeRun['deliveryAgent'] ?? 'mock-agent-123');
+        }
       }
     } catch (e) {
       //
@@ -170,6 +249,17 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
             ),
           );
         }
+
+        // Live location tracking start/stop trigger
+        final currentJob = _activeJobs.firstWhere((o) => o['_id'] == orderId, orElse: () => null);
+        final agentId = currentJob != null ? (currentJob['deliveryAgent'] ?? 'mock-agent-123') : 'mock-agent-123';
+
+        if (nextStatus == 'out_for_delivery') {
+          _startLocationTracking(orderId, agentId);
+        } else if (nextStatus == 'delivered') {
+          _stopLocationTracking();
+        }
+
         _fetchActiveJobs();
         _fetchStats();
       } else {
@@ -402,19 +492,39 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
   // --- MAP ROUTING OVERLAY TAB ---
   Widget _buildMapTab() {
     return FlutterMap(
+      mapController: _flutterMapController,
       options: MapOptions(
-        initialCenter: _mapCenter,
-        initialZoom: 13.0,
+        initialCenter: _currentLocation,
+        initialZoom: 14.0,
       ),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.zephyra.mobile',
         ),
+        PolylineLayer(
+          polylines: [
+            Polyline(
+              points: [_currentLocation, _customerLocation],
+              color: Colors.purple,
+              strokeWidth: 4.0,
+            ),
+          ],
+        ),
         MarkerLayer(
           markers: [
             Marker(
-              point: _mapCenter,
+              point: _currentLocation,
+              width: 50,
+              height: 50,
+              child: const Icon(
+                Icons.directions_bike,
+                color: Colors.blue,
+                size: 40,
+              ),
+            ),
+            Marker(
+              point: _customerLocation,
               width: 50,
               height: 50,
               child: const Icon(

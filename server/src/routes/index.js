@@ -10,6 +10,7 @@ import { protect, restrictTo } from '../middlewares/authMiddleware.js';
 
 import deliveryRoutes from './deliveryRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
+import trackingRoutes from './trackingRoutes.js';
 
 const router = Router();
 
@@ -23,6 +24,6 @@ router.use('/orders', orderRoutes);
 router.use('/admin/orders', protect, restrictTo('admin'), adminOrderRoutes);
 router.use('/delivery', deliveryRoutes);
 router.use('/notifications', protect, notificationRoutes);
-router.use('/tracking', (req, res) => res.json({ msg: 'Live coordinates routes placeholder' }));
+router.use('/tracking', trackingRoutes);
 
 export default router;

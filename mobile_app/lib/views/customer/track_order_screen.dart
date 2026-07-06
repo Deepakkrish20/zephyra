@@ -1,0 +1,244 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'dart:convert';
+import '../../services/api_service.dart';
+import '../../services/socket_service.dart';
+
+class TrackOrderScreen extends StatefulWidget {
+  final String orderId;
+  final String orderNumber;
+
+  const TrackOrderScreen({
+    super.key,
+    required this.orderId,
+    required this.orderNumber,
+  });
+
+  @override
+  State<TrackOrderScreen> createState() => _TrackOrderScreenState();
+}
+
+class _TrackOrderScreenState extends State<TrackOrderScreen> {
+  final _apiService = ApiService();
+  final _socketService = SocketService();
+  final MapController _flutterMapController = MapController();
+
+  final LatLng _clientLocation = const LatLng(11.2681, 76.9587); // Customer destination
+  LatLng? _agentLocation;
+  List<LatLng> _orderRoute = [];
+  String _deliveryStatus = 'accepted';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchInitialTracking();
+    _socketService.connect();
+    _socketService.joinOrderRoom(widget.orderId);
+    _registerSocketListeners();
+  }
+
+  Future<void> _fetchInitialTracking() async {
+    try {
+      final response = await _apiService.get('/tracking/${widget.orderId}');
+      final body = jsonDecode(response.body);
+      if (response.statusCode == 200 && body['success'] == true) {
+        final tracking = body['tracking'];
+        if (tracking != null) {
+          final log = tracking['locationLog'] as List<dynamic>? ?? [];
+          final status = tracking['status'] ?? 'accepted';
+          
+          if (log.isNotEmpty) {
+            final route = log.map((coord) => LatLng(
+              (coord['lat'] as num).toDouble(),
+              (coord['lng'] as num).toDouble(),
+            )).toList();
+
+            setState(() {
+              _orderRoute = route;
+              _agentLocation = route.last;
+              _deliveryStatus = status;
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print('[Track Order] Fetch initial coordinates error: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _registerSocketListeners() {
+    _socketService.onAgentCoordinates((data) {
+      if (data['lat'] != null && data['lng'] != null) {
+        final newPos = LatLng(
+          (data['lat'] as num).toDouble(),
+          (data['lng'] as num).toDouble(),
+        );
+
+        setState(() {
+          _agentLocation = newPos;
+          _orderRoute.add(newPos);
+        });
+
+        try {
+          _flutterMapController.move(newPos, _flutterMapController.camera.zoom);
+        } catch (e) {
+          // ignore if map not ready
+        }
+      }
+    });
+
+    _socketService.onStatusUpdate((data) {
+      if (data['status'] != null) {
+        setState(() {
+          _deliveryStatus = data['status'];
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _socketService.disconnect();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mapCenter = _agentLocation ?? _clientLocation;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Track Shipment #${widget.orderNumber}', style: const TextStyle(fontWeight: FontWeight.bold)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF71EB44)))
+          : Stack(
+              children: [
+                FlutterMap(
+                  mapController: _flutterMapController,
+                  options: MapOptions(
+                    initialCenter: mapCenter,
+                    initialZoom: 13.5,
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.zephyra.mobile',
+                    ),
+                    if (_orderRoute.isNotEmpty)
+                      PolylineLayer(
+                        polylines: [
+                          Polyline(
+                            points: _orderRoute,
+                            color: const Color(0xFF8B5CF6),
+                            strokeWidth: 4.0,
+                          ),
+                        ],
+                      ),
+                    if (_agentLocation != null)
+                      PolylineLayer(
+                        polylines: [
+                           Polyline(
+                            points: [_agentLocation!, _clientLocation],
+                            color: const Color(0xFF8B5CF6),
+                            strokeWidth: 2.0,
+                          ),
+                        ],
+                      ),
+                    MarkerLayer(
+                      markers: [
+                        // Customer Marker
+                        Marker(
+                          point: _clientLocation,
+                          width: 50,
+                          height: 50,
+                          child: const Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                        ),
+                        // Agent Marker
+                        if (_agentLocation != null)
+                          Marker(
+                            point: _agentLocation!,
+                            width: 50,
+                            height: 50,
+                            child: const Icon(
+                              Icons.directions_bike,
+                              color: Color(0xFF8B5CF6),
+                              size: 40,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+                Positioned(
+                  bottom: 24,
+                  left: 16,
+                  right: 16,
+                  child: Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 4,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF1F5F9),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.local_shipping_outlined,
+                              color: Color(0xFF71EB44),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Delivery Status',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFF64748B),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  _deliveryStatus.toUpperCase().replaceAll('_', ' '),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}

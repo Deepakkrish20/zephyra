@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../../services/api_service.dart';
 import 'product_details_screen.dart';
+import 'track_order_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -178,6 +179,49 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
           ),
           
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFFE4E4E7)),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.map_outlined, color: Colors.black, size: 20),
+              onPressed: () async {
+                try {
+                  final response = await _apiService.get('/tracking/active-order');
+                  final body = jsonDecode(response.body);
+                  if (response.statusCode == 200 && body['success'] == true && body['orderId'] != null) {
+                    final String activeOrderId = body['orderId'];
+                    if (context.mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TrackOrderScreen(
+                            orderId: activeOrderId,
+                            orderNumber: 'Active Run',
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('You have no active orders in transit.'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  }
+                } catch (e) {
+                  // ignore
+                }
+              },
+            ),
+          ),
+
           Container(
             margin: const EdgeInsets.only(right: 16),
             decoration: BoxDecoration(
