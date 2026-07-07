@@ -79,7 +79,7 @@ export const AdminDashboard = () => {
   const metrics = [
     {
       title: 'Gross Revenue',
-      value: `$${stats.grossRevenue.toFixed(2)}`,
+      value: `₹${stats.grossRevenue.toFixed(2)}`,
       icon: Activity,
       change: 'Settled deliveries',
       color: 'primary',
@@ -184,7 +184,7 @@ export const AdminDashboard = () => {
                           {order.deliveryAgent?.name || 'Unassigned'}
                         </td>
                         <td className="px-6 py-4 font-bold text-app-text-primary">
-                          ${order.totalAmount.toFixed(2)}
+                          ₹{order.totalAmount.toFixed(2)}
                         </td>
                       </tr>
                     );

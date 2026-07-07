@@ -127,12 +127,12 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
                   <div>
                     <p className="font-extrabold text-app-text-primary">{item.productName}</p>
                     <p className="text-[10px] text-app-text-secondary">
-                      ${parseFloat(item.productPrice).toFixed(2)} each
+                      ₹{parseFloat(item.productPrice).toFixed(2)} each
                     </p>
                   </div>
                 </div>
                 <span className="font-black text-app-text-primary">
-                  ${parseFloat(item.subtotal).toFixed(2)}
+                  ₹{parseFloat(item.subtotal).toFixed(2)}
                 </span>
               </div>
             ))}
@@ -144,7 +144,7 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
           <div className="flex justify-between text-xs font-semibold">
             <span className="text-app-text-secondary">Subtotal</span>
             <span className="text-app-text-primary">
-              ${parseFloat(order.totalAmount).toFixed(2)}
+              ₹{parseFloat(order.totalAmount).toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between text-xs font-semibold">
@@ -155,7 +155,7 @@ export const AdminOrderDetailsModal = ({ isOpen, onClose, order, loading }) => {
           <div className="flex justify-between items-baseline font-black text-base text-app-text-primary">
             <span>Grand Total</span>
             <span className="text-primary-600 dark:text-primary-400">
-              ${parseFloat(order.totalAmount).toFixed(2)}
+              ₹{parseFloat(order.totalAmount).toFixed(2)}
             </span>
           </div>
         </div>

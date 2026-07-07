@@ -222,7 +222,7 @@ export const ProductManagement = () => {
                           </Badge>
                         </td>
                         <td className="px-6 py-4 font-extrabold text-primary-600 dark:text-primary-400">
-                          ${parseFloat(p.price).toFixed(2)}
+                          ₹{parseFloat(p.price).toFixed(2)}
                         </td>
                         <td className="px-6 py-4 font-semibold text-app-text-secondary">
                           {p.stock} Units
@@ -296,7 +296,7 @@ export const ProductManagement = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Price ($)"
+              label="Price (₹)"
               type="number"
               step="0.01"
               placeholder="49.99"

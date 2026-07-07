@@ -292,7 +292,7 @@ export const Checkout = () => {
                     isLoading={orderLoading}
                     onClick={handlePlaceOrder}
                   >
-                    Place Cash on Delivery Order (${totalAmount.toFixed(2)})
+                    Place Cash on Delivery Order (₹{totalAmount.toFixed(2)})
                   </Button>
                 </CardFooter>
               ) : (
@@ -304,7 +304,7 @@ export const Checkout = () => {
                     iconPosition="right"
                     isLoading={checkoutLoading}
                   >
-                    Validate Checkout Order (${totalAmount.toFixed(2)})
+                    Validate Checkout Order (₹{totalAmount.toFixed(2)})
                   </Button>
                 </CardFooter>
               )}
@@ -335,7 +335,7 @@ export const Checkout = () => {
                     </div>
                   </div>
                   <span className="font-black text-app-text-primary">
-                    ${item.subtotal.toFixed(2)}
+                    ₹{item.subtotal.toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -344,7 +344,7 @@ export const Checkout = () => {
 
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Subtotal</span>
-                <span className="text-app-text-primary">${totalAmount.toFixed(2)}</span>
+                <span className="text-app-text-primary">₹{totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Shipping</span>
@@ -358,7 +358,7 @@ export const Checkout = () => {
               <div className="flex justify-between items-baseline font-black text-base text-app-text-primary">
                 <span>Total</span>
                 <span className="text-primary-600 dark:text-primary-400">
-                  ${totalAmount.toFixed(2)}
+                  ₹{totalAmount.toFixed(2)}
                 </span>
               </div>
             </CardBody>

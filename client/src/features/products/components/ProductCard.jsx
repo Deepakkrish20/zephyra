@@ -88,7 +88,7 @@ export const ProductCard = ({ product }) => {
         <div className="flex items-baseline justify-between mt-2">
           <span className="text-xs text-app-text-secondary font-medium">Price</span>
           <span className="text-xl font-black text-primary-600 dark:text-primary-400">
-            ${parseFloat(price).toFixed(2)}
+            ₹{parseFloat(price).toFixed(2)}
           </span>
         </div>
       </CardBody>

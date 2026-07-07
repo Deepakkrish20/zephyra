@@ -163,7 +163,7 @@ export const Cart = () => {
                         </h3>
                       </Link>
                       <p className="text-xs text-primary-600 dark:text-primary-400 font-bold">
-                        ${parseFloat(product.price).toFixed(2)}
+                        ₹{parseFloat(product.price).toFixed(2)}
                       </p>
                       <p className="text-[10px] text-app-text-secondary font-medium">
                         Stock: {product.stock} units available
@@ -200,7 +200,7 @@ export const Cart = () => {
                     <div className="flex items-center gap-4 text-right">
                       <div>
                         <p className="font-extrabold text-sm text-app-text-primary">
-                          ${(product.price * quantity).toFixed(2)}
+                          ₹{(product.price * quantity).toFixed(2)}
                         </p>
                       </div>
                       <button
@@ -228,7 +228,7 @@ export const Cart = () => {
               </h3>
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Subtotal ({itemCount} items)</span>
-                <span className="text-app-text-primary">${totalPrice.toFixed(2)}</span>
+                <span className="text-app-text-primary">₹{totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Shipping Fee</span>
@@ -240,7 +240,7 @@ export const Cart = () => {
               <div className="flex justify-between items-baseline font-black text-lg text-app-text-primary">
                 <span>Total</span>
                 <span className="text-primary-600 dark:text-primary-400">
-                  ${totalPrice.toFixed(2)}
+                  ₹{totalPrice.toFixed(2)}
                 </span>
               </div>
             </CardBody>

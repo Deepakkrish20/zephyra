@@ -328,8 +328,8 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
               Expanded(
                 child: _buildMetricCard(
                   'Total Payout',
-                  '\$${_earnings.toStringAsFixed(2)}',
-                  Icons.monetization_on_outlined,
+                  '₹${_earnings.toStringAsFixed(2)}',
+                  Icons.currency_rupee_outlined,
                   const Color(0xFFF0FDF4),
                   Colors.green,
                 ),
@@ -338,7 +338,7 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
               Expanded(
                 child: _buildMetricCard(
                   'Total Tips',
-                  '\$${_tips.toStringAsFixed(2)}',
+                  '₹${_tips.toStringAsFixed(2)}',
                   Icons.volunteer_activism_outlined,
                   const Color(0xFFEFF6FF),
                   Colors.blue,
@@ -431,7 +431,7 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(orderNum, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    Text('\$${total.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text('₹${total.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
                 const SizedBox(height: 8),

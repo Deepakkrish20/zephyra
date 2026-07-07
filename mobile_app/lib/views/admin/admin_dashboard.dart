@@ -372,9 +372,9 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
                       Expanded(
                         child: CustomInput(
                           controller: _prodPriceController,
-                          labelText: 'Price (\$)',
+                          labelText: 'Price (₹)',
                           hintText: '199.99',
-                          prefixIcon: Icons.attach_money_outlined,
+                          prefixIcon: Icons.currency_rupee_outlined,
                           keyboardType: TextInputType.number,
                           validator: (v) => v == null || v.isEmpty ? 'Required' : null,
                         ),
@@ -470,8 +470,8 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
               Expanded(
                 child: _buildMetricCard(
                   'Gross Revenue',
-                  '\$${_grossRevenue.toStringAsFixed(2)}',
-                  Icons.monetization_on,
+                  '₹${_grossRevenue.toStringAsFixed(2)}',
+                  Icons.currency_rupee,
                   const Color(0xFFF0FDF4),
                   Colors.green,
                 ),
@@ -548,7 +548,7 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '\$${(order['totalAmount'] as num).toStringAsFixed(2)}',
+                                '₹${(order['totalAmount'] as num).toStringAsFixed(2)}',
                                 style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
                               ),
                             ],
@@ -633,7 +633,7 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
               ),
             ),
             title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text('Price: \$${price.toStringAsFixed(2)} | Stock: $stock'),
+            subtitle: Text('Price: ₹${price.toStringAsFixed(2)} | Stock: $stock'),
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -694,7 +694,7 @@ class _AdminDashboardState extends State<AdminDashboard> with SingleTickerProvid
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
-                      '\$${total.toStringAsFixed(2)}',
+                      '₹${total.toStringAsFixed(2)}',
                       style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF71EB44)),
                     ),
                   ],

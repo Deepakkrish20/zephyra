@@ -530,7 +530,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '\$${((product['price'] as num) * (item['quantity'] as num)).toStringAsFixed(2)}',
+                                    '₹${((product['price'] as num) * (item['quantity'] as num)).toStringAsFixed(2)}',
                                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                                   ),
                                 ],
@@ -568,7 +568,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '\$${widget.subtotal.toStringAsFixed(2)}',
+                              '₹${widget.subtotal.toStringAsFixed(2)}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,

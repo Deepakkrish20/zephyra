@@ -214,7 +214,7 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '\$${price.toStringAsFixed(2)}',
+                                        '₹${price.toStringAsFixed(2)}',
                                         style: const TextStyle(
                                           color: Color(0xFF71EB44),
                                           fontWeight: FontWeight.w900,
@@ -312,7 +312,7 @@ class _CartScreenState extends State<CartScreen> {
                                   style: TextStyle(color: Color(0xFF71717A), fontWeight: FontWeight.w600),
                                 ),
                                 Text(
-                                  '\$${_subtotal.toStringAsFixed(2)}',
+                                  '₹${_subtotal.toStringAsFixed(2)}',
                                   style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -342,7 +342,7 @@ class _CartScreenState extends State<CartScreen> {
                                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '\$${_subtotal.toStringAsFixed(2)}',
+                                  '₹${_subtotal.toStringAsFixed(2)}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w900,

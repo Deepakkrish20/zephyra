@@ -179,7 +179,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   
                   // Price Tag
                   Text(
-                    '\$${(widget.product['price'] as num).toStringAsFixed(2)}',
+                    '₹${(widget.product['price'] as num).toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,

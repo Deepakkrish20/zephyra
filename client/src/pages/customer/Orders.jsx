@@ -91,7 +91,7 @@ export const Orders = () => {
               <div className="text-right">
                 <span className="text-xs text-app-text-secondary">Total Amount</span>
                 <p className="font-extrabold text-base text-primary-600">
-                  ${parseFloat(order.totalAmount).toFixed(2)}
+                  ₹{parseFloat(order.totalAmount).toFixed(2)}
                 </p>
               </div>
             </CardBody>
@@ -195,12 +195,12 @@ export const Orders = () => {
                       <div>
                         <p className="font-bold text-app-text-primary">{item.productName}</p>
                         <p className="text-[10px] text-app-text-secondary">
-                          ${parseFloat(item.productPrice).toFixed(2)} each
+                          ₹{parseFloat(item.productPrice).toFixed(2)} each
                         </p>
                       </div>
                     </div>
                     <span className="font-extrabold text-app-text-primary">
-                      ${parseFloat(item.subtotal).toFixed(2)}
+                      ₹{parseFloat(item.subtotal).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -212,7 +212,7 @@ export const Orders = () => {
               <div className="flex justify-between text-xs font-semibold">
                 <span className="text-app-text-secondary">Subtotal</span>
                 <span className="text-app-text-primary">
-                  ${parseFloat(selectedOrder.totalAmount).toFixed(2)}
+                  ₹{parseFloat(selectedOrder.totalAmount).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-xs font-semibold">
@@ -223,7 +223,7 @@ export const Orders = () => {
               <div className="flex justify-between items-baseline font-black text-base text-app-text-primary">
                 <span>Grand Total</span>
                 <span className="text-primary-600 dark:text-primary-400">
-                  ${parseFloat(selectedOrder.totalAmount).toFixed(2)}
+                  ₹{parseFloat(selectedOrder.totalAmount).toFixed(2)}
                 </span>
               </div>
             </div>

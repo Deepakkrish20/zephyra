@@ -193,7 +193,7 @@ export const ProductDetailsPage = () => {
                   {name}
                 </h1>
                 <p className="text-3xl font-extrabold text-primary-600 dark:text-primary-400">
-                  ${parseFloat(price).toFixed(2)}
+                  ₹{parseFloat(price).toFixed(2)}
                 </p>
               </div>
 

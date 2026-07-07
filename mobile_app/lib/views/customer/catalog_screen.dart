@@ -511,7 +511,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '\$${price.toStringAsFixed(2)}',
+                                              '₹${price.toStringAsFixed(2)}',
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w900,
