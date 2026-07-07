@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 import '../../services/api_service.dart';
 import '../../services/socket_service.dart';
@@ -31,6 +32,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   String _deliveryStatus = 'accepted';
   bool _isLoading = true;
 
+  List<LatLng> _roadRoute = [];
+  double _agentRotation = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +42,62 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
     _socketService.connect();
     _socketService.joinOrderRoom(widget.orderId);
     _registerSocketListeners();
+  }
+
+  double _calculateBearing(LatLng start, LatLng end) {
+    final double lat1 = start.latitude * (math.pi / 180.0);
+    final double lng1 = start.longitude * (math.pi / 180.0);
+    final double lat2 = end.latitude * (math.pi / 180.0);
+    final double lng2 = end.longitude * (math.pi / 180.0);
+
+    final double dLon = lng2 - lng1;
+    final double y = math.sin(dLon) * math.cos(lat2);
+    final double x = math.cos(lat1) * math.sin(lat2) -
+        math.sin(lat1) * math.cos(lat2) * math.cos(dLon);
+
+    final double radians = math.atan2(y, x);
+    return (radians * (180.0 / math.pi) + 360.0) % 360.0;
+  }
+
+  Future<void> _fetchRoadRoute() async {
+    if (_agentLocation == null) return;
+    try {
+      final url = Uri.parse(
+          'https://router.project-osrm.org/route/v1/driving/${_agentLocation!.longitude},${_agentLocation!.latitude};${_clientLocation.longitude},${_clientLocation.latitude}?overview=full&geometries=geojson');
+      final response = await http.get(url, headers: {'User-Agent': 'com.zephyra.mobile'});
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['routes'] != null && (data['routes'] as List).isNotEmpty) {
+          final coords = data['routes'][0]['geometry']['coordinates'] as List<dynamic>;
+          final path = coords.map((c) => LatLng(
+            (c[1] as num).toDouble(),
+            (c[0] as num).toDouble(),
+          )).toList();
+
+          setState(() {
+            _roadRoute = path;
+          });
+          _fitBounds();
+        }
+      }
+    } catch (e) {
+      print('[OSRM Mobile] Route fetch failed: $e');
+    }
+  }
+
+  void _fitBounds() {
+    if (_agentLocation == null) return;
+    try {
+      final bounds = LatLngBounds.fromPoints([_agentLocation!, _clientLocation]);
+      _flutterMapController.fitCamera(
+        CameraFit.bounds(
+          bounds: bounds,
+          padding: const EdgeInsets.all(50.0),
+        ),
+      );
+    } catch (e) {
+      // Ignore fitCamera fails
+    }
   }
 
   Future<void> _geocodeCustomerAddress(Map<String, dynamic>? addr) async {
@@ -100,6 +160,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
               _agentLocation = route.last;
               _deliveryStatus = status;
             });
+            _fetchRoadRoute();
           }
         }
       }
@@ -121,15 +182,14 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
         );
 
         setState(() {
+          if (_agentLocation != null) {
+            _agentRotation = _calculateBearing(_agentLocation!, newPos);
+          }
           _agentLocation = newPos;
           _orderRoute.add(newPos);
         });
 
-        try {
-          _flutterMapController.move(newPos, _flutterMapController.camera.zoom);
-        } catch (e) {
-          // ignore if map not ready
-        }
+        _fetchRoadRoute();
       }
     });
 
@@ -180,18 +240,29 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                         polylines: [
                           Polyline(
                             points: _orderRoute,
-                            color: const Color(0xFF8B5CF6),
-                            strokeWidth: 4.0,
+                            color: const Color(0xFFC084FC),
+                            strokeWidth: 3.0,
                           ),
                         ],
                       ),
-                    if (_agentLocation != null)
+                    if (_roadRoute.isNotEmpty)
                       PolylineLayer(
                         polylines: [
-                           Polyline(
+                          Polyline(
+                            points: _roadRoute,
+                            color: const Color(0xFF8B5CF6),
+                            strokeWidth: 5.0,
+                          ),
+                        ],
+                      )
+                    else if (_agentLocation != null)
+                      PolylineLayer(
+                        polylines: [
+                          Polyline(
                             points: [_agentLocation!, _clientLocation],
                             color: const Color(0xFF8B5CF6),
                             strokeWidth: 2.0,
+                            strokeJoin: StrokeJoin.round,
                           ),
                         ],
                       ),
@@ -214,10 +285,13 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                             point: _agentLocation!,
                             width: 50,
                             height: 50,
-                            child: const Icon(
-                              Icons.directions_bike,
-                              color: Color(0xFF8B5CF6),
-                              size: 40,
+                            child: Transform.rotate(
+                              angle: _agentRotation * (math.pi / 180.0),
+                              child: const Icon(
+                                Icons.directions_bike,
+                                color: Color(0xFF8B5CF6),
+                                size: 40,
+                              ),
                             ),
                           ),
                       ],

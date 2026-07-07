@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 import '../../services/api_service.dart';
 import '../../services/location_service.dart';
@@ -45,6 +46,63 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
   LatLng _currentLocation = const LatLng(11.2761, 76.9507);
   LatLng _customerLocation = const LatLng(11.2681, 76.9587);
 
+  List<LatLng> _roadRoute = [];
+  double _agentRotation = 0.0;
+
+  double _calculateBearing(LatLng start, LatLng end) {
+    final double lat1 = start.latitude * (math.pi / 180.0);
+    final double lng1 = start.longitude * (math.pi / 180.0);
+    final double lat2 = end.latitude * (math.pi / 180.0);
+    final double lng2 = end.longitude * (math.pi / 180.0);
+
+    final double dLon = lng2 - lng1;
+    final double y = math.sin(dLon) * math.cos(lat2);
+    final double x = math.cos(lat1) * math.sin(lat2) -
+        math.sin(lat1) * math.cos(lat2) * math.cos(dLon);
+
+    final double radians = math.atan2(y, x);
+    return (radians * (180.0 / math.pi) + 360.0) % 360.0;
+  }
+
+  Future<void> _fetchRoadRoute() async {
+    try {
+      final url = Uri.parse(
+          'https://router.project-osrm.org/route/v1/driving/${_currentLocation.longitude},${_currentLocation.latitude};${_customerLocation.longitude},${_customerLocation.latitude}?overview=full&geometries=geojson');
+      final response = await http.get(url, headers: {'User-Agent': 'com.zephyra.mobile'});
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['routes'] != null && (data['routes'] as List).isNotEmpty) {
+          final coords = data['routes'][0]['geometry']['coordinates'] as List<dynamic>;
+          final path = coords.map((c) => LatLng(
+            (c[1] as num).toDouble(),
+            (c[0] as num).toDouble(),
+          )).toList();
+
+          setState(() {
+            _roadRoute = path;
+          });
+          _fitBounds();
+        }
+      }
+    } catch (e) {
+      print('[OSRM Mobile] Route fetch failed: $e');
+    }
+  }
+
+  void _fitBounds() {
+    try {
+      final bounds = LatLngBounds.fromPoints([_currentLocation, _customerLocation]);
+      _flutterMapController.fitCamera(
+        CameraFit.bounds(
+          bounds: bounds,
+          padding: const EdgeInsets.all(50.0),
+        ),
+      );
+    } catch (e) {
+      // ignore fitCamera fails
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -76,14 +134,11 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
       (position) {
         final newLoc = LatLng(position.latitude, position.longitude);
         setState(() {
+          _agentRotation = _calculateBearing(_currentLocation, newLoc);
           _currentLocation = newLoc;
         });
 
-        try {
-          _flutterMapController.move(newLoc, _flutterMapController.camera.zoom);
-        } catch (e) {
-          // ignore if map not initialized yet
-        }
+        _fetchRoadRoute();
 
         _socketService.emitLocationUpdate(
           orderId: orderId,
@@ -217,6 +272,7 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
           setState(() {
             _customerLocation = LatLng(lat, lon);
           });
+          _fetchRoadRoute();
           return;
         }
       }
@@ -234,6 +290,7 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
         _customerLocation = LatLng(_currentLocation.latitude - 0.005, _currentLocation.longitude + 0.005);
       });
     }
+    _fetchRoadRoute();
   }
 
   Future<void> _acceptJob(String orderId) async {
@@ -544,9 +601,10 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
         PolylineLayer(
           polylines: [
             Polyline(
-              points: [_currentLocation, _customerLocation],
+              points: _roadRoute.isNotEmpty ? _roadRoute : [_currentLocation, _customerLocation],
               color: Colors.purple,
-              strokeWidth: 4.0,
+              strokeWidth: 5.0,
+              strokeJoin: StrokeJoin.round,
             ),
           ],
         ),
@@ -556,10 +614,13 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
               point: _currentLocation,
               width: 50,
               height: 50,
-              child: const Icon(
-                Icons.directions_bike,
-                color: Colors.blue,
-                size: 40,
+              child: Transform.rotate(
+                angle: _agentRotation * (math.pi / 180.0),
+                child: const Icon(
+                  Icons.directions_bike,
+                  color: Colors.blue,
+                  size: 40,
+                ),
               ),
             ),
             Marker(

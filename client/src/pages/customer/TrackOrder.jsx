@@ -17,22 +17,26 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom delivery agent icon
-const agentIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-  iconSize: [38, 38],
-  iconAnchor: [19, 38],
-  popupAnchor: [0, -38],
-});
+// Custom delivery agent icon rotation helper
+const calculateBearing = (startLat, startLng, endLat, endLng) => {
+  const dLng = (endLng - startLng) * (Math.PI / 180);
+  const sLat = startLat * (Math.PI / 180);
+  const eLat = endLat * (Math.PI / 180);
+  const y = Math.sin(dLng) * Math.cos(eLat);
+  const x = Math.cos(sLat) * Math.sin(eLat) - Math.sin(sLat) * Math.cos(eLat) * Math.cos(dLng);
+  let brng = Math.atan2(y, x) * (180 / Math.PI);
+  return (brng + 360) % 360;
+};
 
-// Helper component to auto-pan map view to current agent coordinates
-const MapController = ({ center }) => {
+// Helper component to auto-pan and fit camera bounds to both driver and customer
+const MapBoundsController = ({ agentCoords, clientCoords }) => {
   const map = useMap();
   useEffect(() => {
-    if (center[0] && center[1]) {
-      map.setView(center, map.getZoom());
+    if (agentCoords && agentCoords[0] && clientCoords && clientCoords[0]) {
+      const bounds = L.latLngBounds([agentCoords, clientCoords]);
+      map.fitBounds(bounds, { padding: [50, 50] });
     }
-  }, [center, map]);
+  }, [agentCoords, clientCoords, map]);
   return null;
 };
 
@@ -44,6 +48,10 @@ export const TrackOrder = () => {
 
   const [clientCoords, setClientCoords] = useState([11.3410, 77.7172]); // Erode Default fallback
   const [shippingAddressText, setShippingAddressText] = useState('');
+  
+  const [roadRoute, setRoadRoute] = useState([]);
+  const [bearing, setBearing] = useState(0);
+  const prevAgentLocRef = React.useRef(null);
 
   // 1. Resolve order ID if navigated generally to /customer/track
   useEffect(() => {
@@ -118,6 +126,44 @@ export const TrackOrder = () => {
     };
   }, [resolvedOrderId, startTracking, stopTracking]);
 
+  // 3. OSRM Road Routing Calculation
+  useEffect(() => {
+    if (!agentLocation || !clientCoords) return;
+
+    const fetchRoadRoute = async () => {
+      try {
+        const url = `https://router.project-osrm.org/route/v1/driving/${agentLocation.lng},${agentLocation.lat};${clientCoords[1]},${clientCoords[0]}?overview=full&geometries=geojson`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.routes && data.routes.length > 0) {
+          const coords = data.routes[0].geometry.coordinates;
+          const path = coords.map((c) => [c[1], c[0]]);
+          setRoadRoute(path);
+        }
+      } catch (err) {
+        console.error('[OSRM] Routing failed:', err);
+      }
+    };
+
+    fetchRoadRoute();
+  }, [agentLocation, clientCoords]);
+
+  // 4. Live Vehicle Bearing/Rotation calculation
+  useEffect(() => {
+    if (agentLocation) {
+      if (prevAgentLocRef.current) {
+        const prev = prevAgentLocRef.current;
+        if (prev.lat !== agentLocation.lat || prev.lng !== agentLocation.lng) {
+          const deg = calculateBearing(prev.lat, prev.lng, agentLocation.lat, agentLocation.lng);
+          if (deg !== 0) {
+            setBearing(deg);
+          }
+        }
+      }
+      prevAgentLocRef.current = agentLocation;
+    }
+  }, [agentLocation]);
+
   if (searchingOrder) {
     return (
       <div className="flex flex-col items-center justify-center p-12 min-h-[300px]">
@@ -149,6 +195,17 @@ export const TrackOrder = () => {
   }
 
   const mapCenter = agentLocation ? [agentLocation.lat, agentLocation.lng] : clientCoords;
+
+  // Custom rotated delivery agent DivIcon
+  const rotatedAgentIcon = L.divIcon({
+    html: `<div style="transform: rotate(${bearing}deg); transition: transform 0.4s ease-in-out; display: flex; align-items: center; justify-content: center;">
+             <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" style="width: 38px; height: 38px;" alt="Delivery Vehicle" />
+           </div>`,
+    iconSize: [38, 38],
+    iconAnchor: [19, 19],
+    popupAnchor: [0, -19],
+    className: 'rotated-agent-icon-container',
+  });
 
   return (
     <div className="space-y-6">
@@ -185,7 +242,7 @@ export const TrackOrder = () => {
         <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-app-border h-[400px] shadow-sm relative z-10">
           <MapContainer
             center={mapCenter}
-            zoom={13}
+            zoom={14}
             scrollWheelZoom={false}
             style={{ height: '100%', width: '100%' }}
           >
@@ -193,7 +250,12 @@ export const TrackOrder = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {agentLocation && <MapController center={[agentLocation.lat, agentLocation.lng]} />}
+            {agentLocation && (
+              <MapBoundsController
+                agentCoords={[agentLocation.lat, agentLocation.lng]}
+                clientCoords={clientCoords}
+              />
+            )}
             
             {/* Customer Marker */}
             <Marker position={clientCoords}>
@@ -202,7 +264,7 @@ export const TrackOrder = () => {
             
             {/* Delivery Agent Marker */}
             {agentLocation && (
-              <Marker position={[agentLocation.lat, agentLocation.lng]} icon={agentIcon}>
+              <Marker position={[agentLocation.lat, agentLocation.lng]} icon={rotatedAgentIcon}>
                 <Popup>Delivery Agent Location</Popup>
               </Marker>
             )}
@@ -216,14 +278,25 @@ export const TrackOrder = () => {
               />
             )}
             
-            {/* Distance connector */}
-            {agentLocation && (
+            {/* Road navigation route */}
+            {roadRoute.length > 0 ? (
               <Polyline
-                positions={[[agentLocation.lat, agentLocation.lng], clientCoords]}
+                positions={roadRoute}
                 color="#8b5cf6"
-                dashArray="5, 10"
-                weight={2}
+                weight={5}
+                lineCap="round"
+                lineJoin="round"
               />
+            ) : (
+              // Fallback to straight line connector
+              agentLocation && (
+                <Polyline
+                  positions={[[agentLocation.lat, agentLocation.lng], clientCoords]}
+                  color="#8b5cf6"
+                  dashArray="5, 10"
+                  weight={2}
+                />
+              )
             )}
           </MapContainer>
         </div>
