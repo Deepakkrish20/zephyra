@@ -130,6 +130,25 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
     _socketService.connect();
     _socketService.joinOrderRoom(orderId);
 
+    // Fetch initial location immediately and emit to server
+    Geolocator.getCurrentPosition(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium),
+    ).then((position) {
+      final initialLoc = LatLng(position.latitude, position.longitude);
+      setState(() {
+        _currentLocation = initialLoc;
+      });
+      _fetchRoadRoute();
+      _socketService.emitLocationUpdate(
+        orderId: orderId,
+        agentId: agentId,
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+    }).catchError((e) {
+      print('[Location Tracking] Failed to get initial instant position: $e');
+    });
+
     _positionSubscription = _locationService.getPositionStream().listen(
       (position) {
         final newLoc = LatLng(position.latitude, position.longitude);
@@ -595,7 +614,7 @@ class _DeliveryDashboardState extends State<DeliveryDashboard> with SingleTicker
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate: 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.zephyra.mobile',
         ),
         PolylineLayer(

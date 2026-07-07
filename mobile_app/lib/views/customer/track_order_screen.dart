@@ -114,6 +114,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
           setState(() {
             _clientLocation = LatLng(lat, lon);
           });
+          _fetchRoadRoute();
           return;
         }
       }
@@ -127,6 +128,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
         _clientLocation = const LatLng(11.3410, 77.7172); // Erode center
       });
     }
+    _fetchRoadRoute();
   }
 
   Future<void> _fetchInitialTracking() async {
@@ -135,7 +137,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
       final orderResponse = await _apiService.get('/orders/${widget.orderId}');
       if (orderResponse.statusCode == 200) {
         final orderBody = jsonDecode(orderResponse.body);
-        _geocodeCustomerAddress(orderBody['shippingAddress']);
+        await _geocodeCustomerAddress(orderBody['shippingAddress']);
         setState(() {
           _deliveryStatus = orderBody['status'] ?? 'accepted';
         });
@@ -232,7 +234,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                   ),
                   children: [
                     TileLayer(
-                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      urlTemplate: 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.zephyra.mobile',
                     ),
                     if (_orderRoute.isNotEmpty)
